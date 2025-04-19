@@ -1,0 +1,10 @@
+python-fasthtml==0.6.9
+httpx==0.27.2
+tree-sitter==0.20.1
+rdflib==7.1.1
+pyoxigraph==0.4.1
+fizzysearch==0.28
+mkdocs-material==9.5.42
+sqlite_minutils==4.0.3
+shmarql==0.46
+git+https://gitlab.rlp.net/adwmainz/nfdi4culture/knowledge-graph/mkdocs-nfdi4culture.git@main#egg=mkdocs-nfdi4culture

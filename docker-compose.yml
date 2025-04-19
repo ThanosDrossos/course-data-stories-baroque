@@ -1,0 +1,19 @@
+services:
+  shmarql:
+    image: ghcr.io/epoz/shmarql
+    container_name: "${SHMARQL_CONTAINER_NAME:-shmarql}"
+    restart: unless-stopped
+    environment:
+      - "TZ=Europe/Berlin"
+      - "SCHEME=${SHMARQL_SCHEME:-http://}"
+      - "DOMAIN=${SHMARQL_DOMAIN:-localhost}"
+      - "PORT=8080"
+      - "ENDPOINT=https://nfdi4culture.de/sparql"
+      - "ENDPOINTS=virtuoso|https://nfdi4culture.de/sparql"
+      - "DEBUG=1"
+    volumes:
+      - ./src/mkdocs.yml:/src/mkdocs.yml
+      - ./src/docs:/src/docs
+      - ./src/requirements.txt:/src/requirements.txt
+    ports:
+      - "8080:8000"

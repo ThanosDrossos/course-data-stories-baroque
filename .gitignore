@@ -1,0 +1,45 @@
+# Dependencies
+node_modules
+__pycache__
+venv
+.venv
+
+# Build files
+build
+site
+
+# Distribution files
+dist
+mkdocs_nfdi4culture.egg-info
+
+# Caches and logs
+*.cpuprofile
+*.log
+*.tsbuildinfo
+.cache
+.eslintcache
+
+# Examples
+example
+example.zip
+
+# -----------------------------------------------------------------------------
+# General
+# -----------------------------------------------------------------------------
+
+# Never ignore .gitkeep files
+!**/.gitkeep
+
+# OSX internals
+.DS_Store
+
+# Temporary files
+TODO
+tmp
+
+# IDEs & Editors
+.idea
+*~
+
+# Fonts
+NantesWeb-Bold.woff2

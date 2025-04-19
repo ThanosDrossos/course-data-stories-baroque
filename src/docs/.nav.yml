@@ -1,0 +1,6 @@
+nav:
+  - index.md
+  - Stories:
+      - stories/index.md
+      - 01 Opera Analysis: stories/01/index.md
+  - SPARQL Exploration: "/shmarql"
