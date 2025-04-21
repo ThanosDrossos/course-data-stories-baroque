@@ -1,0 +1,29 @@
+.tile {
+    position: relative;
+    margin: 2rem 0 0 0;
+    padding: 2rem 2rem 0.5rem 2rem;
+    color: black;
+    background: #d3efe6;
+}
+
+figure {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+}
+
+figure img {
+    margin-bottom: 0 !important;
+}
+
+.language-shmarql {
+    margin-bottom: 3rem;
+}
+
+.language-shmarql table {
+    font-size: smaller;
+}
+
+.paginate_button {
+    border-bottom: none !important;
+}

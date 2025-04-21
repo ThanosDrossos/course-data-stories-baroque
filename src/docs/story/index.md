@@ -5,5 +5,5 @@
 
 **Author:** Torsten Schrade
 
-[Read the full story](01/)
+[Read the full story](E6263/index.md)
 /// 

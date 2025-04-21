@@ -2,6 +2,6 @@ nav:
   - index.md
   - Stories:
       - story/index.md
-      - 01 Opera Analysis: story/01/index.md
+      - 01 An Italian Data Journey: story/E6263/index.md
   - Contribute: contribute.md
   - SPARQL Exploration: "/shmarql"
