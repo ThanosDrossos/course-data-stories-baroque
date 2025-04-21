@@ -43,7 +43,7 @@ TEXT
 
 Find all operas in the Doria Pamphilj collection that are based on libretti of Pietro Metastasio.
 
-``` sparql
+``` sparql linenums="1"
 --8<-- "query-06.rq"
 ```
 

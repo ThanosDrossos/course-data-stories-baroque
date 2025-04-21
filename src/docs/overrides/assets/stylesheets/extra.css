@@ -27,3 +27,23 @@ figure img {
 .paginate_button {
     border-bottom: none !important;
 }
+
+td.code {
+    position: relative;
+}
+
+.execute {
+    position: absolute;
+    top: 0.8rem;
+    right: 3rem;
+    border: none !important;
+}
+
+.execute svg:hover path {
+    fill: #82d8bc;
+}
+
+.code .copy-to-clipboard {
+    right: 8px;
+    top: 0.7rem;
+}

@@ -4,17 +4,17 @@ $(function() {
 
   $('.language-sparql').each(function() {
     const $block = $(this);
-    const $pre   = $block.find('pre');
-    const $code  = $block.find('code');
+    const $pre   = $block.find('.code');
+    const $code  = $block.find('.code code');
     const query  = encodeURIComponent($code.text());
 
-    const $link = $('<a>')
+    const $link = $('<a class="execute" title="Execute query">')
       .css('display', 'block')
       .attr('title', 'Execute Query')
       .attr('href', '/shmarql/?query=' + query)
       .html(fa_aeroplane);
 
-    $pre.append($link);
+    $code.append($link);
   });
 
   $('.language-shmarql').each(function() {
