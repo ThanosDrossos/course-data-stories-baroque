@@ -13,6 +13,7 @@ theme:
 
 extra_javascript:
   - overrides/assets/javascripts/jquery.dataTables.min.js
+  - overrides/assets/vendor/sgvizler2.js
   - overrides/assets/javascripts/extra.js
 
 extra_css:

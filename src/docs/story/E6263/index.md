@@ -60,17 +60,29 @@ TEXT
 
 TEXT
 
+### Example 05: Show all places of opera premieres on an interactive map
+
+--8<-- "; query-05.rq"
+
 ### Example 06: Combining Persons in RISM and Partitura
 
 Find all operas in the Doria Pamphilj collection that are based on libretti of Pietro Metastasio.
 
+![Person relations between Partitura and RISM](query-06-visualisation.png)
+
+/// details | **Show SPARQL query**
+    type: plain
 ``` sparql linenums="1"
 --8<-- "query-06.rq"
 ```
+/// 
 
+/// details | **Show SPARQL query result**
+    type: plain
 ``` shmarql
 --8<-- "query-06.rq"
 ```
+///
 
 ## Summary and results
 

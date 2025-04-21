@@ -16,6 +16,10 @@ figure img {
     margin-bottom: 0 !important;
 }
 
+.n4c-border-black {
+    outline: 1px solid #333;
+}
+
 .language-shmarql {
     margin-bottom: 3rem;
 }
@@ -74,4 +78,15 @@ td.code {
 
 .dataTables_wrapper.no-footer .dataTables_scrollBody {
     border: none;
+}
+
+details.plain {
+    background: none !important;
+    padding: 0 !important;
+    margin: 0 0 2rem 0 !important;
+}
+
+details.plain summary {
+    padding: 1rem;
+    border: 1px solid #333;
 }
