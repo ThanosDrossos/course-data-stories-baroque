@@ -1,0 +1,27 @@
+PREFIX schema: <http://schema.org/>
+PREFIX rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:   <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX cto:    <https://nfdi4culture.de/ontology#>
+PREFIX wd:     <http://www.wikidata.org/entity/>
+
+SELECT
+  ?composer
+  (SAMPLE(?composerLabel) AS ?name)
+  (SUM(IF(?elementType = wd:Q208080, 1, 0)) AS ?operaBuffaCount)
+  (SUM(IF(?elementType = wd:Q210675, 1, 0)) AS ?operaSeriaCount)
+  (SUM(IF(?elementType = wd:Q85477,   1, 0)) AS ?oratorioCount)
+  (SUM(
+     IF(?elementType = wd:Q208080, 1, 0) +
+     IF(?elementType = wd:Q210675, 1, 0) +
+     IF(?elementType = wd:Q85477,   1, 0)
+  ) AS ?totalCount)
+WHERE {
+  SERVICE <https://lod.academy/dhi-rom/data/partitura/sparql> {
+    ?work a cto:Item ;
+          schema:composer ?composer ;
+          cto:elementType ?elementType .
+    ?composer rdfs:label  ?composerLabel .
+  }
+}
+GROUP BY ?composer
+ORDER BY DESC(?totalCount)

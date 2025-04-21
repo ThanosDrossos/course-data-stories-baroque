@@ -35,7 +35,7 @@ $(function() {
       $block.find('table').each(function() {
         if (! $.fn.DataTable.isDataTable(this)) {
           $(this).DataTable({
-            scrollX: true,
+            scrollX: false,
             paging:   true,
             ordering: true,
             info:     true

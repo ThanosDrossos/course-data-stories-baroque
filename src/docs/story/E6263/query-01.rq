@@ -1,0 +1,27 @@
+PREFIX schema:   <http://schema.org/>
+PREFIX rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:     <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX cto:      <https://nfdi4culture.de/ontology#>
+PREFIX wd:       <http://www.wikidata.org/entity/>
+
+SELECT
+  ?item
+  ?label
+  (COUNT(DISTINCT ?resource) AS ?usageCount)
+WHERE {
+  SERVICE <https://lod.academy/dhi-rom/data/partitura/sparql> {
+    ?resource a cto:Item ;
+              cto:elementType ?item .
+  }
+
+  FILTER(?item IN (wd:Q208080, wd:Q210675, wd:Q85477))
+
+  BIND(
+    IF(?item = wd:Q208080, "Opera buffa",
+      IF(?item = wd:Q210675, "Opera seria",
+        IF(?item = wd:Q85477,  "Oratorio", "")))
+    AS ?label
+  )
+}
+GROUP BY ?item ?label
+ORDER BY DESC(?usageCount)

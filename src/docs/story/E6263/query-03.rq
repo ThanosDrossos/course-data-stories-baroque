@@ -3,20 +3,17 @@ PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX nfdicore: <https://nfdi.fiz-karlsruhe.de/ontology/>
 PREFIX cto: <https://nfdi4culture.de/ontology#>
-PREFIX wd: <http://www.wikidata.org/entity/>
-PREFIX wdt: <http://www.wikidata.org/prop/direct/>
-PREFIX wikibase: <http://wikiba.se/ontology#>
-PREFIX bd: <http://www.bigdata.com/rdf#>
 
 SELECT
   (SAMPLE(?latitude) AS ?latitude)
   (SAMPLE(?longitude) AS ?longitude)
   ?opera
-  (SAMPLE(?theaterLabel) AS ?description)
-  (SAMPLE(?resource) AS ?link)
-  (SAMPLE(?image) AS ?url)
+  (?composerLabel AS ?composer)
+  (SAMPLE(?theaterLabel) AS ?theater)
+  (SAMPLE(?locationLabel) AS ?location)
+  (SAMPLE(?year) AS ?year)
+  (COUNT(DISTINCT ?resource) AS ?partitura)
 WHERE {
-
   SERVICE <https://lod.academy/dhi-rom/data/partitura/sparql> {
     ?resource a cto:Item .
     ?resource rdfs:label ?opera .
@@ -34,13 +31,6 @@ WHERE {
     ?location schema:longitude ?longitude .
 
     ?event nfdicore:startDate ?year .
-  }
-
-  BIND(IRI(STR(?theater)) AS ?wd_item)
-  {
-    SERVICE <https://query.wikidata.org/sparql> {
-      ?wd_item wdt:P18 ?image .
-    }
   }
 }
 GROUP BY ?opera ?composerLabel

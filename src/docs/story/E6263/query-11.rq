@@ -1,0 +1,66 @@
+PREFIX sc: <http://purl.org/science/owl/sciencecommons/>
+PREFIX ct: <http://data.linkedct.org/resource/linkedct/>
+PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX nfdicore: <https://nfdi.fiz-karlsruhe.de/ontology/>
+PREFIX cto: <https://nfdi4culture.de/ontology#>
+PREFIX partitura: <https://nocodb.nfdi4culture.de/dashboard/#/nc/pxjfen9oerev7k9/mj3w842gefzot7u?rowId=>
+
+SELECT
+  ?partitura
+  ?signature
+  (?partituraLabel AS ?title)
+  (?composerLabel AS ?composer)
+  ?lyricist
+  ?rendered
+  ?incipitTitle
+  ?locationLabel
+  ?year
+  ?rismItem
+  ?latitude
+  ?longitude
+WHERE {
+  SERVICE <https://lod.academy/dhi-rom/data/partitura/sparql> {
+    SELECT
+      ?partitura
+      ?partituraLabel
+	  ?signature
+      ?composerLabel
+      ?rismItem
+      ?locationLabel
+	  ?latitude
+      ?longitude
+      ?year
+    {
+      ?partitura a cto:Item .
+      ?partitura rdfs:label ?partituraLabel .
+      ?partitura schema:identifier ?signature .
+
+      ?partitura schema:composer ?composer .
+      ?composer rdfs:label ?composerLabel .
+
+      OPTIONAL {
+      ?partitura cto:relatedLocation ?location .
+      ?location rdfs:label ?locationLabel .
+      ?location schema:latitude ?latitude .
+      ?location schema:longitude ?longitude .
+      }
+
+      OPTIONAL {
+      ?partitura cto:relatedEvent ?event .
+      ?event nfdicore:startDate ?year .
+      }
+
+      ?partitura cto:relatedItem ?rismItem .
+    }
+  }
+
+  ?rismItem cto:relatedOrganization <https://rism.online/institutions/30001904> .
+  ?incipit cto:incipitOf ?rismItem .
+  ?incipit cto:pattern ?pattern . FILTER regex(?pattern, "B.*?B.*?B.*?B.*?")
+  ?incipit schema:contentURL ?rendered .
+  ?incipit rdfs:label ?incipitTitle .
+  OPTIONAL { ?rismItem schema:lyricist/rdfs:label ?lyricist . }
+}
+GROUP BY ?partitura

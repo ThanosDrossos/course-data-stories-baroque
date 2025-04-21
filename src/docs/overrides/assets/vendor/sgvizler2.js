@@ -6311,4 +6311,4 @@
 }));
 //# sourceMappingURL=sgvizler2.js.map
 
-sgvizler2.containerDraw('result');
+sgvizler2.containerDrawAll();

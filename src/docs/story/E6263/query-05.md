@@ -1,3 +1,8 @@
+<div id="result-05"
+data-sgvizler-endpoint="https://nfdi4culture.de/sparql"
+data-sgvizler-chart="leaflet.visualization.Map"
+data-sgvizler-log="0"
+data-sgvizler-query="
 PREFIX schema: <http://schema.org/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
@@ -45,3 +50,5 @@ WHERE {
 }
 GROUP BY ?opera ?composerLabel
 ORDER BY ?opera ?composerLabel
+" data-sgvizler-endpoint-query-parameter="query"
+style="width: 100%; height: 500px; margin-bottom: 2rem;" class="n4c-border-black"></div>

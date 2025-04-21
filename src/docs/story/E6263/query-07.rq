@@ -1,0 +1,36 @@
+PREFIX schema:    <http://schema.org/>
+PREFIX rdf:       <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:      <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX nfdicore:  <https://nfdi.fiz-karlsruhe.de/ontology/>
+PREFIX cto:       <https://nfdi4culture.de/ontology#>
+
+SELECT
+  ?opera
+  (?composerName AS ?composer)
+  ?year
+  (SAMPLE(?elementTypeLabel)    AS ?type)
+  (COUNT(DISTINCT ?partitura)    AS ?partituraCount)
+WHERE {
+  SERVICE <https://lod.academy/dhi-rom/data/partitura/sparql> {
+
+    VALUES (?elementType ?elementTypeLabel) {
+      (<http://www.wikidata.org/entity/Q210675> "Opera seria")
+      (<http://www.wikidata.org/entity/Q208080> "Opera buffa")
+    }
+
+    ?partitura a cto:Item ;
+               rdfs:label       ?opera ;
+               cto:elementType  ?elementType ;
+               cto:relatedPerson <https://rism.online/people/17950> ;
+               schema:composer  ?composer .
+    ?composer   rdfs:label        ?composerName .
+    ?partitura  cto:relatedEvent  ?event .
+    ?event      nfdicore:startDate ?year .
+  }
+}
+GROUP BY
+  ?opera
+  ?composerName
+  ?year
+  ?elementTypeLabel
+ORDER BY ?year

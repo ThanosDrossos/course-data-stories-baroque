@@ -1,0 +1,40 @@
+#defaultView:Graph
+PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX nfdicore: <https://nfdi.fiz-karlsruhe.de/ontology/>
+PREFIX cto: <https://nfdi4culture.de/ontology#>
+PREFIX wd: <http://www.wikidata.org/entity/>
+PREFIX wdt: <http://www.wikidata.org/prop/direct/>
+PREFIX wikibase: <http://wikiba.se/ontology#>
+PREFIX bd: <http://www.bigdata.com/rdf#>
+
+SELECT
+  (SAMPLE(?latitude) AS ?latitude)
+  (SAMPLE(?longitude) AS ?longitude)
+  (?theaterLabel AS ?title)
+  (SAMPLE(?locationLabel) AS ?description)
+  (?theater AS ?link)
+  (SAMPLE(?image) AS ?url)
+WHERE {
+
+  SERVICE <https://nfdi4culture.de/sparql> {
+    SERVICE <https://lod.academy/dhi-rom/data/partitura/sparql> {
+      ?theater a nfdicore:Organization .
+      ?theater rdfs:label ?theaterLabel . FILTER(STRSTARTS(STR(?theater), "http://www.wikidata.org/entity/"))
+      ?theater cto:relatedLocation ?location .
+      ?location schema:latitude ?latitude .
+      ?location schema:longitude ?longitude .
+      ?location rdfs:label ?locationLabel .
+    }
+  }
+
+  BIND(IRI(STR(?theater)) AS ?wd_item)
+  {
+    SERVICE <https://query.wikidata.org/sparql> {
+      ?wd_item wdt:P18 ?image .
+    }
+  }
+}
+GROUP BY ?theater ?theaterLabel
+ORDER BY ?title

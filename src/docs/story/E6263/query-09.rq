@@ -1,0 +1,61 @@
+PREFIX cs: <http://purl.org/vocab/changeset/schema#>
+PREFIX schema: <http://schema.org/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX nfdicore: <https://nfdi.fiz-karlsruhe.de/ontology/>
+PREFIX cto: <https://nfdi4culture.de/ontology#>
+PREFIX crm: <http://erlangen-crm.org/current/E39_Actor>
+PREFIX csm: <http://corago.unibo.it/sm/>
+PREFIX corago: <http://corago.unibo.it/resource/>
+
+SELECT
+ 	?resource
+    (SAMPLE(?label) AS ?label)
+    (GROUP_CONCAT(STR(?typeLabel); separator = " | ") AS ?genre)
+    (GROUP_CONCAT(STR(?authorLabel); separator = " | ") AS ?authorLabel)
+    (GROUP_CONCAT(STR(?placeLabel); separator = " | ") AS ?placeLabel)
+    (GROUP_CONCAT(STR(?theaterLabel); separator = " | ") AS ?theaterLabel)
+	(SAMPLE(SUBSTR(STR(?isoDate), 1,4)) AS ?year)
+WHERE {
+  SERVICE <http://coragolod2.ing.unibo.it:8080/blazegraph/namespace/corago_20200518/sparql> {
+    SELECT
+    	?resource
+    	?label
+        ?type
+    	?typeLabel
+        ?author
+        ?authorLabel
+        ?place
+        ?placeLabel
+    	?theater
+    	?theaterLabel
+    	?isoDate
+    WHERE {
+        ?resource a <http://erlangen-crm.org/efrbroo/F15_Complex_Work> .
+        ?resource rdfs:label ?label .
+
+        ?resource csm:CPBC10_type ?type .
+        ?type rdfs:label ?typeLabel .
+
+    	?resource csm:CPBC1_work_author ?author . FILTER(STRSTARTS(STR(?author), "http://corago.unibo.it/resource/RESPONS/000005090100"))
+        ?author rdfs:label ?authorLabel .
+
+      	OPTIONAL {
+          ?resource csm:CP9_first_performed_in/csm:CPC10_performance_place ?place .
+          ?place rdfs:label ?placeLabel .
+        }
+
+      	OPTIONAL {
+          ?resource csm:CP9_first_performed_in/csm:CPC11_performance_location ?theater .
+          ?theater rdfs:label ?theaterLabel .
+      	}
+
+      	OPTIONAL {
+          ?resource csm:CP9_first_performed_in/csm:CPC15_performed_on ?date .
+          ?date rdf:value ?isoDate .
+      	}
+    }
+  }
+}
+GROUP BY ?resource
+ORDER BY ?year ?label
