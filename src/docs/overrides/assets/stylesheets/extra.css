@@ -20,6 +20,10 @@ figure img {
     margin-bottom: 3rem;
 }
 
+.language-shmarql p {
+    display: none;
+}
+
 .language-shmarql table {
     font-size: smaller;
 }
@@ -46,4 +50,28 @@ td.code {
 .code .copy-to-clipboard {
     right: 8px;
     top: 0.7rem;
+}
+
+.dataTables_wrapper .dataTables_length select,
+.dataTables_wrapper .dataTables_filter input {
+    border: 1px solid #000;
+    border-radius: 0;
+}
+
+.paginate_button {
+    background: none !important;
+    border: none !important;
+    border-bottom: 1px solid #82d8bc !important;
+    border-radius: 0 !important;
+    color: #0c0c0c !important;
+    margin-right: 5px;
+    padding: 5px !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    color: #82d8bc !important;
+}
+
+.dataTables_wrapper.no-footer .dataTables_scrollBody {
+    border: none;
 }

@@ -25,11 +25,32 @@ Daniel de Lafeuille, Nouvelle Carte D’Italie - Nieuwe Kaart van Italien, 1706,
 
 ## Introduction
 
-TEXT
+The Archivio Doria Pamphilj in Rome houses a significant yet largely unexplored collection of operatic materials dating from the 16th to the 19th centuries. Originally assembled between 1764 and 1777 by Giorgio Andrea IV Doria Landi Pamphilj (1747–1820), this archive includes approximately 300 bibliographic units encompassing sacred music from the 16th and 17th centuries, vocal and instrumental music from the 18th century, and printed music from the 19th century. Notably, the archive contains 27 complete opera scores, 21 collections of varied arias ("Arie diversi"), and 128 individual aria manuscripts from the late 18th and early 19th centuries.
+
+[![Pallazo Doria Pamphilj](pallazo-doria.jpg)](https://commons.wikimedia.org/wiki/File:Calcografia_degli_edifizj_di_Roma_1779_(69608988).jpg)
+
+/// caption
+Palazzo Doria Pamphilj, Rome / 1779; [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Calcografia_degli_edifizj_di_Roma_1779_(69608988).jpg), Public Domain
+///
+
+To facilitate scholarly access and promote deeper musicological research, the German Historical Institute in Rome (DHI) initiated the "Partitura Project," supported by the German Research Foundation (DFG) between 2008 and 2015 under the leadership of Dr Roland Pfeiffer. The project accomplished comprehensive digitisation of opera scores from both the Doria Pamphilj and the Massimo collections, resulting in a digital archive comprising approximately 115,000 images and a database of around 30,000 aria incipits.
 
 ## Research questions
 
-TEXT
+Our data story addresses two research questions: 
+
+1. firstly, whether selected datasets from the DHI can be effectively federated within European data spaces using data-driven methods, thereby generating novel insights that surpass the original data; 
+2. and secondly, how these federated data can be employed to unlock new research potentials and concrete scholarly advancements in music-historical studies.
+
+Methodologically, the exploration was designed as a structured experiment, constrained to a 100-hour timeframe spread across four weeks. The investigation exclusively utilised cloud-based European infrastructures, notably those provided by NFDI4Culture and the European Open Science Cloud (EOSC). 
+
+A key aspect involved employing artificial intelligence and knowledge graphs, particularly for data curation, semantic enrichment, and assisted programming. Quality control was maintained through a "human-in-the-loop" approach, while data federation occurred in real-time during analyses. The experiment aimed at demonstrating measurable improvements in data interoperability, enhanced discoverability and interpretative value, and the creation of new multimodal interaction opportunities with historical datasets.
+
+![Envisaged data federation and methodological approach](partitura-federation.png)
+
+/// caption
+Envisaged data federation and methodological approach
+///
 
 ## Data preparation
 
