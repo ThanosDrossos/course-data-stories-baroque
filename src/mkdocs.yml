@@ -11,52 +11,48 @@ theme:
   static_templates:
     - 404.html
 
+extra_javascript:
+  - javascripts/extra.js
+
 plugins:
   - search
   - awesome-nav
 
 markdown_extensions:
   - abbr
-  - admonition
   - attr_list
-  - def_list
   - footnotes
   - md_in_html
+  - shmarql
   - toc:
       permalink: false
   - pymdownx.arithmatex:
       generic: true
   - pymdownx.betterem:
       smart_enable: all
+  - pymdownx.blocks.admonition
+  - pymdownx.blocks.caption
+  - pymdownx.blocks.definition
+  - pymdownx.blocks.details
+  - pymdownx.blocks.html
+  - pymdownx.blocks.tab
   - pymdownx.caret
-  - pymdownx.details
   - pymdownx.highlight:
       anchor_linenums: true
       line_spans: __span
       pygments_lang_class: true
   - pymdownx.inlinehilite
-  - pymdownx.keys
   - pymdownx.magiclink:
       normalize_issue_symbols: true
       repo_url_shorthand: true
-      user: squidfunk
-      repo: mkdocs-material
   - pymdownx.mark
   - pymdownx.smartsymbols
-  - pymdownx.snippets:
-      auto_append:
-        - includes/mkdocs.md
+  - pymdownx.snippets
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-  - pymdownx.tabbed:
-      alternate_style: true
-      combine_header_slug: true
-      slugify: !!python/object/apply:pymdownx.slugs.slugify
-        kwds:
-          case: lower
   - pymdownx.tasklist:
       custom_checkbox: true
   - pymdownx.tilde
