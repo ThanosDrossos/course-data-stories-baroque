@@ -83,7 +83,7 @@ As a preliminary step, data were systematically transferred into a no-code datab
 * 57 theatres
 * 94 inventory entries
 
-<iframe src="https://nocodb.nfdi4culture.de/dashboard/#/base/c148f081-7a60-4b4e-8da7-deadec7904b0" width="100%" height="600px" style="border: none; margin-bottom: 2rem"></iframe>
+**Check out the data interactively:** https://nocodb.nfdi4culture.de/dashboard/#/base/c148f081-7a60-4b4e-8da7-deadec7904b0
 
 ### Step 2: Semi-automated enrichment with authority data
 
