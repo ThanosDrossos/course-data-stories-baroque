@@ -16,18 +16,10 @@ git clone https://gitlab.rlp.net/adwmainz/nfdi4culture/knowledge-graph/shmarql/d
 cd datastories && docker compose up -d
 ```
 
-#### 3. Install the NFDI4Culture theme
-
-```
-docker exec -it shmarql /usr/local/bin/pip install -r requirements.txt
-```
-
-#### 4. Generate the website
-
-```
-docker exec -it shmarql mkdocs build
-```
-
-#### 5. Open it in your browser
+#### 3. Open it in your browser
 
 The Shmarql instance will run at http://localhost:7014
+
+#### 4. Edit the files in the ./docs directory
+
+You can add new stories or edit existing ones in the `docs` directory. The files are written in Markdown format, and you can use Shmarql queries to visualize data.
