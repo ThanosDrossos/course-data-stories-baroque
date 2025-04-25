@@ -1,6 +1,8 @@
 services:
   shmarql:
-    image: ghcr.io/epoz/shmarql:v0.53
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: "${SHMARQL_CONTAINER_NAME:-shmarql}"
     restart: unless-stopped
     environment:
@@ -15,5 +17,6 @@ services:
     volumes:
       - ./src/mkdocs.yml:/src/mkdocs.yml
       - ./src/docs:/src/docs
+      - ./src/docs/.nav.yml:/src/docs/.nav.yml
     ports:
       - "7014:8000"
