@@ -24,9 +24,9 @@ The Shmarql instance will run at http://localhost:7014
 
 You can add new stories or edit existing ones in the `docs` directory. The files are written in Markdown format, and you can use Shmarql queries to visualize data. A few steps must be followed to register and correctly process new data stories.
 
-##### 4. a) Create a directory for the new data story in the 'src/docs/story' directory
+##### 4. a) Create a directory for the new data story in the `src/docs/story` directory
 
-A separate directory is created in the 'src/docs/story' directory for each data story. The name of the directory is the Culture IRI of the new data story to be added. All files specific to the data story are stored in this directory, such as the `index.md` of the story itself, images, SPARQL queries and Markdown snippets.
+A separate directory is created in the `src/docs/story` directory for each data story. The name of the directory is the Culture IRI of the new data story to be added. All files specific to the data story are stored in this directory, such as the `index.md` of the story itself, images, SPARQL queries and Markdown snippets.
 
 ##### 4. b) Create an `index.md` in the newly created data story directory
 
@@ -66,9 +66,9 @@ Example:
 - 01 An Italian Data Journey: story/E6263/index.md
 ```
 
-##### 4. e) Add new story to `src/docs/story/index.md`
+##### 4. e) Add accordion for new data story to `src/docs/story/index.md`
 
-A short abstract, author information and a link are added in `src/docs/story/index.md` so that the new data story also appears as an accordion on the 'Data Story Index' overview page.
+A short abstract, author information and a link to the new data story are added in `src/docs/story/index.md` so that the new data story also appears as an accordion on the 'Data Story Index' overview page.
 
 Example:
 
