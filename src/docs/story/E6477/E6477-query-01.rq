@@ -1,0 +1,42 @@
+PREFIX cto: <https://nfdi4culture.de/ontology#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX schema: <http://schema.org/>
+PREFIX nfdicore: <https://nfdi.fiz-karlsruhe.de/ontology/>
+PREFIX n4c: <https://nfdi4culture.de/id/>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX gnd: <http://d-nb.info/gnd/>
+
+# Show me sample resources from RISM Online related to the musicians Beethoven, Rossini, Liszt and Mendelssohn Bartholdy, from the same year that Ferdinand Gregorovius dealt with the musicians in his letters.
+
+SELECT DISTINCT
+?year
+?musician
+?letter
+?letterID
+# Just show one musical example source from RISM Online
+(SAMPLE(?musicalSourceLabel) AS ?musicalSource)
+(SAMPLE(?pattern) AS ?musicIncipitPattern)
+(SAMPLE(?rismResource) AS ?rismID)
+WHERE {
+  VALUES ?gnd { gnd:118573527 gnd:118580779 gnd:118602985 gnd:118508288 }
+	n4c:E5378 schema:dataFeedElement/schema:item ?letterID .
+  	?letterID rdfs:label ?letterLabel ;
+  	cto:relatedPerson ?gnd ;
+    cto:creationDate ?date .
+  	bind(year(xsd:date(?date)) as ?year) .
+  	n4c:E5313 schema:dataFeedElement/schema:item ?rismResource .
+    ?rismResource cto:relatedPerson ?gnd ;
+               rdfs:label ?rismLabel ;
+               schema:temporalCoverage ?tempCover .
+    ?incipit cto:incipitOf ?rismResource ;
+           	cto:pattern ?pattern .
+    ?gnd rdfs:label ?musician .
+  	# Filter for a musical source of the same year from RISM Online
+  	FILTER(regex(str(?tempCover), str(?year)))
+  	# Concat label of letters/musical sources with date
+  	BIND(CONCAT(?letterLabel, " (", ?date, ")") AS ?letter)
+  	BIND(CONCAT(?rismLabel, " (", ?tempCover, ")") AS ?musicalSourceLabel)
+}
+
+ORDER BY ?year

@@ -57,6 +57,7 @@ markdown_extensions:
   - pymdownx.snippets:
       base_path:
         - docs/story/E6263/
+        - docs/story/E6477/
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid

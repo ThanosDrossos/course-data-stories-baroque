@@ -1,0 +1,1 @@
+<iframe style="width: 100%; height: 500px; margin-bottom: 2rem; border: none" src="https://superset.nfdi4culture.de/superset/dashboard/culture-kg-kitchen" referrerpolicy="origin" sandbox="allow-scripts allow-same-origin allow-popups" class="n4c-border-black"></iframe>

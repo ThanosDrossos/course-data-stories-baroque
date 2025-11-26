@@ -7,3 +7,11 @@
 
 [Read the full story](E6263/index.md)
 /// 
+
+/// details | **02 A Deep Dive into NFDI4Culture's Integration Workflows**
+**Abstract:** Ever wondered how cross-connections between cultural resources are made in NFDI4Culture? In this story, we’re showcasing how data from RISM Online and the Gregorovius Letter Edition were integrated into the Culture Knowledge Graph - opening up new ways to link and explore cultural heritage data.
+
+**Author:** Linnaea Söhn, Tabea Tietz, Jonatan Jalle Steller, Paul Kehrein, Alexandra Büttner, Oleksandra Bruns, Etienne Posthumus, Jan Grünewälder, Jörg Hörnschemeyer, Christoph Sander, Vera Grund, Heike Fliegl, Harald Sack, Torsten Schrade
+
+[Read the full story](E6477/index.md)
+/// 
