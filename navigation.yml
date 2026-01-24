@@ -3,5 +3,6 @@ nav:
   - Stories:
       - story/index.md
       - 01 An Italian Data Journey: story/E6263/index.md
+      - 02 Baroque Ceiling Paintings: story/baroque-paintings/index.md
   - Contribute: contribute.md
   - SPARQL Exploration: "/shmarql"

@@ -12,7 +12,7 @@ services:
       - "DEBUG=1"
       - "WATCH_DOCS=1"
     volumes:
-      - ./stories:/src/docs/course
+      - ./stories/baroque-paintings:/src/docs/story/baroque-paintings
       - ./navigation.yml:/src/docs/.nav.yml
     ports:
       - "7015:8000"

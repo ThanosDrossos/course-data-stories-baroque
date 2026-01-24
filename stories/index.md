@@ -1,12 +1,23 @@
-# Another Story
+# Data Stories: NFDI4Culture Knowledge Graph
 
-Here is some lorem ipsum text to fill the page.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+Welcome to the Data Stories collection exploring cultural heritage data through the NFDI4Culture Knowledge Graph.
 
-## With a SPARQL query
+## Featured Data Story
 
-```sparql linenums="1" title="Example query"
-# List of research data portals
+### [Baroque Ceiling Paintings in Germany](baroque-paintings/index.md)
+
+Explore the **Corpus of Baroque Ceiling Painting in Germany (CbDD)** — over 5,800 ceiling paintings spanning 350 years of German art history.
+
+- 🖼️ **[Explore Paintings](baroque-paintings/paintings.md)** — Filter by year, location, subjects
+- 🎨 **[Painters & Collaborators](baroque-paintings/painters.md)** — Artist networks and famous families
+- 🏛️ **[Buildings & Geography](baroque-paintings/buildings.md)** — Churches, palaces, and maps
+- 📚 **[Iconographic Subjects](baroque-paintings/subjects.md)** — ICONCLASS themes and meanings
+
+---
+
+## Sample SPARQL Query
+
+```sparql linenums="1" title="List of Research Data Portals"
 PREFIX fabio: <http://purl.org/spar/fabio/>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
