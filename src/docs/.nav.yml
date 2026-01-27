@@ -4,5 +4,6 @@ nav:
       - story/index.md
       - 01 An Italian Data Journey: story/E6263/index.md
       - 02 A Deep Dive into NFDI4Culture's Integration Workflows: story/E6477/index.md
+      - 03 Baroque Art and History in Germany: story/CbDD/index.md
   - Contribute: contribute.md
   - SPARQL Exploration: "/shmarql"
