@@ -6,7 +6,7 @@ NFDI4Culture Data Story
 ## Exploring the Corpus of Baroque Ceiling Painting (CbDD) through Interactive Data Visualization
 
 /// html | div[class='tile']
-**Author:** [Your Name](https://orcid.org/)  
+**Authors:** [Thanos Drossos](https://orcid.org/0009-0001-6545-9096), [Robin](https://orcid.org/), [YiMin Cai](https://orcid.org/)  
 **Persistent Identifier:** https://nfdi4culture.de/id/CbDD  
 **License:** [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/)
 ///
@@ -258,11 +258,16 @@ ORDER BY painting_count DESC
 
 **ICONCLASS Categories:**
 
-- **7 - Bible**: Old and New Testament scenes
-- **1 - Religion & Magic**: Christian iconography, saints, angels
-- **9 - Classical Mythology**: Greek and Roman gods and heroes
-- **4 - Society & Culture**: Allegories of virtues, arts, sciences
-- **3 - Human Being**: Portraits, human activities
+- *0* · Abstract, Non-representational Art
+- *1* · Religion and Magic
+- *2* · Nature
+- *3* · Human Being, Man in General
+- *4* · Society, Civilization, Culture
+- *5* · Abstract Ideas and Concepts
+- *6* · History
+- *7* · Bible
+- *8* · Literature
+- *9* · Classical Mythology and Ancient History
 
 ---
 
