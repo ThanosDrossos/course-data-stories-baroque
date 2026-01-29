@@ -66,13 +66,14 @@ window.BaroqueViz = (function() {
         `,
         
         iconclassCategories: `
-            SELECT 
-                SUBSTRING(s.iconclass_code, 1, 1) as category,
+            -- Extract ICONCLASS code from subject_uri (e.g. https://iconclass.org/11D121 -> 11D121)
+            SELECT
+                SUBSTRING(regexp_replace(s.subject_uri, '.*/', ''), 1, 1) as category,
                 COUNT(DISTINCT ps.nfdi_uri) as painting_count
             FROM painting_subjects ps
             JOIN subjects s ON ps.subject_uri = s.subject_uri
-            WHERE s.iconclass_code IS NOT NULL
-            GROUP BY SUBSTRING(s.iconclass_code, 1, 1)
+            WHERE s.subject_source = 'ICONCLASS' AND s.subject_uri IS NOT NULL
+            GROUP BY SUBSTRING(regexp_replace(s.subject_uri, '.*/', ''), 1, 1)
             ORDER BY painting_count DESC
         `,
         
@@ -305,7 +306,78 @@ window.BaroqueViz = (function() {
         el.style.height = '600px';
 
         try {
-            const data = await BaroqueDB.query(QUERIES.buildingsWithCoords);
+            // Inspect schema to find available coordinate columns
+            const bCols = await BaroqueDB.query("PRAGMA table_info('buildings')");
+            const buildingCols = bCols.map(c => c.name ? c.name.toLowerCase() : c.name);
+
+            const pCols = await BaroqueDB.query("PRAGMA table_info('paintings')");
+            const paintingCols = pCols.map(c => c.name ? c.name.toLowerCase() : c.name);
+
+            // Candidate coordinate column name sets to look for
+            const latCandidates = ['latitude', 'lat', 'location_latitude', 'y'];
+            const lonCandidates = ['longitude', 'lon', 'location_longitude', 'x'];
+
+            function findColumn(cols, candidates) {
+                for (const c of candidates) {
+                    if (cols.indexOf(c) !== -1) return c;
+                }
+                return null;
+            }
+
+            const bLat = findColumn(buildingCols, latCandidates);
+            const bLon = findColumn(buildingCols, lonCandidates);
+
+            // Determine building name column (label vs name etc.)
+            const nameCandidates = ['label', 'name', 'building_name', 'title'];
+            const nameCol = findColumn(buildingCols, nameCandidates) || 'name';
+            // Determine city column if present
+            const cityCandidates = ['location_city', 'city', 'town'];
+            const cityCol = findColumn(buildingCols, cityCandidates);
+
+            let sql;
+            if (bLat && bLon) {
+                // Buildings table has coordinates
+                sql = `
+                    SELECT 
+                        b.${nameCol} as building_name,
+                        b.${bLat} as latitude,
+                        b.${bLon} as longitude,
+                        ${cityCol ? `b.${cityCol},` : ''}
+                        b.location_state,
+                        COUNT(DISTINCT p.nfdi_uri) as painting_count
+                    FROM buildings b
+                    JOIN paintings p ON b.building_id = p.building_id
+                    WHERE b.${bLat} IS NOT NULL AND b.${bLon} IS NOT NULL
+                    GROUP BY b.building_id, b.${nameCol}, b.${bLat}, b.${bLon}, 
+                             ${cityCol ? `b.${cityCol},` : ''} b.location_state
+                    ORDER BY painting_count DESC
+                `;
+            } else {
+                // Try to find coordinates in paintings table and average per building
+                const pLat = findColumn(paintingCols, latCandidates);
+                const pLon = findColumn(paintingCols, lonCandidates);
+
+                if (pLat && pLon) {
+                    sql = `
+                        SELECT
+                            b.${nameCol} as building_name,
+                            AVG(CAST(p.${pLat} AS DOUBLE)) as latitude,
+                            AVG(CAST(p.${pLon} AS DOUBLE)) as longitude,
+                            ${cityCol ? `b.${cityCol},` : ''}
+                            b.location_state,
+                            COUNT(DISTINCT p.nfdi_uri) as painting_count
+                        FROM buildings b
+                        JOIN paintings p ON b.building_id = p.building_id
+                        WHERE p.${pLat} IS NOT NULL AND p.${pLon} IS NOT NULL
+                        GROUP BY b.building_id, b.${nameCol}, ${cityCol ? `b.${cityCol},` : ''} b.location_state
+                        ORDER BY painting_count DESC
+                    `;
+                } else {
+                    throw new Error('No coordinate columns found in `buildings` or `paintings` tables.');
+                }
+            }
+
+            const data = await BaroqueDB.query(sql);
             
             // Clear loading message
             el.innerHTML = '';

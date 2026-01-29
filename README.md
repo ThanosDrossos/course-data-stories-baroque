@@ -1,83 +1,56 @@
 # NFDI4Culture Data Stories
+# NFDI4Culture Data Stories (local development)
 
-This repository contains a customized Shmarql instance with the official NFDI4Culture theme for our interactive data story platform.
+This repository contains the NFDI4Culture Data Stories site built on top of Shmarql and MkDocs. The project is configured to serve interactive data stories (SPARQL + client-side DuckDB WASM) via a Dockerized Shmarql instance.
 
-## How to run it
+Repository: https://github.com/ThanosDrossos/course-data-stories-baroque.git
 
-#### 1. Clone the repository
+Quick start
+1. Clone the repository:
 
-```
-git clone https://gitlab.rlp.net/adwmainz/nfdi4culture/knowledge-graph/shmarql/datastories.git
-```
-
-#### 2. Start the Shmarql container with docker compose
-
-```
-cd datastories && docker compose up -d
+```bash
+git clone https://github.com/ThanosDrossos/course-data-stories-baroque.git
+cd course-data-stories-baroque
 ```
 
-#### 3. Open it in your browser
+2. Build and run the site (rebuild on every change):
 
-The Shmarql instance will run at http://localhost:7014
-
-#### 4. Edit the files in the ./docs directory
-
-You can add new stories or edit existing ones in the `docs` directory. The files are written in Markdown format, and you can use Shmarql queries to visualize data. A few steps must be followed to register and correctly process new data stories.
-
-##### 4. a) Create a directory for the new data story in the `src/docs/story` directory
-
-A separate directory is created in the `src/docs/story` directory for each data story. The name of the directory is the Culture IRI of the new data story to be added. All files specific to the data story are stored in this directory, such as the `index.md` of the story itself, images, SPARQL queries and Markdown snippets.
-
-##### 4. b) Create an `index.md` in the newly created data story directory
-
-The entry point for each data story is an `index.md` file. The story is written in this file and other files are called up and integrated from it.
-
-Example:
-
-```
-src/docs/story/E6263/index.md
+```bash
+docker compose up -d --build
 ```
 
-##### 4. c) Add base path of the new data story directory to `src/mkdocs.yml`
+3. Open the site in your browser:
 
-To load snippets, such as custom Markdown files and SPARQL queries, the base path of the new directory must be added in the `src/mkdocs.yml` to
+http://localhost:7014
 
+Important: after you change any files under `src/` (Markdown, JS, CSS, mkdocs config), re-run:
+
+```bash
+docker compose up -d --build
 ```
-- pymdownx.snippets:
-    base_path:
-```
+This rebuilds the image and reloads the site so your edits are picked up.
 
-Example:
+Repository layout (key locations)
+- `src/mkdocs.yml` - site configuration and `extra_javascript` / `extra_css` entries.
+- `src/docs/` - MkDocs content for the site.
+    - `src/docs/story/` - data story content (each story in its own subfolder, e.g. `CbDD`, `E6263`, `E6477`).
+    - `src/docs/story/CbDD/baroque.duckdb` - pre-built DuckDB analytical database used by the CbDD story.
+    - `src/docs/story/CbDD/index.md` - the interactive CbDD story (uses DuckDB WASM + visualisations).
 
-```
-- docs/story/E6263/
-```
+- `src/docs/overrides/assets/` - site static assets
+    - `javascripts/` - custom JS (e.g. `duckdb-wasm-loader.js`, `baroque-viz.js`, `extra.js`, `local_test_buildings_map.html`)
+    - `vendor/` - third-party JS/CSS (Plotly, Leaflet, sgvizler2)
+    - `stylesheets/` - custom CSS (`extra.css`)
 
-##### 4. d) Add path to index.md of the new data story to `src/docs/.nav.yml`
+How to add a new data story
+1. Create a new folder under `src/docs/story/` named for the story (e.g. `E1234`).
+2. Add an `index.md` with the story content and any `*.rq` SPARQL snippets or assets.
+3. Add the story folder to `pymdownx.snippets.base_path` in `src/mkdocs.yml` if you use snippets from that folder.
+4. Add the new story entry to `src/docs/.nav.yml` to include it in navigation.
+5. Optionally add an accordion entry to `src/docs/story/index.md`.
 
-For a new data story to also appear in the navigation, it must be added in `src/docs/.nav.yml` below
-
-```
-- Stories:
-```
-Example:
-
-```
-- 01 An Italian Data Journey: story/E6263/index.md
-```
-
-##### 4. e) Add accordion for new data story to `src/docs/story/index.md`
-
-A short abstract, author information and a link to the new data story are added in `src/docs/story/index.md` so that the new data story also appears as an accordion on the 'Data Story Index' overview page.
-
-Example:
-
-```
-/// details | **01 An Italian Data Journey**
-**Abstract:** In this story we analyse Italian Opera of the 18th century using data from the NFDI4Culture Knowledge Graph and federated queries to Wikidata, Corago and the Partitura database of the DHI Rome.
-
-**Author:** Torsten Schrade
-
-[Read the full story](E6263/index.md)
-/// 
-```
+Where to look for code
+- Visualization and query helpers: `src/docs/overrides/assets/javascripts/baroque-viz.js`
+- DuckDB WASM initialization and loader: `src/docs/overrides/assets/javascripts/duckdb-wasm-loader.js`
+- Site-specific JS and DataTables helpers: `src/docs/overrides/assets/javascripts/extra.js`
+- Vendor libraries: `src/docs/overrides/assets/vendor/` (Plotly, Leaflet, sgvizler2)
