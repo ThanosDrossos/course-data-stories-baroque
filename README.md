@@ -1,9 +1,6 @@
 # NFDI4Culture Data Stories
-# NFDI4Culture Data Stories (local development)
 
 This repository contains the NFDI4Culture Data Stories site built on top of Shmarql and MkDocs. The project is configured to serve interactive data stories (SPARQL + client-side DuckDB WASM) via a Dockerized Shmarql instance.
-
-Repository: https://github.com/ThanosDrossos/course-data-stories-baroque.git
 
 Quick start
 1. Clone the repository:
