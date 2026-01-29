@@ -13,10 +13,10 @@ git clone https://github.com/ThanosDrossos/course-data-stories-baroque.git
 cd course-data-stories-baroque
 ```
 
-2. Build and run the site (rebuild on every change):
+2. Build:
 
 ```bash
-docker compose up -d --build
+docker compose up -d
 ```
 
 3. Open the site in your browser:
