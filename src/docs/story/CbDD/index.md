@@ -1,330 +1,410 @@
 NFDI4Culture Data Story
 {: .text-overline-m}
 
-# Baroque Art and History in Germany
+# Baroque Ceiling Paintings in Germany
 
-## Analysing research data about 18th century Italian opera using the Culture Knowledge Graph and federated European research infrastructures
+## Exploring the Corpus of Baroque Ceiling Painting (CbDD) through Interactive Data Visualization
 
 /// html | div[class='tile']
-**Author:** []()  
-**Persistent Identifier:**  
-**Metadata:** 
-**License:** []()
+**Author:** [Your Name](https://orcid.org/)  
+**Persistent Identifier:** https://nfdi4culture.de/id/CbDD  
+**License:** [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/)
 ///
 
-![Introductory Image]()
-
-/// caption
-///
-
-**Abstract:**
+**Abstract:** This data story explores the Corpus of Baroque Ceiling Painting in Germany (CbDD) through interactive visualizations powered by DuckDB WASM. We analyze the geographic distribution, temporal patterns, and thematic content of over 4,500 ceiling paintings across German regions, using client-side SQL queries for responsive data exploration. The study combines data from the NFDI4Culture Knowledge Graph with historical photographs from Bildindex, cross-referenced via GND identifiers.
+{: .intro}
 
 ---
 
 ## Introduction
 
-The Archivio Doria Pamphilj in Rome houses a significant yet largely unexplored collection of operatic materials dating from the 16th to the 19th centuries. Originally assembled between 1764 and 1777 by Giorgio Andrea IV Doria Landi Pamphilj (1747–1820), this archive includes approximately 300 bibliographic units encompassing sacred music from the 16th and 17th centuries, vocal and instrumental music from the 18th century, and printed music from the 19th century. Notably, the archive contains 27 complete opera scores, 21 collections of varied arias ("Arie diversi"), and 128 individual aria manuscripts from the late 18th and early 19th centuries.
+Baroque ceiling paintings represent one of the most significant artistic achievements of the 17th and 18th centuries in German-speaking regions. The Corpus of Baroque Ceiling Painting in Germany (CbDD) provides a comprehensive database of these works, documenting paintings in churches, palaces, and other buildings across the country.
 
-[![]()]()
+This data story leverages **DuckDB WASM** to bring the analytical database directly to your browser. All queries execute locally—no server processing required—enabling fast, interactive exploration of the dataset.
 
-/// caption
-///
+### Dataset Overview
 
+<div id="dataset-stats" class="duckdb-query">
+    <div class="loading">Loading database statistics...</div>
+</div>
 
----
-
-## Research questions
-
-Our data story addresses the following research questions:
-
-1. Firstly, how did the activity of Baroque painters in German regions evolve over time and across locations?
-2. Secondly, which thematic patterns can be observed in paintings, and how do these themes change throughout painters’ careers?
-3. Thirdly, to what extent do collaboration patterns and shared contexts emerge from co-occurrences in artworks and locations?
-
-
-![Envisaged data federation and methodological approach](partitura-federation.png)
-
-/// caption
-Envisaged data federation and methodological approach
-///
-
----
-
-## Data preparation
-
-### Initial Dataset
-
-The initial dataset for this data story is derived from the NFDI4Culture Knowledge Graph, with a particular focus on the Corpus of Baroque Ceiling Painting in Germany (CbDD).
-CbDD is registered as a cultural data portal within NFDI4Culture and serves as a structured aggregation of metadata on Baroque ceiling paintings, including information on artworks, painters, locations, iconographic subjects, and related institutions.
-
-The NFDI4Culture Knowledge Graph provides these data via a SPARQL endpoint, enabling federated queries across multiple cultural heritage sources. In this project, the CbDD portal acts as the primary entry point for identifying relevant painting records and their associated metadata.
-
-![Challenges in the source data]()
-
-/// caption
-Challenges in the Partitura source data
-///
-
-
-### Step 1: Migration to a structured relational dataset (DuckDB)
-
-As a preliminary step, the curated Baroque ceiling painting data were migrated into a persistent relational database using DuckDB (baroque.duckdb).
-This migration transformed heterogeneous tabular inputs into a normalized relational schema, explicitly modelling many-to-many relationships between paintings, persons, subjects, buildings, and rooms via junction tables.
-
-To support efficient analytical queries and interactive exploration, indexes were created on key identifiers and foreign keys (e.g. painting IDs, person IDs, subject URIs).
-
-The migration resulted in a structured relational dataset comprising:
-
-* 4,594 paintings
-* 4,082 iconographic subjects
-* 17,474 painting–subject annotations
-* 1,260 buildings
-* 2,376 rooms
-
-**Check out the data interactively:** 
-
-### Step 2: Data cleaning, normalization, and quality assessment
-
-To enable systematic temporal and spatial analysis, several data cleaning and normalization steps were applied.
-
-First, heterogeneous German-language date expressions were parsed using custom year-parsing functions. These transformed free-text year strings into normalized temporal fields (year_start, year_end, and approximation flags), allowing both precise and approximate dates to be represented analytically.
-
-Second, data completeness and consistency were assessed through coverage statistics. This included evaluating the availability of parsed dates, geographic coordinates, image URLs, painter attributions, and CbDD matches across the paintings table.
-The resulting data quality summary provides an explicit account of usable versus missing information and supports transparent interpretation of subsequent analyses.
-
-### Step 3: Integration decisions and semantic structuring
-
-Rather than performing additional post-hoc authority reconciliation, semantic enrichment was inherited from the curated dataset structure itself. Iconographic subjects are represented as distinct entities and retain their associated controlled vocabulary sources (e.g. ICONCLASS and Getty AAT), enabling comparative analysis of descriptive frameworks.
-
-For painter-related analyses, explicit methodological decisions were documented. In particular, painter productivity analyses rely on consolidated painter name strings at the painting level to avoid artefacts introduced by fragmented person entries in junction tables.
-These integration decisions ensure analytical coherence while preserving traceability to the underlying data structures.
-
-/// caption
-///
-
-### Step 4: Analytical layers and interactive visual exploration
-
-The prepared relational dataset serves as the foundation for multiple analytical layers presented in this data story.
-
-These include:
-
-1. geographic distributions of paintings and buildings by German federal state,
-
-2. temporal distributions of ceiling paintings across decades,
-
-3. painter productivity and active periods,
-
-4. collaboration networks based on co-authored paintings,
-
-5. and frequency analyses of iconographic themes across controlled vocabularies.
-
-All analyses are implemented as reproducible SQL queries and rendered through interactive visualizations, enabling exploratory engagement with spatial, temporal, social, and thematic dimensions of Baroque ceiling painting production.
-
-/// caption
-///
+<script type="module">
+// Initialize database and show stats
+(async function() {
+    const statsEl = document.getElementById('dataset-stats');
+    
+    try {
+        // Show loading progress
+        statsEl.innerHTML = `
+            <div class="db-progress">
+                <div class="db-progress-bar" style="width: 0%"></div>
+            </div>
+            <div class="db-progress-text">Initializing DuckDB WASM...</div>
+        `;
+        
+        await BaroqueDB.init('/story/CbDD/baroque.duckdb', (progress) => {
+            statsEl.querySelector('.db-progress-bar').style.width = progress.percent + '%';
+            statsEl.querySelector('.db-progress-text').textContent = progress.message;
+        });
+        
+        // Query dataset statistics
+        const stats = await BaroqueDB.query(`
+            SELECT 
+                (SELECT COUNT(*) FROM paintings) as paintings,
+                (SELECT COUNT(*) FROM persons) as persons,
+                (SELECT COUNT(*) FROM buildings) as buildings,
+                (SELECT COUNT(*) FROM rooms) as rooms,
+                (SELECT COUNT(*) FROM subjects) as subjects,
+                (SELECT COUNT(*) FROM bi_items) as bildindex_items
+        `);
+        
+        const s = stats[0];
+        statsEl.innerHTML = `
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center;">
+                <div style="padding: 20px; background: #3498db22; border-radius: 8px;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #3498db;">${s.paintings.toLocaleString()}</div>
+                    <div>Ceiling Paintings</div>
+                </div>
+                <div style="padding: 20px; background: #27ae6022; border-radius: 8px;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #27ae60;">${s.persons.toLocaleString()}</div>
+                    <div>Artists & Architects</div>
+                </div>
+                <div style="padding: 20px; background: #9b59b622; border-radius: 8px;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #9b59b6;">${s.buildings.toLocaleString()}</div>
+                    <div>Buildings</div>
+                </div>
+                <div style="padding: 20px; background: #e67e2222; border-radius: 8px;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #e67e22;">${s.rooms.toLocaleString()}</div>
+                    <div>Rooms</div>
+                </div>
+                <div style="padding: 20px; background: #e74c3c22; border-radius: 8px;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #e74c3c;">${s.subjects.toLocaleString()}</div>
+                    <div>Subject Classifications</div>
+                </div>
+                <div style="padding: 20px; background: #1abc9c22; border-radius: 8px;">
+                    <div style="font-size: 2rem; font-weight: bold; color: #1abc9c;">${s.bildindex_items.toLocaleString()}</div>
+                    <div>Bildindex Photos</div>
+                </div>
+            </div>
+        `;
+    } catch (error) {
+        statsEl.innerHTML = `<div class="error">Failed to load database: ${error.message}</div>`;
+    }
+})();
+</script>
 
 ---
 
-## Data analysis
+## Research Questions
 
-### Analysis 01: 
+This data story addresses the following research questions:
 
-/// details | **Show SPARQL query 01**
-    type: plain
-``` sparql linenums="1" title="query-01.rq"
---8<-- "query-01.rq"
-```
-///
-
-/// details | **Show query result 01**
-    type: plain
-``` shmarql linenums="1" title="query-01.rq"
---8<-- "query-01.rq"
-```
-///
+1. **Geographic Distribution**: How are Baroque ceiling paintings distributed across German federal states?
+2. **Temporal Patterns**: When was the peak period of ceiling painting production?
+3. **Artistic Networks**: Who were the most prolific painters, and where did they work?
+4. **Thematic Analysis**: What iconographic subjects dominate Baroque ceiling paintings?
+5. **Cross-Dataset Links**: How do CbDD records connect to historical photographs in Bildindex?
 
 ---
 
-### Analysis 02: 
+## Analysis 01: Geographic Distribution
 
-/// details | **Show SPARQL query 02**
+Where are Baroque ceiling paintings concentrated across Germany?
+
+<div id="state-distribution" class="baroque-chart"></div>
+
+<script type="module">
+(async function() {
+    // Wait for database to be ready
+    while (!BaroqueDB.isReady()) {
+        await new Promise(r => setTimeout(r, 100));
+    }
+    await BaroqueViz.renderStateDistribution('#state-distribution');
+})();
+</script>
+
+/// details | **Show SQL Query**
     type: plain
-``` sparql linenums="1" title="query-02.rq"
---8<-- "query-02.rq"
+```sql
+SELECT 
+    location_state,
+    COUNT(*) as painting_count,
+    COUNT(DISTINCT building_id) as building_count
+FROM paintings
+WHERE location_state IS NOT NULL
+GROUP BY location_state
+ORDER BY painting_count DESC
 ```
 ///
 
-/// details | **Show query result 02**
+**Observation:** Bavaria and Baden-Württemberg contain the highest concentrations of Baroque ceiling paintings, reflecting the Catholic cultural sphere's emphasis on elaborate church decoration during the Counter-Reformation period.
+
+---
+
+## Analysis 02: Temporal Distribution
+
+When were most ceiling paintings created?
+
+<div id="temporal-distribution" class="baroque-chart"></div>
+
+<script type="module">
+(async function() {
+    while (!BaroqueDB.isReady()) {
+        await new Promise(r => setTimeout(r, 100));
+    }
+    await BaroqueViz.renderTemporalDistribution('#temporal-distribution');
+})();
+</script>
+
+/// details | **Show SQL Query**
     type: plain
-``` shmarql linenums="1" title="query-02.rq"
---8<-- "query-02.rq"
+```sql
+SELECT 
+    CAST(FLOOR(year_start / 10) * 10 AS INTEGER) as decade,
+    COUNT(*) as count
+FROM paintings
+WHERE year_start IS NOT NULL
+  AND year_start >= 1500 AND year_start <= 1900
+GROUP BY FLOOR(year_start / 10) * 10
+ORDER BY decade
 ```
 ///
 
-<img src="query-02-visualisation.svg" style="width: 100%" title="Statistics on opera buffa, opera seria and oratorio"/>
-
-/// caption
-Statistics on opera buffa, opera seria and oratorio in the Doria Pamphilj dataset
-///
+**Observation:** The peak period for Baroque ceiling painting production was between 1700-1760, coinciding with the height of the Baroque and Rococo periods in German architecture.
 
 ---
 
-### Example 03: 
+## Analysis 03: Top Painters
 
-/// details | **Show SPARQL query 03**
+Who were the most prolific ceiling painters in Germany?
+
+<div id="top-painters" class="baroque-chart"></div>
+
+<script type="module">
+(async function() {
+    while (!BaroqueDB.isReady()) {
+        await new Promise(r => setTimeout(r, 100));
+    }
+    await BaroqueViz.renderTopPainters('#top-painters');
+})();
+</script>
+
+/// details | **Show SQL Query**
     type: plain
-``` sparql linenums="1" title="query-03.rq"
---8<-- "query-03.rq"
-```
-/// 
-
---8<-- "query-03.md"
-
----
-
-### Analysis 04: 
-
-/// details | **Show SPARQL query 04**
-    type: plain
-``` sparql linenums="1" title="query-04.rq"
---8<-- "query-04.rq"
-```
-/// 
-
---8<-- "query-04.md"
-
----
-
-### Example 05: 
-
-/// details | **Show SPARQL query 05**
-    type: plain
-``` sparql linenums="1" title="query-05.rq"
---8<-- "query-05.rq"
-```
-/// 
-
---8<-- "query-05.md"
-
----
-
-### Example 06: 
-
-Find all operas in the Doria Pamphilj collection that are based on libretti of Pietro Metastasio.
-
-![Person relations between Partitura and RISM](query-06-visualisation.png)
-
-/// details | **Show SPARQL query 06**
-    type: plain
-``` sparql linenums="1" title="query-06.rq"
---8<-- "query-06.rq"
-```
-/// 
-
-/// details | **Show query result 06**
-    type: plain
-``` shmarql
---8<-- "query-06.rq"
+```sql
+SELECT 
+    pp.person_name,
+    COUNT(DISTINCT pp.nfdi_uri) as painting_count,
+    MIN(p.year_start) as earliest,
+    MAX(p.year_end) as latest
+FROM painting_persons pp
+JOIN paintings p ON pp.nfdi_uri = p.nfdi_uri
+WHERE pp.role = 'PAINTER'
+GROUP BY pp.person_name
+ORDER BY painting_count DESC
+LIMIT 20
 ```
 ///
 
 ---
 
-### Example 07: 
+## Analysis 04: Geographic Map of Buildings
 
-/// details | **Show SPARQL query 07**
-    type: plain
-``` sparql linenums="1" title="query-07.rq"
---8<-- "query-07.rq"
-```
-/// 
+Interactive map showing the locations of buildings with ceiling paintings.
 
-/// details | **Show query result 07**
-    type: plain
-``` shmarql
---8<-- "query-07.rq"
-```
-///
+<div id="buildings-map" class="baroque-map"></div>
 
----
+<script type="module">
+(async function() {
+    while (!BaroqueDB.isReady()) {
+        await new Promise(r => setTimeout(r, 100));
+    }
+    await BaroqueViz.renderBuildingsMap('#buildings-map');
+})();
+</script>
 
-### Example 08: 
-
-/// details | **Show SPARQL query 08**
-    type: plain
-``` sparql linenums="1" title="query-08.rq"
---8<-- "query-08.rq"
-```
-/// 
-
-/// details | **Show query result 08**
-    type: plain
-``` shmarql
---8<-- "query-08.rq"
-```
-///
+**Tip:** Click on markers to see building details and painting counts. Use the zoom controls to explore specific regions.
 
 ---
 
-### Example 09: 
+## Analysis 05: ICONCLASS Subject Categories
 
-/// details | **Show SPARQL query 09**
+What themes dominate Baroque ceiling paintings?
+
+<div id="iconclass-categories" class="baroque-chart"></div>
+
+<script type="module">
+(async function() {
+    while (!BaroqueDB.isReady()) {
+        await new Promise(r => setTimeout(r, 100));
+    }
+    await BaroqueViz.renderIconclassCategories('#iconclass-categories');
+})();
+</script>
+
+/// details | **Show SQL Query**
     type: plain
-``` sparql linenums="1" title="query-09.rq"
---8<-- "query-09.rq"
+```sql
+SELECT 
+    SUBSTRING(s.iconclass_code, 1, 1) as category,
+    COUNT(DISTINCT ps.nfdi_uri) as painting_count
+FROM painting_subjects ps
+JOIN subjects s ON ps.subject_uri = s.subject_uri
+WHERE s.iconclass_code IS NOT NULL
+GROUP BY SUBSTRING(s.iconclass_code, 1, 1)
+ORDER BY painting_count DESC
 ```
-/// 
-
-![Alluvial diagram showing the relation between works and places of premiere](query-09-visualisation.png)
-
-/// caption
-Alluvial diagram showing the relation between works and places of premiere
 ///
+
+**ICONCLASS Categories:**
+
+- **7 - Bible**: Old and New Testament scenes
+- **1 - Religion & Magic**: Christian iconography, saints, angels
+- **9 - Classical Mythology**: Greek and Roman gods and heroes
+- **4 - Society & Culture**: Allegories of virtues, arts, sciences
+- **3 - Human Being**: Portraits, human activities
 
 ---
 
-### Example 10: 
+## Analysis 06: Cross-Dataset Comparison
 
-/// details | **Show SPARQL query 10**
-    type: plain
-``` sparql linenums="1" title="query-10.rq"
---8<-- "query-10.rq"
-```
-/// 
+Comparing CbDD ceiling paintings with Bildindex historical photographs.
 
-![Beeswarm plot showing the staging history of Demofoonte](query-10-visualisation.png)
+<div id="cross-dataset" class="baroque-chart"></div>
 
-/// caption
-Beeswarm plot showing the staging history of Demofoonte
-///
+<script type="module">
+(async function() {
+    while (!BaroqueDB.isReady()) {
+        await new Promise(r => setTimeout(r, 100));
+    }
+    await BaroqueViz.renderCrossDatasetComparison('#cross-dataset');
+})();
+</script>
 
----
-
-### Example 11: 
-
-/// details | **Show SPARQL query 11**
-    type: plain
-``` sparql linenums="1" title="query-11.rq"
---8<-- "query-11.rq"
-```
-/// 
-
-![Relation between RISM incipits and resources from Partitura](query-11-visualisation.png)
-
-/// caption
-Relation between RISM incipits and resources from Partitura
-///
-
-**Experimental Search interface for notated music (Plaine & Easy format)**
-
-![](https://nfdi4culture.de/fileadmin/incipits/doria-p-incipitsearch.gif)
-
-**Try it out live:** https://nfdi4culture.de/kg-incipit-search.html
+The Bildindex archive contains historical photographs of ceiling paintings, many taken before restoration or destruction during World War II. These images provide invaluable documentation of artworks that may have changed significantly over time.
 
 ---
 
-## Summary and Outcomes
+## Interactive Query Explorer
 
-/// caption
+Run your own SQL queries against the database:
 
-///
+<div class="duckdb-query">
+    <textarea id="custom-query" class="query-editor" rows="6">SELECT 
+    pp.person_name as painter,
+    COUNT(*) as paintings,
+    STRING_AGG(DISTINCT p.location_state, ', ') as regions
+FROM painting_persons pp
+JOIN paintings p ON pp.nfdi_uri = p.nfdi_uri
+WHERE pp.role = 'PAINTER'
+GROUP BY pp.person_name
+ORDER BY paintings DESC
+LIMIT 10</textarea>
+    <button id="run-custom-query" class="run-query">▶ Run Query</button>
+    <div id="custom-query-result" class="query-result"></div>
+</div>
+
+<script type="module">
+document.getElementById('run-custom-query').addEventListener('click', async () => {
+    const sql = document.getElementById('custom-query').value;
+    const resultEl = document.getElementById('custom-query-result');
+    const btn = document.getElementById('run-custom-query');
+    
+    btn.disabled = true;
+    btn.textContent = 'Running...';
+    
+    try {
+        await BaroqueViz.renderCustomQuery('#custom-query-result', sql, 'Query Results');
+    } catch (error) {
+        resultEl.innerHTML = `<div class="error">Query Error: ${error.message}</div>`;
+    }
+    
+    btn.disabled = false;
+    btn.textContent = '▶ Run Query';
+});
+</script>
+
+### Example Queries to Try
+
+**Paintings by decade and state:**
+```sql
+SELECT 
+    FLOOR(year_start/10)*10 as decade,
+    location_state,
+    COUNT(*) as count
+FROM paintings
+WHERE year_start BETWEEN 1650 AND 1800
+GROUP BY decade, location_state
+ORDER BY decade, count DESC
+```
+
+**Buildings with most paintings:**
+```sql
+SELECT 
+    b.label as building,
+    b.location_city,
+    COUNT(DISTINCT p.nfdi_uri) as paintings
+FROM buildings b
+JOIN paintings p ON b.building_id = p.building_id
+GROUP BY b.building_id, b.label, b.location_city
+ORDER BY paintings DESC
+LIMIT 20
+```
+
+**Subject co-occurrences:**
+```sql
+SELECT 
+    s1.subject_label as subject1,
+    s2.subject_label as subject2,
+    COUNT(*) as co_occurrences
+FROM painting_subjects ps1
+JOIN painting_subjects ps2 ON ps1.nfdi_uri = ps2.nfdi_uri AND ps1.subject_uri < ps2.subject_uri
+JOIN subjects s1 ON ps1.subject_uri = s1.subject_uri
+JOIN subjects s2 ON ps2.subject_uri = s2.subject_uri
+WHERE s1.subject_source = 'ICONCLASS' AND s2.subject_source = 'ICONCLASS'
+GROUP BY s1.subject_label, s2.subject_label
+ORDER BY co_occurrences DESC
+LIMIT 20
+```
+
+---
+
+## Technical Notes
+
+### Data Sources
+
+- **CbDD**: Corpus of Baroque Ceiling Painting in Germany, accessed via NFDI4Culture Knowledge Graph
+- **Bildindex**: Historical photograph archive from Bildindex der Kunst und Architektur
+
+### Technology Stack
+
+- **DuckDB WASM**: Client-side analytical database (~16MB)
+- **Plotly.js**: Interactive charts and visualizations
+- **Leaflet**: Geographic mapping with marker clustering
+- **DataTables**: Sortable, searchable result tables
+
+### Database Schema
+
+| Table | Rows | Description |
+|-------|------|-------------|
+| `paintings` | 4,594 | Ceiling paintings with metadata |
+| `persons` | 2,831 | Artists, architects, patrons |
+| `buildings` | 1,260 | Churches, palaces, castles |
+| `rooms` | 2,376 | Specific rooms within buildings |
+| `subjects` | 4,082 | ICONCLASS + Getty AAT subjects |
+| `painting_persons` | 5,848 | Painting ↔ Person relations |
+| `painting_subjects` | 17,474 | Painting ↔ Subject relations |
+| `bi_items` | 968 | Bildindex historical photos |
+
+---
+
+## Summary
+
+This data story demonstrates how DuckDB WASM enables interactive, client-side data exploration for cultural heritage research. Key findings include:
+
+1. **Geographic concentration** in Bavaria and Baden-Württemberg reflects Catholic patronage patterns
+2. **Temporal peak** between 1700-1760 aligns with the height of Baroque and Rococo architectural styles
+3. **Biblical themes** (ICONCLASS category 7) dominate ceiling iconography
+4. **Cross-dataset linking** via GND identifiers connects primary documentation with historical photography
+
+The combination of structured analytical data with interactive visualizations enables researchers to explore hypotheses and patterns that would be difficult to perceive in tabular data alone.

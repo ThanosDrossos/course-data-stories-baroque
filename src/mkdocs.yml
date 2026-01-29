@@ -16,6 +16,8 @@ extra_javascript:
   - overrides/assets/vendor/sgvizler2.js
   - overrides/assets/javascripts/extra.js
   - overrides/assets/vendor/plotly-3.0.1.min.js
+  - overrides/assets/javascripts/duckdb-wasm-loader.js
+  - overrides/assets/javascripts/baroque-viz.js
 
 extra_css:
   - overrides/assets/stylesheets/jquery.dataTables.min.css
@@ -58,6 +60,7 @@ markdown_extensions:
       base_path:
         - docs/story/E6263/
         - docs/story/E6477/
+        - docs/story/CbDD/
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
