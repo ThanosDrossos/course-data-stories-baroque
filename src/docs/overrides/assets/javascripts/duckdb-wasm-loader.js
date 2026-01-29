@@ -21,19 +21,38 @@ window.BaroqueDB = (function() {
     let isInitialized = false;
     let initPromise = null;
 
-    // DuckDB WASM CDN URLs - must match database version
-    // Database was created with DuckDB v1.4.3, try WASM v1.32.0 (latest stable after 1.31.0)
-    const DUCKDB_VERSION = '1.32.0';
-    const DUCKDB_BUNDLES = {
-        mvp: {
-            mainModule: `https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@${DUCKDB_VERSION}/dist/duckdb-mvp.wasm`,
-            mainWorker: `https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@${DUCKDB_VERSION}/dist/duckdb-browser-mvp.worker.js`,
-        },
-        eh: {
-            mainModule: `https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@${DUCKDB_VERSION}/dist/duckdb-eh.wasm`,
-            mainWorker: `https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@${DUCKDB_VERSION}/dist/duckdb-browser-eh.worker.js`,
+    // DuckDB WASM versions to try (fallback list).
+    // The database file was created with DuckDB v1.4.3; try compatible WASM builds.
+    const DUCKDB_VERSIONS = [
+        '1.33.1-dev19.0',
+        '1.33.1-dev18.0',
+        '1.33.0',
+        '1.32.0',
+        '1.31.0',
+        '1.30.0',
+        '1.29.2'
+    ];
+
+    // Will be populated once we find a working version
+    let DUCKDB_VERSION = null;
+    let DUCKDB_BUNDLES = null;
+
+    // Try dynamic import for a list of versions and return the first successful module
+    async function tryImportDuckDB(versions) {
+        let lastError = null;
+        for (const v of versions) {
+            const url = `https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@${v}/+esm`;
+            try {
+                const mod = await import(url);
+                console.log(`[BaroqueDB] Imported @duckdb/duckdb-wasm@${v}`);
+                return { mod, version: v };
+            } catch (err) {
+                console.warn(`[BaroqueDB] Failed to import @duckdb/duckdb-wasm@${v}: ${err.message}`);
+                lastError = err;
+            }
         }
-    };
+        throw lastError || new Error('No duckdb-wasm versions could be imported');
+    }
 
     /**
      * Select the best bundle based on browser capabilities
@@ -103,10 +122,23 @@ window.BaroqueDB = (function() {
         try {
             _reportProgress(onProgress, 'Loading DuckDB WASM...', 0);
 
-            // Dynamically import DuckDB WASM
-            const duckdb = await import(`https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@${DUCKDB_VERSION}/+esm`);
-            
-            _reportProgress(onProgress, 'Selecting optimal bundle...', 10);
+            // Dynamically import DuckDB WASM (try multiple versions if necessary)
+            const { mod: duckdb, version: chosen } = await tryImportDuckDB(DUCKDB_VERSIONS);
+            DUCKDB_VERSION = chosen;
+
+            // Build bundles for the chosen version
+            DUCKDB_BUNDLES = {
+                mvp: {
+                    mainModule: `https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@${DUCKDB_VERSION}/dist/duckdb-mvp.wasm`,
+                    mainWorker: `https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@${DUCKDB_VERSION}/dist/duckdb-browser-mvp.worker.js`,
+                },
+                eh: {
+                    mainModule: `https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@${DUCKDB_VERSION}/dist/duckdb-eh.wasm`,
+                    mainWorker: `https://cdn.jsdelivr.net/npm/@duckdb/duckdb-wasm@${DUCKDB_VERSION}/dist/duckdb-browser-eh.worker.js`,
+                }
+            };
+
+            _reportProgress(onProgress, `Selected @duckdb/duckdb-wasm@${DUCKDB_VERSION}`, 10);
             const bundle = selectBundle();
 
             _reportProgress(onProgress, 'Creating worker...', 20);
