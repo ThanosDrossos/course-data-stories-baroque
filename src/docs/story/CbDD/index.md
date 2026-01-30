@@ -107,7 +107,22 @@ This data story addresses the following research questions:
 
 ---
 
-## Analysis 01: Geographic Distribution
+## User experience 
+
+This data story invites users to explore Baroque ceiling painting between **1600 and 1750** through two complementary perspectives: a **macro perspective** and a **micro perspective**.
+
+**Macro perspective:**
+This perspective provides an overview of the period by presenting temporal, spatial, and historical information. It visualizes how ceiling paintings are distributed over time, highlights their geographical occurrence across regions and building types, and situates the artworks within broader political and historical settings of the era. This perspective is intended to support orientation and to offer contextual reference points.
+
+**Micro perspective:**
+This perspective shifts the focus to an individual level. Users can explore the period through the life and work of a representative artist associated with a selected thematic block. Biographical information, artistic output, and geographical movement are presented to allow users to experience Baroque ceiling painting from a personal viewpoint and to observe how artistic activity unfolds across time and space.
+
+By combining aggregated views with individual trajectories, this data story enables users to navigate between overview and detail, encouraging independent exploration and reflection on Baroque ceiling painting within its historical context.
+
+---
+
+## Macro perspective
+### Analysis 01: Geographic Distribution
 
 Where are Baroque ceiling paintings concentrated across Germany?
 
@@ -141,7 +156,7 @@ ORDER BY painting_count DESC
 
 ---
 
-## Analysis 02: Temporal Distribution
+### Analysis 02: Temporal Distribution
 
 When were most ceiling paintings created?
 
@@ -174,7 +189,7 @@ ORDER BY decade
 
 ---
 
-## Analysis 03: Top Painters
+### Analysis 03: Top Painters
 
 Who were the most prolific ceiling painters in Germany?
 
@@ -208,7 +223,7 @@ LIMIT 20
 
 ---
 
-## Analysis 04: Geographic Map of Buildings
+### Analysis 04: Geographic Map of Buildings
 
 Interactive map showing the locations of buildings with ceiling paintings.
 
@@ -227,7 +242,7 @@ Interactive map showing the locations of buildings with ceiling paintings.
 
 ---
 
-## Analysis 05: ICONCLASS Subject Categories
+### Analysis 05: ICONCLASS Subject Categories
 
 What themes dominate Baroque ceiling paintings?
 
@@ -271,7 +286,7 @@ ORDER BY painting_count DESC
 
 ---
 
-## Analysis 06: Cross-Dataset Comparison
+### Analysis 06: Cross-Dataset Comparison
 
 Comparing CbDD ceiling paintings with Bildindex historical photographs.
 
@@ -402,6 +417,119 @@ LIMIT 20
 | `bi_items` | 968 | Bildindex historical photos |
 
 ---
+
+## Micro perspective
+
+### Analysis 1: Select a Category 
+
+You can select a thematic category that interests you. Based on your selection, you can explore Baroque ceiling painting through related artworks, artists, and contextual information.
+
+<div class="iconclass-picker" id="iconclass-picker">
+ 
+ <a class="iconclass-tile"
+     href="#analysis-society"
+     data-cat="4"
+     title="Society & Culture">
+    <img src="https://picsum.photos/200?random=23" alt="Society & Culture">
+    <span>Society & Culture</span>
+  </a>
+
+  <a class="iconclass-tile is-active"
+     href="#analysis-nature"
+     data-cat="2"
+     title="Nature">
+    <img src="https://picsum.photos/200?random=21" alt="Nature">
+    <span>Nature</span>
+  </a>
+
+  <a class="iconclass-tile"
+     href="#analysis-mythology"
+     data-cat="9"
+     title="Classical Mythology">
+    <img src="https://picsum.photos/200?random=22" alt="Classical Mythology">
+    <span>Classical Mythology</span>
+  </a>
+
+</div>
+
+
+<style>
+.iconclass-picker{
+    display: flex;
+  justify-content: space-between;   /* gleichmäßig verteilen */
+  align-items: flex-start;
+  gap: 0;                           /* kein zusätzliches spacing */
+  max-width: 720px;                 /* an Textbreite angepasst */
+  margin: 24px auto 16px auto;      /* zentriert unter dem Text */
+}
+.iconclass-tile{
+  border:0;
+  background:transparent;
+  padding:0;
+  cursor:pointer;
+  width:140px;
+  text-align:center;
+}
+.iconclass-tile img{
+  width:120px;
+  height:120px;
+  border-radius:999px;
+  object-fit:cover;
+  display:block;
+  margin:0 auto 10px auto;
+  box-shadow: 0 6px 16px rgba(0,0,0,.12);
+  border: 3px solid transparent;
+}
+.iconclass-tile span{
+  display:block;
+  font-size: 0.95rem;
+}
+.iconclass-tile.is-active img{
+  border-color: rgba(0,0,0,.45);
+}
+</style>
+
+<script type="module">
+(function(){
+  const picker = document.getElementById('iconclass-picker');
+  if(!picker) return;
+
+  picker.addEventListener('click', (e) => {
+    const btn = e.target.closest('.iconclass-tile');
+    if(!btn) return;
+
+    picker.querySelectorAll('.iconclass-tile').forEach(b => b.classList.remove('is-active'));
+    btn.classList.add('is-active');
+
+    // altert -> ausgeschaltet, sodass keine pop ups mehr kommen
+    //console.log('Selected ICONCLASS category:', btn.dataset.cat);
+    //alert(`Selected category: ${btn.dataset.cat}`);
+  });
+})();
+</script>
+
+
+---
+<a id="analysis-society"></a>
+## Society & Culture
+
+
+---
+<a id="analysis-nature"></a>
+## Nature
+
+---
+<a id="analysis-mythology"></a>
+## Classical Mythology
+
+
+
+
+
+
+
+---
+
 
 ## Summary
 
