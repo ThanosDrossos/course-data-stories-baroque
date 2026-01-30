@@ -223,6 +223,52 @@ LIMIT 20
 
 ---
 
+### Analysis 03b: Co-painter Relationships
+
+Which painters most frequently appear together on the same ceiling paintings?
+
+<div id="co-painter-pairs" class="baroque-chart"></div>
+
+<script type="module">
+(async function() {
+    while (!BaroqueDB.isReady()) {
+        await new Promise(r => setTimeout(r, 100));
+    }
+    await BaroqueViz.renderCoPainterPairs('#co-painter-pairs');
+})();
+</script>
+
+/// details | **Show SQL Query**
+    type: plain
+```sql
+WITH painters AS (
+  SELECT nfdi_uri, person_name AS painter
+  FROM painting_persons
+  WHERE role='PAINTER' AND person_name IS NOT NULL
+),
+pairs AS (
+  SELECT
+    a.painter AS p1,
+    b.painter AS p2,
+    COUNT(*) AS n_co
+  FROM painters a
+  JOIN painters b
+    ON a.nfdi_uri = b.nfdi_uri
+   AND a.painter < b.painter
+  GROUP BY 1,2
+)
+SELECT *
+FROM pairs
+WHERE n_co >= 8
+ORDER BY n_co DESC
+LIMIT 30
+```
+///
+
+**Observation:** Repeated co-painter pairs suggest stable collaboration (e.g., workshop teams or recurring commissions). This highlights that ceiling painting production was often network-based rather than purely individual authorship.
+
+---
+
 ### Analysis 04: Geographic Map of Buildings
 
 Interactive map showing the locations of buildings with ceiling paintings.

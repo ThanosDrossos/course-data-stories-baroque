@@ -124,6 +124,30 @@ window.BaroqueViz = (function() {
             GROUP BY pg.person_name
             ORDER BY bildindex_count DESC
             LIMIT 15
+        `, 
+
+        coPainterPairs: `
+            WITH painters AS (
+            SELECT nfdi_uri, person_name AS painter
+            FROM painting_persons
+            WHERE role='PAINTER' AND person_name IS NOT NULL
+            ),
+            pairs AS (
+            SELECT
+                a.painter AS p1,
+                b.painter AS p2,
+                COUNT(*) AS n_co
+            FROM painters a
+            JOIN painters b
+                ON a.nfdi_uri = b.nfdi_uri
+            AND a.painter < b.painter
+            GROUP BY 1,2
+            )
+            SELECT *
+            FROM pairs
+            WHERE n_co >= 8
+            ORDER BY n_co DESC
+            LIMIT 30
         `
     };
 
@@ -254,6 +278,86 @@ window.BaroqueViz = (function() {
         }
     }
 
+    /**
+     * Render top co-painter relationships (pairs)
+     */
+    async function renderCoPainterPairs(container, minCo = 6, limit = 120) {
+        const el = _getElement(container);
+        el.innerHTML = '<div class="loading">Loading co-painter relationships...</div>';
+      
+        try {
+          const sql = `
+            WITH painters AS (
+              SELECT nfdi_uri, person_name AS painter
+              FROM painting_persons
+              WHERE role='PAINTER' AND person_name IS NOT NULL
+            ),
+            pairs AS (
+              SELECT
+                a.painter AS p1,
+                b.painter AS p2,
+                COUNT(*) AS n_co
+              FROM painters a
+              JOIN painters b
+                ON a.nfdi_uri = b.nfdi_uri
+               AND a.painter < b.painter
+              GROUP BY 1,2
+            )
+            SELECT *
+            FROM pairs
+            WHERE n_co >= ${minCo}
+            ORDER BY n_co DESC
+            LIMIT ${limit}
+          `;
+      
+          const data = await BaroqueDB.query(sql);
+      
+          Plotly.purge(el);
+          el.innerHTML = '';
+          
+          const paintersA = [...new Set(data.map(d => d.p1))];
+      
+          const paintersB = [...new Set(data.map(d => d.p2))];
+      
+          const traces = paintersB.map((p2, i) => {
+            const xVals = paintersA.map(p1 => {
+              const row = data.find(d => d.p1 === p1 && d.p2 === p2);
+              return row ? row.n_co : 0;
+            });
+      
+            return {
+              type: 'bar',
+              orientation: 'h',
+              name: p2,
+              y: paintersA,
+              x: xVals,
+              hovertemplate:
+                'Painter A: %{y}<br>' +
+                `Painter B: ${p2}<br>` +
+                'Co-painted works: %{x}<extra></extra>',
+              marker: { color: COLORS.states[i % COLORS.states.length] }
+            };
+          });
+      
+          const layout = {
+            title: 'Top Co-painter Relationships (Stacked by Partner)',
+            barmode: 'stack',
+            xaxis: { title: 'Co-painted works' },
+            yaxis: { automargin: true, title: 'Painter A' },
+            margin: { l: 220, r: 30, t: 60, b: 50 },
+            height: 650,
+            legend: { title: { text: 'Painter B' } }
+          };
+      
+          await Plotly.newPlot(el, traces, layout, { responsive: true });
+          return data;
+      
+        } catch (error) {
+          el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+          throw error;
+        }
+      }
+      
     /**
      * Render ICONCLASS category distribution
      */
@@ -617,6 +721,7 @@ window.BaroqueViz = (function() {
         renderCrossDatasetComparison,
         renderPainterBiography,
         renderCustomQuery,
+        renderCoPainterPairs,
         QUERIES,
         COLORS,
         ICONCLASS_LABELS
