@@ -6,7 +6,7 @@ NFDI4Culture Data Story
 ## Exploring the Corpus of Baroque Ceiling Painting (CbDD) through Interactive Data Visualization
 
 /// html | div[class='tile']
-**Authors:** [Thanos Drossos](https://orcid.org/0009-0001-6545-9096), [Robin](https://orcid.org/), [YiMin Cai](https://orcid.org/)  
+**Authors:** [Thanos Drossos](https://orcid.org/0009-0001-6545-9096), [Robin Kleemann](https://orcid.org/), [YiMin Cai](https://orcid.org/)  
 **Persistent Identifier:** https://nfdi4culture.de/id/CbDD  
 **License:** [CC-BY 4.0](https://creativecommons.org/licenses/by/4.0/)
 ///
@@ -480,34 +480,446 @@ LIMIT 20
 
 ## Micro perspective
 
+
+This section provides an overview of the ICONCLASS categories represented across the corpus of Baroque ceiling paintings.
+
+The dashboard below allows you to explore basic statistics for each category, including the number of paintings, artists, locations, and key actors such as commissioners. By switching between categories, you can quickly compare thematic emphases within the dataset.
+
+The level of detail can be adjusted using the Top N selector, enabling a closer look at the most frequent painters, states, buildings, or commissioners for each ICONCLASS category.
+
+Have fun while exploring the data! 
+
+<!-- =========================
+     ICONCLASS QUICK STATS DASHBOARD (0–9)
+     - Category tabs (0..9), default 4
+     - Core counts (paintings, painters, states, buildings, rooms)
+     - Top N lists: painters, states, buildings, commissioners
+     - N selector
+========================= -->
+
+
+
+ <h3 style="margin-top:0">Micro perspective statistics</h3>
+
+<div class="ic-wrap">
+  <div class="ic-header">
+    <div class="ic-title">
+      <span id="ic-title-main">Society &amp; Culture</span>
+      <span class="ic-sub">(ICONCLASS Category <span id="ic-cat-digit">4</span>)</span>
+    </div>
+
+    <div class="ic-controls">
+      <label class="ic-label">Top N:</label>
+      <select id="ic-topn" class="ic-select">
+        <option>3</option>
+        <option>5</option>
+        <option selected>10</option>
+        <option>20</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="ic-tabs" id="ic-tabs"></div>
+
+  <!-- Core full width -->
+  <section class="ic-card ic-corewide">
+    <div class="ic-card-title">Core counts (selected category)</div>
+    <table class="ic-table">
+      <thead>
+        <tr><th>Metric</th><th style="text-align:right">Value</th></tr>
+      </thead>
+      <tbody id="ic-core-body">
+        <tr><td>Paintings</td><td style="text-align:right">…</td></tr>
+        <tr><td>Painters (role=PAINTER)</td><td style="text-align:right">…</td></tr>
+        <tr><td>States</td><td style="text-align:right">…</td></tr>
+        <tr><td>Buildings</td><td style="text-align:right">…</td></tr>
+        <tr><td>Rooms</td><td style="text-align:right">…</td></tr>
+      </tbody>
+    </table>
+    <div class="ic-note">
+      Note: A painting can appear multiple times via multiple subjects; here we always count <b>distinct nfdi_uri</b>.
+    </div>
+  </section>
+
+  <!-- Bottom 2x2 -->
+  <div class="ic-grid-2x2">
+    <section class="ic-card">
+      <div class="ic-card-title">Top <span class="ic-topn-label">10</span> painters</div>
+      <div id="ic-top-painters" class="ic-list">Loading…</div>
+    </section>
+
+    <section class="ic-card">
+      <div class="ic-card-title">Top <span class="ic-topn-label">10</span> states</div>
+      <div id="ic-top-states" class="ic-list">Loading…</div>
+    </section>
+
+    <section class="ic-card">
+      <div class="ic-card-title">Top <span class="ic-topn-label">10</span> buildings</div>
+      <div id="ic-top-buildings" class="ic-list">Loading…</div>
+    </section>
+
+    <section class="ic-card">
+      <div class="ic-card-title">Top <span class="ic-topn-label">10</span> commissioners</div>
+      <div id="ic-top-commissioners" class="ic-list">Loading…</div>
+    </section>
+  </div>
+</div>
+
+<style>
+  .ic-wrap{ margin: 10px 0 26px; }
+  .ic-header{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    gap:14px; margin-bottom: 10px;
+  }
+  .ic-title{ font-weight:800; font-size:18px; line-height:1.2; }
+  .ic-sub{ font-weight:600; font-size:13px; opacity:.65; margin-left:8px; }
+  .ic-controls{ display:flex; align-items:center; gap:8px; }
+  .ic-label{ font-size:13px; opacity:.7; }
+  .ic-select{
+    border: 1px solid rgba(0,0,0,.18);
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 14px;
+    background: white;
+  }
+
+  .ic-tabs{
+    display:flex; flex-wrap:wrap; gap:8px;
+    margin: 8px 0 14px;
+  }
+  .ic-tab{
+    border: 1px solid rgba(0,0,0,.14);
+    border-radius: 999px;
+    padding: 7px 10px;
+    font-size: 13px;
+    background: rgba(255,255,255,.92);
+    cursor:pointer;
+    user-select:none;
+    transition: transform .05s ease, box-shadow .12s ease, border-color .12s ease;
+  }
+  .ic-tab:hover{ box-shadow: 0 8px 18px rgba(0,0,0,.06); border-color: rgba(0,0,0,.22); }
+  .ic-tab:active{ transform: scale(.99); }
+  .ic-tab.is-active{
+    border-color: rgba(20,110,200,.55);
+    box-shadow: 0 10px 22px rgba(20,110,200,.12);
+  }
+
+  .ic-card{
+    border-radius: 16px;
+    background: rgba(255,255,255,.92);
+    box-shadow: 0 6px 24px rgba(0,0,0,.06);
+    padding: 14px;
+  }
+  .ic-card-title{ font-weight:800; margin-bottom:10px; }
+
+  /* NEW: core full width */
+  .ic-corewide{
+    width:100%;
+    margin-bottom: 14px;
+  }
+
+  /* NEW: bottom 2x2 grid */
+  .ic-grid-2x2{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+
+  .ic-table{
+    width:100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .ic-table th{
+    text-align:left;
+    font-size: 12.5px;
+    letter-spacing:.01em;
+    opacity:.65;
+    border-bottom: 1px solid rgba(0,0,0,.10);
+    padding: 8px 4px;
+  }
+  .ic-table td{
+    padding: 10px 4px;
+    border-bottom: 1px solid rgba(0,0,0,.06);
+  }
+  .ic-note{
+    margin-top: 10px;
+    font-size: 12.5px;
+    opacity: .65;
+  }
+
+  .ic-list{ display:flex; flex-direction:column; gap:8px; }
+  .ic-row{
+    display:flex;
+    justify-content:space-between;
+    gap:12px;
+    padding: 9px 10px;
+    border: 1px solid rgba(0,0,0,.07);
+    border-radius: 12px;
+    background: white;
+  }
+  .ic-row .k{ font-weight:650; font-size: 13.5px; }
+  .ic-row .v{ font-variant-numeric: tabular-nums; opacity:.8; }
+
+  .ic-empty{
+    padding: 10px;
+    font-size: 13px;
+    opacity: .7;
+    border: 1px dashed rgba(0,0,0,.18);
+    border-radius: 12px;
+    background: rgba(0,0,0,.02);
+  }
+
+  @media (max-width: 980px){
+    .ic-grid-2x2{ grid-template-columns: 1fr; }
+  }
+</style>
+
+<script type="module">
+(async function(){
+  const wait = (ms) => new Promise(r => setTimeout(r, ms));
+  const $ = (id) => document.getElementById(id);
+
+  // Wait for BaroqueDB
+  while (typeof BaroqueDB === 'undefined' || !BaroqueDB.isReady || !BaroqueDB.isReady()){
+    await wait(100);
+  }
+
+  // --- Category labels (0..9) ---
+  const CAT_LABELS = {
+    '0': 'Abstract',
+    '1': 'Religion & Magic',
+    '2': 'Nature',
+    '3': 'Human Being',
+    '4': 'Society & Culture',
+    '5': 'Abstract Ideas',
+    '6': 'History',
+    '7': 'Bible',
+    '8': 'Literature',
+    '9': 'Classical Mythology'
+  };
+
+  // --- UI state ---
+  let currentCat = '4';
+
+  // Render tabs
+  const tabsEl = $('ic-tabs');
+  tabsEl.innerHTML = Object.keys(CAT_LABELS).map(d => `
+    <div class="ic-tab ${d===currentCat ? 'is-active':''}" data-cat="${d}">
+      ${d} · ${CAT_LABELS[d]}
+    </div>
+  `).join('');
+
+  function setActiveTab(){
+    for (const el of tabsEl.querySelectorAll('.ic-tab')){
+      el.classList.toggle('is-active', el.dataset.cat === currentCat);
+    }
+    $('ic-title-main').textContent = CAT_LABELS[currentCat] || 'ICONCLASS';
+    $('ic-cat-digit').textContent = currentCat;
+  }
+
+  function renderList(containerId, rows, keyName, valueName){
+    const el = $(containerId);
+    if (!rows || !rows.length){
+      el.innerHTML = `<div class="ic-empty">No data returned.</div>`;
+      return;
+    }
+    el.innerHTML = rows.map(r => {
+      const k = r[keyName] ?? '(unknown)';
+      const v = r[valueName] ?? 0;
+      return `<div class="ic-row"><div class="k">${escapeHtml(k)}</div><div class="v">${v}</div></div>`;
+    }).join('');
+  }
+
+  function escapeHtml(s){
+    return String(s ?? '').replace(/[&<>"']/g, (c) => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+    }[c]));
+  }
+
+  async function query(sql){
+    return await BaroqueDB.query(sql);
+  }
+
+  // Robust iconclass_code extraction (no regex)
+  // -> split on iconclass.org/ then take first path segment
+  function iconclassCTE(){
+    return `
+      WITH iconclass_parsed AS (
+        SELECT
+          ps.nfdi_uri,
+          CASE
+            WHEN s.subject_uri LIKE '%iconclass.org/%'
+              THEN split_part(split_part(s.subject_uri, 'iconclass.org/', 2), '/', 1)
+            ELSE NULL
+          END AS iconclass_code
+        FROM painting_subjects ps
+        JOIN subjects s ON ps.subject_uri = s.subject_uri
+        WHERE s.subject_source='ICONCLASS'
+      ),
+      cat_paintings AS (
+        SELECT DISTINCT nfdi_uri
+        FROM iconclass_parsed
+        WHERE iconclass_code LIKE '${currentCat}%'
+      )
+    `;
+  }
+
+  async function refresh(){
+    const topN = parseInt($('ic-topn').value, 10);
+    for (const x of document.querySelectorAll('.ic-topn-label')) x.textContent = String(topN);
+
+    setActiveTab();
+
+    // 1) Core counts
+    const core = await query(`
+      ${iconclassCTE()}
+      SELECT
+        (SELECT COUNT(*) FROM cat_paintings) AS paintings,
+        (SELECT COUNT(DISTINCT pp.person_name)
+           FROM painting_persons pp
+           JOIN cat_paintings cp ON cp.nfdi_uri=pp.nfdi_uri
+          WHERE pp.role='PAINTER' AND pp.person_name IS NOT NULL) AS painters,
+        (SELECT COUNT(DISTINCT p.location_state)
+           FROM paintings p
+           JOIN cat_paintings cp ON cp.nfdi_uri=p.nfdi_uri
+          WHERE p.location_state IS NOT NULL AND p.location_state <> '') AS states,
+        (SELECT COUNT(DISTINCT p.building_name)
+           FROM paintings p
+           JOIN cat_paintings cp ON cp.nfdi_uri=p.nfdi_uri
+          WHERE p.building_name IS NOT NULL AND p.building_name <> '') AS buildings,
+        (SELECT COUNT(DISTINCT p.room_name)
+           FROM paintings p
+           JOIN cat_paintings cp ON cp.nfdi_uri=p.nfdi_uri
+          WHERE p.room_name IS NOT NULL AND p.room_name <> '') AS rooms
+    `);
+
+    const c = (core && core[0]) ? core[0] : {paintings:0,painters:0,states:0,buildings:0,rooms:0};
+    $('ic-core-body').innerHTML = `
+      <tr><td>Paintings (ICONCLASS ${currentCat}…)</td><td style="text-align:right"><b>${c.paintings ?? 0}</b></td></tr>
+      <tr><td>Painters (role=PAINTER)</td><td style="text-align:right"><b>${c.painters ?? 0}</b></td></tr>
+      <tr><td>States</td><td style="text-align:right"><b>${c.states ?? 0}</b></td></tr>
+      <tr><td>Buildings</td><td style="text-align:right"><b>${c.buildings ?? 0}</b></td></tr>
+      <tr><td>Rooms</td><td style="text-align:right"><b>${c.rooms ?? 0}</b></td></tr>
+    `;
+
+    // 2) Top N painters
+    const topPainters = await query(`
+      ${iconclassCTE()}
+      SELECT
+        pp.person_name AS painter,
+        COUNT(DISTINCT pp.nfdi_uri) AS painting_count
+      FROM painting_persons pp
+      JOIN cat_paintings cp ON cp.nfdi_uri = pp.nfdi_uri
+      WHERE pp.role='PAINTER' AND pp.person_name IS NOT NULL AND pp.person_name <> ''
+      GROUP BY pp.person_name
+      ORDER BY painting_count DESC
+      LIMIT ${topN}
+    `);
+    renderList('ic-top-painters', topPainters, 'painter', 'painting_count');
+
+    // 3) Top N states
+    const topStates = await query(`
+      ${iconclassCTE()}
+      SELECT
+        p.location_state AS state,
+        COUNT(DISTINCT p.nfdi_uri) AS painting_count
+      FROM paintings p
+      JOIN cat_paintings cp ON cp.nfdi_uri = p.nfdi_uri
+      WHERE p.location_state IS NOT NULL AND p.location_state <> ''
+      GROUP BY p.location_state
+      ORDER BY painting_count DESC
+      LIMIT ${topN}
+    `);
+    renderList('ic-top-states', topStates, 'state', 'painting_count');
+
+    // 4) Top N buildings
+    const topBuildings = await query(`
+      ${iconclassCTE()}
+      SELECT
+        p.building_name AS building,
+        COUNT(DISTINCT p.nfdi_uri) AS painting_count
+      FROM paintings p
+      JOIN cat_paintings cp ON cp.nfdi_uri = p.nfdi_uri
+      WHERE p.building_name IS NOT NULL AND p.building_name <> ''
+      GROUP BY p.building_name
+      ORDER BY painting_count DESC
+      LIMIT ${topN}
+    `);
+    renderList('ic-top-buildings', topBuildings, 'building', 'painting_count');
+
+    // 5) Top N commissioners
+    const topCommissioners = await query(`
+      ${iconclassCTE()}
+      SELECT
+        pp.person_name AS commissioner,
+        COUNT(DISTINCT pp.nfdi_uri) AS painting_count
+      FROM painting_persons pp
+      JOIN cat_paintings cp ON cp.nfdi_uri = pp.nfdi_uri
+      WHERE pp.role='COMMISSIONER' AND pp.person_name IS NOT NULL AND pp.person_name <> ''
+      GROUP BY pp.person_name
+      ORDER BY painting_count DESC
+      LIMIT ${topN}
+    `);
+    renderList('ic-top-commissioners', topCommissioners, 'commissioner', 'painting_count');
+  }
+
+  // Tab clicks
+  tabsEl.addEventListener('click', (e) => {
+    const t = e.target.closest('.ic-tab');
+    if (!t) return;
+    currentCat = t.dataset.cat;
+    refresh();
+  });
+
+  // N selector
+  $('ic-topn').addEventListener('change', refresh);
+
+  // initial
+  setActiveTab();
+  refresh();
+
+})();
+</script>
+---
+
+
 ### Analysis 1: Select a Category 
 
 You can select a thematic category that interests you. Based on your selection, you can explore Baroque ceiling painting through related artworks, artists, and contextual information.
 
+OR
+
+Select a subtheme to explore where and how it appears in Baroque ceiling paintings.
+
+
+
 <div class="iconclass-picker" id="iconclass-picker">
  
  <a class="iconclass-tile"
-     href="#analysis-society"
+     href="#analysis-politics"
      data-cat="4"
-     title="Society & Culture">
-    <img src="https://picsum.photos/200?random=23" alt="Society & Culture">
-    <span>Society & Culture</span>
+     title="Politics and Military">
+    <img src="https://picsum.photos/200?random=23" alt="Politics and Military">
+    <span>Politics and Military</span>
   </a>
 
   <a class="iconclass-tile is-active"
-     href="#analysis-nature"
+     href="#analysis-diseases"
      data-cat="2"
-     title="Nature">
-    <img src="https://picsum.photos/200?random=21" alt="Nature">
-    <span>Nature</span>
+     title="Diseases">
+    <img src="https://picsum.photos/200?random=21" alt="Diseases">
+    <span>Diseases</span>
   </a>
 
   <a class="iconclass-tile"
-     href="#analysis-mythology"
+     href="#analysis-church"
      data-cat="9"
-     title="Classical Mythology">
-    <img src="https://picsum.photos/200?random=22" alt="Classical Mythology">
-    <span>Classical Mythology</span>
+     title="Church and Religion">
+    <img src="https://picsum.photos/200?random=22" alt="Church and Religion">
+    <span>Church and Religion</span>
   </a>
 
 </div>
@@ -569,19 +981,23 @@ You can select a thematic category that interests you. Based on your selection, 
 </script>
 
 
----
-<a id="analysis-society"></a>
-## Society & Culture
+
 
 
 ---
-<a id="analysis-nature"></a>
-## Nature
+
+
+
+<a id="analysis-politics"></a>
+## Politics and Military Affairs in Baroque Ceiling Paintings
+
+This section provides an overview of how themes of social order, political life, and cultural practices are represented across the corpus of Baroque ceiling paintings.
+
+
+
 
 
 ---
-<a id="analysis-mythology"></a>
-## Classical Mythology
 
 The Baroque era in German-speaking lands produced a dazzling array of ceiling and wall paintings filled with scenes from classical mythology. These grand frescoes and allegorical programs served not merely as decoration, but as visual sermons of princely virtue, power, and Enlightenment ideals. Commissioned for palaces and grand halls, they wove ancient myths into the narrative of contemporary rulers – celebrating peace after war, exalting dynastic glory, and extolling the arts and sciences. In this data-driven exploration, we trace a red thread through several emblematic Baroque interiors in Germany, uncovering how mythology was employed to transform architecture into theatre of statecraft. From the Olympian gods on the ceilings of Munich’s Nymphenburg Palace to Ovid’s metamorphic tales in a Thuringian castle, these case studies reveal a common language of allegory that early modern patrons used to legitimize and immortalize their reigns. We also examine how the tempo of artistic commissions rose and fell with historical tides – ravaging wars followed by renewed prosperity – and briefly highlight two Italian masters behind these works. The result is a panoramic story of Baroque mythological imagery, presented in academic depth yet accessible and engaging.
 The Baroque era in German-speaking lands produced a dazzling array of ceiling and wall paintings filled with scenes from classical mythology. These grand frescoes and allegorical programs served not merely as decoration, but as visual sermons of princely virtue, power, and Enlightenment ideals. Commissioned for palaces and grand halls, they wove ancient myths into the narrative of contemporary rulers – celebrating peace after war, exalting dynastic glory, and extolling the arts and sciences. In this data-driven exploration, we trace a red thread through several emblematic Baroque interiors in Germany, uncovering how mythology was employed to transform architecture into theatre of statecraft. From the Olympian gods on the ceilings of Munich’s Nymphenburg Palace to Ovid’s metamorphic tales in a Thuringian castle, these case studies reveal a common language of allegory that early modern patrons used to legitimize and immortalize their reigns. We also examine how the tempo of artistic commissions rose and fell with historical tides – ravaging wars followed by renewed prosperity – and briefly highlight two Italian masters behind these works. The result is a panoramic story of Baroque mythological imagery, presented in academic depth yet accessible and engaging.
@@ -624,6 +1040,16 @@ Importantly, these grand mythological paintings did not emerge in a vacuum – t
     await BaroqueViz.renderMythFigureGallery('#apollo-gallery', 'Apollo', { limit: 6 });
 })();
 </script>
+
+<a id="analysis-diseases"></a>
+## Diseases in Baroque Ceiling Paintings
+
+---
+<a id="analysis-church"></a>
+## Church and Religion in Baroque Ceiling Paintings
+
+
+---
 
 
 ### Nymphenburg Palace: An Olympian Vision of Peace and Prosperity
@@ -946,7 +1372,1147 @@ Yet the surviving Baroque mythological paintings continue to speak. In their all
 
 ---
 
+<!-- =========================
+     ARTIST — Intro Section (Step 1)
+     - Anchor jump
+     - Manual bio (birth/death)
+     - Data-check KPIs from BaroqueDB (works, span, states, top commissioner)
+========================= -->
 
+<a id="artist-asam"></a>
+
+<h3 style="margin-top:0">Artist — Cosmas Damian Asam</h3>
+
+<div class="ai-wrap">
+  <div class="ai-left">
+    <div class="ai-card">
+      <div class="ai-small">Artist profile</div>
+      <div class="ai-name">Cosmas Damian Asam</div>
+      <div class="ai-dates">
+        Born: <b>29 Sep 1686</b> (Benediktbeuern) · Died: <b>10 May 1739</b> (Munich)
+      </div>
+
+      <p class="ai-text">
+        This section provides a quick entry point into the artist’s works in the dataset.
+        Below you can see how many works are available (with coordinates), the covered time span,
+        and the most frequent commissioners. Later we will add an interactive map + chronological journey.
+      </p>
+
+      <div class="ai-jump">
+        <a class="ai-jumpbtn" href="#artist-asam">🔗 Copy link to this section</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="ai-right">
+    <div class="ai-kpis">
+      <div class="ai-kpi">
+        <div class="ai-kpi-v" id="ai-works">…</div>
+        <div class="ai-kpi-k">Works (with coords)</div>
+      </div>
+      <div class="ai-kpi">
+        <div class="ai-kpi-v" id="ai-span">…</div>
+        <div class="ai-kpi-k">Time span (min–max)</div>
+      </div>
+      <div class="ai-kpi">
+        <div class="ai-kpi-v" id="ai-states">…</div>
+        <div class="ai-kpi-k">States</div>
+      </div>
+      <div class="ai-kpi">
+        <div class="ai-kpi-v" id="ai-topcomm">…</div>
+        <div class="ai-kpi-k">Top commissioner</div>
+      </div>
+    </div>
+
+    <div class="ai-status" id="ai-status">Loading data…</div>
+  </div>
+</div>
+
+<style>
+  .ai-wrap{
+    display:grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 14px;
+    align-items: stretch;
+    margin: 10px 0 24px;
+  }
+  .ai-card{
+    border-radius: 16px;
+    background: rgba(255,255,255,.92);
+    box-shadow: 0 6px 24px rgba(0,0,0,.06);
+    padding: 14px;
+  }
+  .ai-small{ font-weight:800; font-size:12px; opacity:.65; letter-spacing:.02em; }
+  .ai-name{ font-weight:900; font-size:20px; margin-top:6px; }
+  .ai-dates{ margin-top:6px; font-size:13px; opacity:.8; }
+  .ai-text{ margin:10px 0 0; font-size:13px; opacity:.78; line-height:1.4; }
+  .ai-jump{ margin-top:10px; }
+  .ai-jumpbtn{
+    display:inline-block;
+    font-size:12.5px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    border: 1px solid rgba(0,0,0,.12);
+    background: white;
+    text-decoration:none;
+    color: inherit;
+  }
+  .ai-jumpbtn:hover{ box-shadow: 0 8px 18px rgba(0,0,0,.06); }
+
+  .ai-kpis{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+  .ai-kpi{
+    border-radius: 16px;
+    background: rgba(255,255,255,.92);
+    box-shadow: 0 6px 24px rgba(0,0,0,.06);
+    padding: 12px 14px;
+  }
+  .ai-kpi-v{ font-weight:900; font-size:20px; }
+  .ai-kpi-k{ font-size:12.5px; opacity:.7; margin-top:2px; }
+
+  .ai-status{
+    margin-top: 10px;
+    border-radius: 14px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    opacity: .75;
+    border: 1px dashed rgba(0,0,0,.18);
+    background: rgba(0,0,0,.02);
+  }
+
+  @media (max-width: 980px){
+    .ai-wrap{ grid-template-columns: 1fr; }
+  }
+</style>
+
+<script type="module">
+(async function(){
+  const wait = (ms) => new Promise(r => setTimeout(r, ms));
+  const $ = (id) => document.getElementById(id);
+
+  const ARTIST = "Asam, Cosmas Damian";
+
+  // 1) Wait for BaroqueDB
+  while (typeof BaroqueDB === 'undefined' || !BaroqueDB.isReady || !BaroqueDB.isReady()){
+    await wait(100);
+  }
+
+  const status = $('ai-status');
+  status.textContent = "BaroqueDB ready. Running queries…";
+
+  function fmt(n){
+    if (n === null || n === undefined) return "—";
+    try { return Number(n).toLocaleString(); } catch(e){ return String(n); }
+  }
+
+  try{
+    // Works with coords for this artist
+    const rows = await BaroqueDB.query(`
+      WITH artist_paintings AS (
+        SELECT DISTINCT nfdi_uri
+        FROM painting_persons
+        WHERE role='PAINTER' AND person_name='${ARTIST}'
+      )
+      SELECT
+        COUNT(*) AS works_with_coords,
+        MIN(year_start) AS min_year,
+        MAX(COALESCE(year_end, year_start)) AS max_year,
+        COUNT(DISTINCT location_state) AS n_states
+      FROM paintings p
+      JOIN artist_paintings ap ON ap.nfdi_uri = p.nfdi_uri
+      WHERE p.lat IS NOT NULL AND p.lon IS NOT NULL
+    `);
+
+    const r = rows && rows[0] ? rows[0] : null;
+
+    $('ai-works').textContent  = r ? fmt(r.works_with_coords) : "0";
+    $('ai-span').textContent   = (r && r.min_year && r.max_year) ? `${r.min_year}–${r.max_year}` : "—";
+    $('ai-states').textContent = r ? fmt(r.n_states) : "0";
+
+    // Top commissioner for this artist (by number of distinct works)
+    const top = await BaroqueDB.query(`
+      WITH artist_paintings AS (
+        SELECT DISTINCT nfdi_uri
+        FROM painting_persons
+        WHERE role='PAINTER' AND person_name='${ARTIST}'
+      )
+      SELECT
+        pp.person_name AS commissioner,
+        COUNT(DISTINCT pp.nfdi_uri) AS painting_count
+      FROM painting_persons pp
+      JOIN artist_paintings ap ON ap.nfdi_uri = pp.nfdi_uri
+      WHERE pp.role='COMMISSIONER'
+        AND pp.person_name IS NOT NULL AND pp.person_name <> ''
+      GROUP BY pp.person_name
+      ORDER BY painting_count DESC
+      LIMIT 1
+    `);
+
+    $('ai-topcomm').textContent =
+      (top && top[0]) ? `${top[0].commissioner} (${top[0].painting_count})` : "—";
+
+    // Status text
+    if (r && r.works_with_coords > 0){
+      status.textContent = `✅ Data OK: ${r.works_with_coords} works with coordinates found for ${ARTIST}.`;
+    } else {
+      status.textContent = `⚠️ No works with coordinates found for ${ARTIST}. (We can still build a timeline without map, or relax the lat/lon filter.)`;
+    }
+
+  } catch (err){
+    // show readable error in UI (no console needed)
+    status.textContent = "❌ Query failed: " + (err && err.message ? err.message : String(err));
+    $('ai-works').textContent  = "—";
+    $('ai-span').textContent   = "—";
+    $('ai-states').textContent = "—";
+    $('ai-topcomm').textContent= "—";
+  }
+})();
+</script>
+
+---
+
+
+<!-- =========================
+     ARTIST JOURNEY — Map + chronological stops (Step 2)
+     - Asam, Cosmas Damian
+     - map + right-side timeline list
+     - popups include ICONCLASS category digits (0..9) and codes (sample)
+========================= -->
+
+<a id="asam-journey"></a>
+<h3 style="margin-top:0">Artist Journey — Map & timeline</h3>
+
+<p style="opacity:.75; margin-top:-6px; font-size:13px;">
+  Click a stop in the list to jump to the location on the map. Works are ordered chronologically (based on <code>year_start</code> / <code>year</code>).
+</p>
+
+<div class="aj-wrap">
+  <div class="aj-map" id="aj-map"></div>
+
+  <aside class="aj-panel">
+    <div class="aj-panel__top">
+      <div class="aj-panel__title">Stops</div>
+      <div class="aj-panel__meta"><span id="aj-count">0</span> works</div>
+
+      <div class="aj-controls">
+        <button class="aj-btn" id="aj-prev">← Prev</button>
+        <button class="aj-btn" id="aj-next">Next →</button>
+      </div>
+
+      <input id="aj-search" class="aj-search" type="search" placeholder="Search (state, building, iconclass)..." />
+      <input id="aj-slider" class="aj-slider" type="range" min="0" max="0" step="1" value="0" />
+      <div class="aj-slider-meta" id="aj-slider-meta">—</div>
+    </div>
+
+    <div class="aj-list" id="aj-list">
+      <div class="aj-hint">Loading…</div>
+    </div>
+
+    <div class="aj-status" id="aj-status">Loading data…</div>
+  </aside>
+</div>
+
+<style>
+  .aj-wrap{
+    display:grid;
+    grid-template-columns: 1fr 390px;
+    gap: 14px;
+    align-items: stretch;
+    margin: 10px 0 26px;
+  }
+  .aj-map{
+    height: 680px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 24px rgba(0,0,0,.06);
+    background: #f6f6f6;
+  }
+  .aj-panel{
+    height: 680px;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 6px 24px rgba(0,0,0,.06);
+    background: rgba(255,255,255,.92);
+    display:flex;
+    flex-direction: column;
+  }
+  .aj-panel__top{
+    padding: 14px 14px 10px;
+    border-bottom: 1px solid rgba(0,0,0,.08);
+  }
+  .aj-panel__title{
+    font-weight: 900;
+    font-size: 16px;
+    line-height: 1.2;
+  }
+  .aj-panel__meta{
+    font-size: 12.5px;
+    opacity: .7;
+    margin-top: 4px;
+  }
+  .aj-controls{
+    margin-top: 10px;
+    display:flex;
+    gap: 8px;
+  }
+  .aj-btn{
+    border: 1px solid rgba(0,0,0,.14);
+    border-radius: 12px;
+    padding: 8px 10px;
+    background: white;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .aj-btn:hover{ box-shadow: 0 8px 18px rgba(0,0,0,.06); }
+  .aj-btn:active{ transform: scale(.99); }
+
+  .aj-search{
+    width: 100%;
+    margin-top: 10px;
+    border: 1px solid rgba(0,0,0,.14);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 14px;
+    outline: none;
+    background: white;
+  }
+  .aj-search:focus{
+    border-color: rgba(20,110,200,.45);
+    box-shadow: 0 0 0 4px rgba(20,110,200,.12);
+  }
+
+  .aj-slider{
+    width: 100%;
+    margin-top: 10px;
+  }
+  .aj-slider-meta{
+    font-size: 12.5px;
+    opacity: .7;
+    margin-top: 4px;
+  }
+
+  .aj-list{
+    padding: 8px 8px 10px;
+    overflow: auto;
+    flex: 1 1 auto;
+  }
+  .aj-hint{
+    padding: 10px;
+    font-size: 13px;
+    opacity: .7;
+  }
+
+  .aj-item{
+    border: 1px solid rgba(0,0,0,.07);
+    border-radius: 14px;
+    padding: 10px 10px;
+    margin: 8px 6px;
+    background: white;
+    cursor: pointer;
+    transition: box-shadow .12s ease, border-color .12s ease, transform .05s ease;
+  }
+  .aj-item:hover{
+    border-color: rgba(20,110,200,.25);
+    box-shadow: 0 8px 20px rgba(0,0,0,.10);
+  }
+  .aj-item:active{ transform: scale(.99); }
+  .aj-item.is-active{
+    border-color: rgba(20,110,200,.55);
+    box-shadow: 0 10px 22px rgba(20,110,200,.12);
+  }
+  .aj-item__t{ font-weight: 800; font-size: 13.5px; }
+  .aj-item__m{ font-size: 12.5px; opacity: .75; margin-top: 4px; line-height: 1.25; }
+
+  .aj-status{
+    border-top: 1px solid rgba(0,0,0,.08);
+    padding: 10px 12px;
+    font-size: 12.5px;
+    opacity: .75;
+    background: rgba(0,0,0,.02);
+  }
+
+  @media (max-width: 1050px){
+    .aj-wrap{ grid-template-columns: 1fr; }
+    .aj-map{ height: 520px; }
+    .aj-panel{ height: 520px; }
+  }
+</style>
+
+<script type="module">
+(async function(){
+  const wait = (ms) => new Promise(r => setTimeout(r, ms));
+  const $ = (id) => document.getElementById(id);
+
+  const ARTIST = "Asam, Cosmas Damian";
+
+  // Approx coordinates (so we can place birth/death markers)
+  const BIRTH = { label: "Born — Benediktbeuern (approx.)", lat: 47.702, lon: 11.415, year: 1686 };
+  const DEATH = { label: "Died — Munich (approx.)", lat: 48.137, lon: 11.575, year: 1739 };
+
+  // Category labels
+  const CAT_LABELS = {
+    '0': 'Abstract',
+    '1': 'Religion & Magic',
+    '2': 'Nature',
+    '3': 'Human Being',
+    '4': 'Society & Culture',
+    '5': 'Abstract Ideas',
+    '6': 'History',
+    '7': 'Bible',
+    '8': 'Literature',
+    '9': 'Classical Mythology'
+  };
+
+  // Wait for BaroqueDB
+  while (typeof BaroqueDB === 'undefined' || !BaroqueDB.isReady || !BaroqueDB.isReady()){
+    await wait(100);
+  }
+
+  // Ensure Leaflet exists (your project already uses it)
+  if (typeof L === 'undefined'){
+    $('aj-status').textContent = "❌ Leaflet not loaded on this page.";
+    return;
+  }
+
+  $('aj-status').textContent = "Running query…";
+
+  // Helper
+  function esc(s){
+    return String(s ?? '').replace(/[&<>"']/g, (c) => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+    }[c]));
+  }
+  function timeLabel(r){
+    if (r.year_start && r.year_end && r.year_start !== r.year_end) return `${r.year_start}–${r.year_end}`;
+    if (r.year_start) return `${r.year_start}`;
+    if (r.year) return `${r.year}`;
+    return "—";
+  }
+  function sortKey(r){
+    const y = r.year_start ?? null;
+    const y2 = r.year ?? null;
+    return (y ?? y2 ?? 999999);
+  }
+
+  try{
+    // 1) Query works with coords + ICONCLASS summary per work
+    // iconclass_code extraction without regex: split on iconclass.org/
+    const rows = await BaroqueDB.query(`
+      WITH artist_paintings AS (
+        SELECT DISTINCT nfdi_uri
+        FROM painting_persons
+        WHERE role='PAINTER' AND person_name='${ARTIST}'
+      ),
+      iconclass_parsed AS (
+        SELECT
+          ps.nfdi_uri,
+          CASE
+            WHEN s.subject_uri LIKE '%iconclass.org/%'
+              THEN split_part(split_part(s.subject_uri, 'iconclass.org/', 2), '/', 1)
+            ELSE NULL
+          END AS iconclass_code
+        FROM painting_subjects ps
+        JOIN subjects s ON ps.subject_uri = s.subject_uri
+        WHERE s.subject_source='ICONCLASS'
+      ),
+      iconclass_agg AS (
+        SELECT
+          nfdi_uri,
+          STRING_AGG(DISTINCT iconclass_code, ', ') AS iconclass_codes,
+          STRING_AGG(DISTINCT SUBSTRING(iconclass_code, 1, 1), ', ') AS iconclass_digits
+        FROM iconclass_parsed
+        WHERE iconclass_code IS NOT NULL
+        GROUP BY nfdi_uri
+      ),
+      commissioners AS (
+        SELECT nfdi_uri, STRING_AGG(DISTINCT person_name, ', ') AS commissioners
+        FROM painting_persons
+        WHERE role='COMMISSIONER'
+        GROUP BY nfdi_uri
+      ),
+      donors AS (
+        SELECT nfdi_uri, STRING_AGG(DISTINCT person_name, ', ') AS donors
+        FROM painting_persons
+        WHERE role='DONOR'
+        GROUP BY nfdi_uri
+      )
+      SELECT
+        p.nfdi_uri,
+        p.building_name,
+        p.room_name,
+        p.location_state,
+        p.year_start,
+        p.year_end,
+        p.year,
+        p.lat,
+        p.lon,
+        p.imageUrl,
+        COALESCE(ia.iconclass_digits, '') AS iconclass_digits,
+        COALESCE(ia.iconclass_codes, '') AS iconclass_codes,
+        COALESCE(c.commissioners, '') AS commissioners,
+        COALESCE(d.donors, '') AS donors
+      FROM paintings p
+      JOIN artist_paintings ap ON ap.nfdi_uri = p.nfdi_uri
+      LEFT JOIN iconclass_agg ia ON ia.nfdi_uri = p.nfdi_uri
+      LEFT JOIN commissioners c ON c.nfdi_uri = p.nfdi_uri
+      LEFT JOIN donors d ON d.nfdi_uri = p.nfdi_uri
+      WHERE p.lat IS NOT NULL AND p.lon IS NOT NULL
+    `);
+
+    // 2) Sort chronologically
+    const works = (rows || []).slice().sort((a,b) => sortKey(a) - sortKey(b));
+
+    $('aj-count').textContent = works.length;
+
+    if (!works.length){
+      $('aj-list').innerHTML = `<div class="aj-hint">
+        ⚠️ No works with coordinates found for <b>${esc(ARTIST)}</b>.<br>
+        (We can still build a non-map timeline, or relax the <code>lat/lon</code> filter.)
+      </div>`;
+      $('aj-status').textContent = "No coordinate data for this artist.";
+      return;
+    }
+
+    // 3) Build map
+    const map = L.map('aj-map', { scrollWheelZoom: true });
+
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      maxZoom: 19,
+      attribution: '&copy; OpenStreetMap'
+    }).addTo(map);
+
+    // Fit bounds to works (+ birth/death)
+    const bounds = L.latLngBounds([
+      ...works.map(w => [w.lat, w.lon]),
+      [BIRTH.lat, BIRTH.lon],
+      [DEATH.lat, DEATH.lon]
+    ]);
+    map.fitBounds(bounds.pad(0.15));
+
+    const layer = (L.markerClusterGroup ? L.markerClusterGroup({
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: true,
+      disableClusteringAtZoom: 18,
+      maxClusterRadius: 42
+    }) : L.layerGroup()).addTo(map);
+
+    // Birth/death markers
+    const birthM = L.marker([BIRTH.lat, BIRTH.lon]).bindPopup(
+      `<div style="font-size:13px"><b>${esc(BIRTH.label)}</b><br>Year: ${BIRTH.year}</div>`
+    );
+    const deathM = L.marker([DEATH.lat, DEATH.lon]).bindPopup(
+      `<div style="font-size:13px"><b>${esc(DEATH.label)}</b><br>Year: ${DEATH.year}</div>`
+    );
+    layer.addLayer(birthM);
+    layer.addLayer(deathM);
+
+    // ✅ NEW: route line connecting all works chronologically
+    let routeLine = null;
+    const routePoints = works
+      .filter(w => w.lat != null && w.lon != null)
+      .map(w => [w.lat, w.lon]);
+
+    if (routePoints.length >= 2){
+      routeLine = L.polyline(routePoints, { weight: 4, opacity: 0.75 }).addTo(map);
+    }
+
+    // Index: marker per work
+    const markerByUri = new Map();
+
+    function iconclassPrettyDigits(digits){
+      if (!digits) return '';
+      // digits is "4, 7" etc. -> map each
+      const ds = digits.split(',').map(x => x.trim()).filter(Boolean);
+      if (!ds.length) return '';
+      const parts = ds.map(d => `${d}: ${CAT_LABELS[d] ?? 'Unknown'}`);
+      return parts.join(' · ');
+    }
+
+    // Add markers
+    for (const w of works){
+      const t = timeLabel(w);
+      const title = w.building_name || w.room_name || 'Ceiling painting';
+
+      const icDigitsPretty = iconclassPrettyDigits(w.iconclass_digits);
+      const icLine = (icDigitsPretty || w.iconclass_codes)
+        ? `<div style="margin-top:6px; opacity:.9">
+             <b>ICONCLASS:</b> ${esc(icDigitsPretty)}<br>
+             <span style="opacity:.8; font-size:12px">${esc(w.iconclass_codes)}</span>
+           </div>`
+        : '';
+
+      const commLine = w.commissioners ? `<div><b>Commissioner:</b> ${esc(w.commissioners)}</div>` : '';
+      const donorLine = w.donors ? `<div><b>Donor:</b> ${esc(w.donors)}</div>` : '';
+      const metaLine = [
+        t !== "—" ? `Time: ${esc(t)}` : '',
+        w.location_state ? `State: ${esc(w.location_state)}` : '',
+        w.room_name ? `Room: ${esc(w.room_name)}` : ''
+      ].filter(Boolean).join(' · ');
+
+      const img = w.imageUrl ? `<div style="margin-top:8px">
+        <img src="${esc(w.imageUrl)}" alt="" style="width:100%;max-width:260px;border-radius:10px;display:block" />
+      </div>` : '';
+
+      const popup = `
+        <div style="font-size:13px; line-height:1.25">
+          <div style="font-weight:800; margin-bottom:4px">${esc(title)}</div>
+          <div style="opacity:.75">${metaLine}</div>
+          <div style="margin-top:8px; opacity:.95">
+            ${commLine}
+            ${donorLine}
+          </div>
+          ${icLine}
+          <div style="opacity:.6; margin-top:8px; font-size:12px">${esc(w.nfdi_uri)}</div>
+          ${img}
+        </div>
+      `;
+
+      const m = L.circleMarker([w.lat, w.lon], {
+        radius: 6,
+        weight: 1,
+        fillOpacity: 0.85
+      }).bindPopup(popup);
+
+      m.__row = w;
+      markerByUri.set(w.nfdi_uri, m);
+      layer.addLayer(m);
+    }
+
+    // 4) Right-side timeline list (+ interactions)
+    const listEl = $('aj-list');
+    const searchEl = $('aj-search');
+    const sliderEl = $('aj-slider');
+    const sliderMetaEl = $('aj-slider-meta');
+    const statusEl = $('aj-status');
+
+    let filtered = works.slice();
+    let activeIdx = 0;
+
+    function passesSearch(w, q){
+      if (!q) return true;
+      const hay = [
+        w.location_state, w.building_name, w.room_name, w.iconclass_digits, w.iconclass_codes,
+        w.commissioners, w.donors, w.year_start, w.year_end, w.year
+      ].join(' ').toLowerCase();
+      return hay.includes(q);
+    }
+
+    function renderList(){
+      const q = (searchEl.value || '').trim().toLowerCase();
+      filtered = works.filter(w => passesSearch(w, q));
+
+      $('aj-count').textContent = filtered.length;
+
+      if (!filtered.length){
+        listEl.innerHTML = `<div class="aj-hint">No matches. Clear search or try a different term.</div>`;
+        sliderEl.max = 0;
+        sliderEl.value = 0;
+        sliderMetaEl.textContent = "—";
+        return;
+      }
+
+      // ensure activeIdx in range
+      activeIdx = Math.max(0, Math.min(activeIdx, filtered.length - 1));
+      sliderEl.max = String(filtered.length - 1);
+      sliderEl.value = String(activeIdx);
+
+      listEl.innerHTML = filtered.map((w, i) => {
+        const t = timeLabel(w);
+        const title = w.building_name || w.room_name || 'Ceiling painting';
+        const ic = w.iconclass_digits ? `ICONCLASS: ${w.iconclass_digits}` : '';
+        const meta = [
+          t !== "—" ? `Time: ${t}` : '',
+          w.location_state ? `State: ${w.location_state}` : '',
+          ic
+        ].filter(Boolean).join(' · ');
+
+        return `
+          <div class="aj-item ${i===activeIdx ? 'is-active':''}" data-idx="${i}">
+            <div class="aj-item__t">${esc(title)}</div>
+            <div class="aj-item__m">${esc(meta)}</div>
+          </div>
+        `;
+      }).join('');
+
+      for (const el of listEl.querySelectorAll('.aj-item')){
+        el.addEventListener('click', () => {
+          const i = parseInt(el.dataset.idx, 10);
+          setActive(i, true);
+        });
+      }
+
+      updateSliderMeta();
+      highlightActive();
+    }
+
+    function updateSliderMeta(){
+      if (!filtered.length){ sliderMetaEl.textContent = "—"; return; }
+      const w = filtered[activeIdx];
+      sliderMetaEl.textContent = `${activeIdx+1}/${filtered.length} · ${timeLabel(w)} · ${w.location_state || '—'}`;
+    }
+
+    function highlightActive(){
+      for (const el of listEl.querySelectorAll('.aj-item')){
+        el.classList.toggle('is-active', parseInt(el.dataset.idx,10) === activeIdx);
+      }
+    }
+
+    function setActive(i, panTo){
+      if (!filtered.length) return;
+      activeIdx = Math.max(0, Math.min(i, filtered.length - 1));
+      sliderEl.value = String(activeIdx);
+      updateSliderMeta();
+      highlightActive();
+
+      const w = filtered[activeIdx];
+      const m = markerByUri.get(w.nfdi_uri);
+      if (m && panTo){
+        map.setView(m.getLatLng(), Math.max(map.getZoom(), 13), { animate: true });
+        m.openPopup();
+      }
+    }
+
+    $('aj-prev').addEventListener('click', () => setActive(activeIdx - 1, true));
+    $('aj-next').addEventListener('click', () => setActive(activeIdx + 1, true));
+    sliderEl.addEventListener('input', () => setActive(parseInt(sliderEl.value, 10), true));
+    searchEl.addEventListener('input', () => { activeIdx = 0; renderList(); });
+
+    // when popup opens -> set active
+    for (const [uri, m] of markerByUri.entries()){
+      m.on('popupopen', () => {
+        const idx = filtered.findIndex(w => w.nfdi_uri === uri);
+        if (idx >= 0) setActive(idx, false);
+      });
+    }
+
+    renderList();
+    setActive(0, false);
+
+    statusEl.textContent = `✅ Loaded ${works.length} mapped works for ${ARTIST}.`;
+
+  } catch (err){
+    $('aj-status').textContent = "❌ Query failed: " + (err && err.message ? err.message : String(err));
+    $('aj-list').innerHTML = `<div class="aj-hint">Query failed. See status below.</div>`;
+  }
+})();
+</script>
+
+---
+
+
+
+
+
+
+
+
+
+<!-- =========================
+     MAP + SIDE PANEL (with Category Toggle)
+     Default: ICONCLASS 4 (Society & Culture)
+========================= -->
+
+<div class="map-panel-wrap">
+  <div id="works-map" class="works-map"></div>
+
+  <aside class="works-panel">
+    <div class="works-panel__header">
+      <div class="works-panel__top">
+        <div>
+          <div class="works-panel__title">Works in view</div>
+          <div class="works-panel__meta">
+            <span id="works-count">0</span> items
+          </div>
+        </div>
+
+        <!-- Toggle -->
+        <div class="works-toggle" role="group" aria-label="Filter works">
+          <button id="btn-cat4" class="works-toggle__btn is-active" type="button" title="Only ICONCLASS category 4">
+            Society & Culture
+          </button>
+          <button id="btn-all" class="works-toggle__btn" type="button" title="All works with coordinates">
+            All
+          </button>
+        </div>
+      </div>
+
+      <input id="works-search" class="works-panel__search" type="search"
+             placeholder="Search (artist, building, room, state)..." />
+    </div>
+
+    <div id="works-list" class="works-panel__list">
+      <div class="works-panel__hint">Move/zoom the map to load items…</div>
+    </div>
+  </aside>
+</div>
+
+<style>
+  .map-panel-wrap{
+    display:flex; gap:24px; align-items:stretch;
+    width:100%; max-width:100%; margin:12px 0 24px;
+  }
+  .works-map{
+    flex:1 1 65%; min-width:420px; height:640px;
+    border-radius:14px; overflow:hidden;
+    box-shadow:0 6px 24px rgba(0,0,0,.08);
+  }
+  .works-panel{
+    flex:0 0 420px; max-width:520px; height:640px;
+    border-radius:14px;
+    box-shadow:0 6px 24px rgba(0,0,0,.08);
+    background:rgba(255,255,255,.9);
+    backdrop-filter:blur(6px);
+    overflow:hidden; display:flex; flex-direction:column;
+  }
+  .works-panel__header{
+    padding:16px 16px 10px;
+    border-bottom:1px solid rgba(0,0,0,.08);
+  }
+  .works-panel__top{
+    display:flex; justify-content:space-between; gap:14px; align-items:flex-start;
+    margin-bottom:10px;
+  }
+  .works-panel__title{ font-weight:700; font-size:16px; line-height:1.2; margin-bottom:6px; }
+  .works-panel__meta{ font-size:13px; opacity:.75; }
+
+  .works-toggle{
+    display:flex; gap:8px; align-items:center; justify-content:flex-end;
+    flex-wrap:wrap;
+  }
+  .works-toggle__btn{
+    border:1px solid rgba(0,0,0,.12);
+    background:white;
+    border-radius:999px;
+    padding:8px 10px;
+    font-size:12.5px;
+    cursor:pointer;
+    line-height:1;
+    transition: box-shadow .12s ease, border-color .12s ease, transform .05s ease;
+    white-space:nowrap;
+  }
+  .works-toggle__btn:hover{
+    border-color: rgba(20,110,200,.35);
+    box-shadow: 0 6px 16px rgba(0,0,0,.10);
+  }
+  .works-toggle__btn:active{ transform:scale(.99); }
+  .works-toggle__btn.is-active{
+    border-color: rgba(20,110,200,.55);
+    box-shadow: 0 10px 22px rgba(20,110,200,.12);
+  }
+
+  .works-panel__search{
+    width:100%;
+    border:1px solid rgba(0,0,0,.12);
+    border-radius:10px;
+    padding:10px 12px;
+    font-size:14px;
+    outline:none;
+  }
+  .works-panel__search:focus{
+    border-color: rgba(20,110,200,.45);
+    box-shadow: 0 0 0 4px rgba(20,110,200,.12);
+  }
+  .works-panel__list{ overflow:auto; padding:8px 8px 10px; }
+  .works-panel__hint{ padding:10px 10px; font-size:13px; opacity:.7; }
+
+  .work-item{
+    display:block;
+    border:1px solid rgba(0,0,0,.06);
+    border-radius:12px;
+    padding:10px 10px;
+    margin:8px 6px;
+    background:white;
+    transition: transform .05s ease, box-shadow .12s ease, border-color .12s ease;
+    cursor:pointer;
+  }
+  .work-item:hover{
+    border-color: rgba(20,110,200,.25);
+    box-shadow: 0 8px 20px rgba(0,0,0,.10);
+  }
+  .work-item.is-active{
+    border-color: rgba(20,110,200,.55);
+    box-shadow: 0 10px 22px rgba(20,110,200,.12);
+  }
+  .work-item__title{ font-weight:650; font-size:13.5px; margin-bottom:4px; }
+  .work-item__meta{ font-size:12.5px; opacity:.75; line-height:1.25; }
+
+  @media (max-width: 1050px){
+    .map-panel-wrap{ flex-direction:column; }
+    .works-map{ min-width:0; height:520px; }
+    .works-panel{ flex:1 1 auto; max-width:100%; height:520px; }
+  }
+</style>
+
+<script type="module">
+(async function(){
+  const $ = (id) => document.getElementById(id);
+
+  // Wait for BaroqueDB
+  while (typeof BaroqueDB === 'undefined' || !BaroqueDB.isReady || !BaroqueDB.isReady()){
+    await new Promise(r => setTimeout(r, 100));
+  }
+
+  // Leaflet present?
+  if (typeof L === 'undefined'){
+    $('works-list').innerHTML = `<div class="works-panel__hint">
+      Leaflet not loaded. Make sure Leaflet is included (it should be, if your other map works).
+    </div>`;
+    return;
+  }
+
+  // ---------- Load base rows (all geocoded works) ----------
+  let rowsAll;
+  try{
+    rowsAll = await BaroqueDB.query(`
+      SELECT
+        nfdi_uri,
+        building_name,
+        room_name,
+        location_state,
+        year_start,
+        year_end,
+        year,
+        lat,
+        lon,
+        imageUrl,
+        painters,
+        commissioners
+      FROM paintings
+      WHERE lat IS NOT NULL AND lon IS NOT NULL
+    `);
+  } catch(e){
+    console.error(e);
+    $('works-list').innerHTML = `<div class="works-panel__hint">
+      Query failed (paintings). Open console to see the error.
+    </div>`;
+    return;
+  }
+
+  // ---------- Load cat4 URI set ----------
+  let cat4Set = new Set();
+  try{
+    const cat4 = await BaroqueDB.query(`
+      WITH cat4 AS (
+        SELECT DISTINCT ps.nfdi_uri
+        FROM painting_subjects ps
+        JOIN subjects s ON ps.subject_uri = s.subject_uri
+        WHERE s.subject_source = 'ICONCLASS'
+          AND REGEXP_EXTRACT(s.subject_uri, 'iconclass\\.org/([^/]+)', 1) LIKE '4%'
+      )
+      SELECT nfdi_uri FROM cat4
+    `);
+    cat4Set = new Set(cat4.map(d => d.nfdi_uri));
+  } catch(e){
+    console.warn("Could not load category 4 set:", e);
+    // not fatal – toggle still works for "All"
+  }
+
+  // ---------- Map ----------
+  const map = L.map('works-map', { scrollWheelZoom: true });
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 19,
+    attribution: '&copy; OpenStreetMap'
+  }).addTo(map);
+
+  // Fit Germany-ish
+  if (rowsAll.length){
+    const b = L.latLngBounds(rowsAll.map(r => [r.lat, r.lon]));
+    map.fitBounds(b.pad(0.12));
+  } else {
+    map.setView([51.1657, 10.4515], 6);
+  }
+
+  const hasCluster = !!L.markerClusterGroup;
+  let layer = null;
+  let markerByUri = new Map();
+  let activeUri = null;
+
+  const listEl = $('works-list');
+  const countEl = $('works-count');
+  const searchEl = $('works-search');
+
+  const btnCat4 = $('btn-cat4');
+  const btnAll  = $('btn-all');
+
+  // Default: cat4
+  let mode = 'cat4'; // 'cat4' | 'all'
+
+  function esc(s){
+    return String(s ?? '').replace(/[&<>"']/g, (c) => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+    }[c]));
+  }
+
+  function formatTime(r){
+    if (r.year_start && r.year_end && r.year_start !== r.year_end) return `${r.year_start}–${r.year_end}`;
+    if (r.year_start) return `${r.year_start}`;
+    if (r.year) return `${r.year}`;
+    return '';
+  }
+
+  function getRows(){
+    if (mode === 'cat4' && cat4Set.size){
+      return rowsAll.filter(r => cat4Set.has(r.nfdi_uri));
+    }
+    return rowsAll;
+  }
+
+  function clearLayer(){
+    if (layer){
+      layer.clearLayers();
+      map.removeLayer(layer);
+    }
+    markerByUri = new Map();
+    activeUri = null;
+  }
+
+  function buildLayer(){
+    const rows = getRows();
+
+    layer = hasCluster ? L.markerClusterGroup({
+      spiderfyOnMaxZoom: true,
+      showCoverageOnHover: false,
+      zoomToBoundsOnClick: true,
+      disableClusteringAtZoom: 18,
+      maxClusterRadius: 40
+    }) : L.layerGroup();
+
+    for (const r of rows){
+      const time = formatTime(r);
+      const title = r.building_name || r.room_name || 'Ceiling painting';
+      const meta1 = [time, r.location_state].filter(Boolean).join(' | ');
+      const meta2 = [
+        r.painters ? `Painter(s): ${esc(r.painters)}` : '',
+        r.commissioners ? `Commissioner(s): ${esc(r.commissioners)}` : '',
+      ].filter(Boolean).join('<br>');
+
+      const img = r.imageUrl ? `<div style="margin-top:8px">
+          <img src="${esc(r.imageUrl)}" alt="" style="width:100%;max-width:260px;border-radius:10px;display:block" />
+        </div>` : '';
+
+      const popup = `
+        <div style="font-size:13px; line-height:1.25">
+          <div style="font-weight:700; margin-bottom:4px">${esc(title)}</div>
+          <div style="opacity:.75; margin-bottom:6px">${esc(meta1)}</div>
+          <div style="opacity:.9">${meta2}</div>
+          <div style="opacity:.75; margin-top:8px; font-size:12px">${esc(r.nfdi_uri)}</div>
+          ${img}
+        </div>
+      `;
+
+      const m = L.circleMarker([r.lat, r.lon], { radius: 6, weight: 1, fillOpacity: 0.8 })
+        .bindPopup(popup);
+
+      m.__row = r;
+      markerByUri.set(r.nfdi_uri, m);
+      m.on('popupopen', () => setActive(r.nfdi_uri));
+      layer.addLayer(m);
+    }
+
+    layer.addTo(map);
+  }
+
+  function setActive(uri){
+    activeUri = uri;
+    for (const el of listEl.querySelectorAll('.work-item')){
+      el.classList.toggle('is-active', el.dataset.uri === uri);
+    }
+  }
+
+  function inView(r, bounds){ return bounds.contains([r.lat, r.lon]); }
+
+  function passesSearch(r, q){
+    if (!q) return true;
+    const hay = [
+      r.painters, r.building_name, r.room_name, r.location_state, r.commissioners,
+      r.year_start, r.year_end, r.year
+    ].join(' ').toLowerCase();
+    return hay.includes(q);
+  }
+
+  function renderList(){
+    const rows = getRows();
+    const bounds = map.getBounds();
+    const q = (searchEl.value || '').trim().toLowerCase();
+
+    const filtered = rows
+      .filter(r => inView(r, bounds))
+      .filter(r => passesSearch(r, q))
+      .sort((a,b) => (a.year_start ?? 999999) - (b.year_start ?? 999999));
+
+    countEl.textContent = filtered.length;
+
+    if (!filtered.length){
+      listEl.innerHTML = `<div class="works-panel__hint">
+        No items in view (or filtered out). Try zooming out or clearing search.
+      </div>`;
+      return;
+    }
+
+    listEl.innerHTML = filtered.map(r => {
+      const time = formatTime(r);
+      const title = r.building_name || r.room_name || 'Ceiling painting';
+      const meta = [
+        time ? `Time: ${time}` : '',
+        r.location_state ? `State: ${r.location_state}` : '',
+        r.room_name ? `Room: ${r.room_name}` : ''
+      ].filter(Boolean).join(' · ');
+
+      const painters = r.painters ? `Painter(s): ${r.painters}` : '';
+      return `
+        <div class="work-item ${activeUri===r.nfdi_uri ? 'is-active':''}" data-uri="${esc(r.nfdi_uri)}">
+          <div class="work-item__title">${esc(title)}</div>
+          <div class="work-item__meta">${esc(meta)}</div>
+          ${painters ? `<div class="work-item__meta" style="margin-top:4px">${esc(painters)}</div>` : ''}
+        </div>
+      `;
+    }).join('');
+
+    for (const el of listEl.querySelectorAll('.work-item')){
+      el.addEventListener('click', () => {
+        const uri = el.dataset.uri;
+        const m = markerByUri.get(uri);
+        if (!m) return;
+        setActive(uri);
+        const latlng = m.getLatLng();
+        map.setView(latlng, Math.max(map.getZoom(), 14), { animate: true });
+        m.openPopup();
+      });
+    }
+  }
+
+  function setMode(next){
+    mode = next;
+    btnCat4.classList.toggle('is-active', mode === 'cat4');
+    btnAll.classList.toggle('is-active', mode === 'all');
+
+    // rebuild markers for the new subset
+    clearLayer();
+    buildLayer();
+    renderList();
+  }
+
+  // build initial (cat4)
+  buildLayer();
+  renderList();
+
+  map.on('moveend zoomend', renderList);
+  searchEl.addEventListener('input', renderList);
+
+  btnCat4.addEventListener('click', () => setMode('cat4'));
+  btnAll.addEventListener('click', () => setMode('all'));
+})();
+</script>
+
+
+
+
+
+---
 ## Summary
 
 This data story demonstrates how DuckDB WASM enables interactive, client-side data exploration for cultural heritage research. Key findings include:
