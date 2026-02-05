@@ -943,25 +943,17 @@ Try exploring these notable Baroque ceiling painters:
             style="padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95em;">
         🎨 Cosmas Damian Asam
     </button>
-    <button onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Zick, Januarius');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}" 
+    <button onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Seivert, Lammers');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}" 
             style="padding: 12px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95em;">
-        🎨 Januarius Zick
+        🎨 Lammers Seivert
     </button>
-    <button onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Carlone, Carlo Innocenzo');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}" 
+    <button onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Castelli, Carlo Ludovico');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}" 
             style="padding: 12px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95em;">
-        🎨 Carlo Innocenzo Carlone
-    </button>
-    <button onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Scheffler, Felix Anton');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}" 
-            style="padding: 12px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95em;">
-        🎨 Felix Anton Scheffler
+        🎨 Carlo Ludovico Castelli
     </button>
     <button onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Holzer, Johann Evangelist');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}" 
             style="padding: 12px; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95em;">
         🎨 Johann Evangelist Holzer
-    </button>
-    <button onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Troger, Paul');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}" 
-            style="padding: 12px; background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); color: #333; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95em;">
-        🎨 Paul Troger
     </button>
 </div>
 
