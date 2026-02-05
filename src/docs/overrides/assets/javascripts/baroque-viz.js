@@ -702,6 +702,1857 @@ window.BaroqueViz = (function() {
     }
 
     /**
+     * Render a painting card with image and metadata from database
+     * @param {string} container - CSS selector or DOM element
+     * @param {string} paintingId - UUID or full nfdi_uri of the painting
+     * @param {object} options - { showImage: true, captionStyle: 'below'|'overlay' }
+     */
+    async function renderPaintingCard(container, paintingId, options = {}) {
+        const el = _getElement(container);
+        el.innerHTML = '<div class="loading">Loading painting...</div>';
+
+        const { showImage = true, captionStyle = 'below' } = options;
+
+        try {
+            // Build WHERE clause to match UUID or full URI
+            const whereClause = paintingId.includes('http') 
+                ? `nfdi_uri = '${paintingId}'`
+                : `nfdi_uri LIKE '%${paintingId}%'`;
+
+            const sql = `
+                SELECT 
+                    p.nfdi_uri,
+                    p.label,
+                    p.painters,
+                    p.commissioners,
+                    p.year_start,
+                    p.year_end,
+                    p.building_name,
+                    p.room_name,
+                    p.location_state,
+                    p.imageUrl,
+                    p.method
+                FROM paintings p
+                WHERE ${whereClause}
+                LIMIT 1
+            `;
+            
+            const data = await BaroqueDB.query(sql);
+            
+            if (data.length === 0) {
+                el.innerHTML = '<div class="no-data">Painting not found in database.</div>';
+                return null;
+            }
+
+            const painting = data[0];
+            
+            // Get all persons involved
+            const personsSql = `
+                SELECT person_name, role 
+                FROM painting_persons 
+                WHERE nfdi_uri = '${painting.nfdi_uri}'
+                ORDER BY role
+            `;
+            const persons = await BaroqueDB.query(personsSql);
+
+            // Build persons by role
+            const personsByRole = {};
+            for (const p of persons) {
+                if (!personsByRole[p.role]) personsByRole[p.role] = [];
+                personsByRole[p.role].push(p.person_name);
+            }
+
+            const yearStr = painting.year_start === painting.year_end 
+                ? painting.year_start 
+                : `${painting.year_start}–${painting.year_end}`;
+
+            const cardHtml = `
+                <figure class="painting-card" style="margin: 1em 0; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: #fafafa;">
+                    ${showImage && painting.imageUrl ? `
+                        <a href="${painting.nfdi_uri}" target="_blank" rel="noopener">
+                            <img src="${painting.imageUrl}" alt="${painting.label}" 
+                                 style="width: 100%; max-height: 400px; object-fit: contain; background: #000;">
+                        </a>
+                    ` : ''}
+                    <figcaption style="padding: 15px;">
+                        <h4 style="margin: 0 0 10px 0; color: #2c3e50;">
+                            <a href="${painting.nfdi_uri}" target="_blank" style="color: inherit; text-decoration: none;">
+                                ${painting.label}
+                            </a>
+                        </h4>
+                        <div style="font-size: 0.9em; color: #666; line-height: 1.6;">
+                            <div><strong>📅 Year:</strong> ${yearStr || 'Unknown'}</div>
+                            <div><strong>📍 Location:</strong> ${painting.building_name || ''}${painting.room_name ? `, ${painting.room_name}` : ''}</div>
+                            <div><strong>🗺️ Region:</strong> ${painting.location_state || 'Unknown'}</div>
+                            ${personsByRole['PAINTER'] ? `<div><strong>🎨 Painter(s):</strong> ${_makeClickablePainterNames(personsByRole['PAINTER'])}</div>` : ''}
+                            ${painting.commissioners ? `<div><strong>👑 Commissioner:</strong> ${painting.commissioners}</div>` : ''}
+                            ${painting.method ? `<div><strong>🖌️ Technique:</strong> ${painting.method}</div>` : ''}
+                        </div>
+                    </figcaption>
+                </figure>
+            `;
+
+            el.innerHTML = cardHtml;
+            return painting;
+        } catch (error) {
+            el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            throw error;
+        }
+    }
+
+    /**
+     * Render a room card with associated paintings, architects, and commissioners
+     * @param {string} container - CSS selector or DOM element
+     * @param {string} roomId - UUID of the room
+     * @param {object} options - { showPaintings: true, paintingLimit: 4 }
+     */
+    async function renderRoomCard(container, roomId, options = {}) {
+        const el = _getElement(container);
+        el.innerHTML = '<div class="loading">Loading room...</div>';
+
+        const { showPaintings = true, paintingLimit = 8 } = options;
+
+        try {
+            // Get room details
+            const roomSql = `
+                SELECT 
+                    r.room_id,
+                    r.name as room_name,
+                    r.function as room_function,
+                    b.name as building_name,
+                    b.location_state,
+                    b.function as building_function,
+                    b.construction_date
+                FROM rooms r
+                JOIN buildings b ON r.building_id = b.building_id
+                WHERE r.room_id = '${roomId}'
+                LIMIT 1
+            `;
+            
+            const roomData = await BaroqueDB.query(roomSql);
+            
+            if (roomData.length === 0) {
+                el.innerHTML = '<div class="no-data">Room not found in database.</div>';
+                return null;
+            }
+
+            const room = roomData[0];
+
+            // Get persons associated with this room
+            const personsSql = `
+                SELECT person_name, role 
+                FROM room_persons 
+                WHERE room_id = '${roomId}'
+                ORDER BY role, person_name
+            `;
+            const persons = await BaroqueDB.query(personsSql);
+
+            // Group by role
+            const personsByRole = {};
+            for (const p of persons) {
+                if (!personsByRole[p.role]) personsByRole[p.role] = [];
+                personsByRole[p.role].push(p.person_name);
+            }
+
+            // Get paintings in this room with full details
+            let paintingsHtml = '';
+            let paintings = [];
+            if (showPaintings) {
+                const paintingsSql = `
+                    SELECT 
+                        p.nfdi_uri, 
+                        p.label, 
+                        p.painters, 
+                        p.commissioners,
+                        p.year_start, 
+                        p.year_end,
+                        p.method,
+                        p.imageUrl
+                    FROM paintings p
+                    WHERE p.room_name = '${room.room_name.replace(/'/g, "''")}'
+                    AND p.building_name = '${room.building_name.replace(/'/g, "''")}'
+                    LIMIT ${paintingLimit}
+                `;
+                paintings = await BaroqueDB.query(paintingsSql);
+                
+                if (paintings.length > 0) {
+                    // Generate unique ID for this room card instance
+                    const roomCardId = 'room-' + Math.random().toString(36).substr(2, 9);
+                    
+                    const paintingCards = paintings.map((p, idx) => {
+                        const paintingId = `${roomCardId}-painting-${idx}`;
+                        const yearStr = p.year_start === p.year_end 
+                            ? (p.year_start || 'Unknown') 
+                            : `${p.year_start || '?'}–${p.year_end || '?'}`;
+                        
+                        return `
+                            <div class="room-painting-item" style="flex: 0 0 calc(25% - 10px); min-width: 140px; margin-bottom: 10px;">
+                                <div class="room-painting-thumb" 
+                                     data-painting-id="${paintingId}"
+                                     style="cursor: pointer; position: relative;">
+                                    ${p.imageUrl ? `
+                                        <img src="${p.imageUrl}" alt="${p.label}" 
+                                             style="width: 100%; height: 100px; object-fit: cover; border-radius: 4px; border: 2px solid transparent; transition: border-color 0.2s;">
+                                    ` : `
+                                        <div style="width: 100%; height: 100px; background: #ddd; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #888;">
+                                            No image
+                                        </div>
+                                    `}
+                                    <div style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.6); color: #fff; padding: 2px 6px; border-radius: 3px; font-size: 0.7em;">
+                                        ℹ️
+                                    </div>
+                                </div>
+                                <div style="font-size: 0.75em; margin-top: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #444;">
+                                    ${p.label}
+                                </div>
+                                
+                                <!-- Expandable painting details -->
+                                <div id="${paintingId}" class="painting-details-dropdown" 
+                                     style="display: none; margin-top: 8px; padding: 12px; background: #fff; border: 1px solid #ccc; border-radius: 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-size: 0.85em;">
+                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 8px;">
+                                        <strong style="color: #2c3e50; font-size: 1em; line-height: 1.3;">${p.label}</strong>
+                                        <button class="close-painting-details" data-target="${paintingId}" 
+                                                style="background: none; border: none; cursor: pointer; font-size: 1.2em; color: #888; padding: 0 4px;">×</button>
+                                    </div>
+                                    <div style="color: #555; line-height: 1.6;">
+                                        <div><strong>📅 Year:</strong> ${yearStr}</div>
+                                        ${p.painters ? `<div><strong>🎨 Painter(s):</strong> ${_makeClickablePainterNames(p.painters)}</div>` : ''}
+                                        ${p.commissioners ? `<div><strong>👑 Commissioner:</strong> ${p.commissioners}</div>` : ''}
+                                        ${p.method ? `<div><strong>🖌️ Technique:</strong> ${p.method}</div>` : ''}
+                                        <div style="margin-top: 8px;">
+                                            <a href="${p.nfdi_uri}" target="_blank" rel="noopener" 
+                                               style="color: #3498db; text-decoration: none; font-size: 0.9em;">
+                                                View in CbDD →
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                    
+                    paintingsHtml = `
+                        <div class="room-paintings-section" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ccc;">
+                            <strong style="font-size: 0.9em; color: #555;">🖼️ Paintings in this room (${paintings.length}):</strong>
+                            <p style="font-size: 0.8em; color: #888; margin: 5px 0 10px 0;">Click on a painting to see details</p>
+                            <div class="room-paintings-grid" style="display: flex; gap: 10px; flex-wrap: wrap;">
+                                ${paintingCards}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            const cardHtml = `
+                <div class="room-card" style="margin: 1em 0; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);">
+                    <div style="padding: 20px;">
+                        <h4 style="margin: 0 0 5px 0; color: #2c3e50; font-size: 1.3em;">
+                            🏛️ ${room.room_name}
+                        </h4>
+                        <div style="color: #666; font-size: 0.95em; margin-bottom: 15px;">
+                            ${room.building_name}
+                        </div>
+                        <div style="font-size: 0.9em; color: #555; line-height: 1.7;">
+                            ${room.room_function ? `<div><strong>Function:</strong> ${room.room_function}</div>` : ''}
+                            <div><strong>🗺️ Region:</strong> ${room.location_state || 'Unknown'}</div>
+                            ${room.building_function ? `<div><strong>Building Type:</strong> ${room.building_function}</div>` : ''}
+                            ${room.construction_date ? `<div><strong>📅 Construction:</strong> ${room.construction_date}</div>` : ''}
+                            ${personsByRole['ARCHITECT'] ? `<div><strong>🏗️ Architect(s):</strong> ${personsByRole['ARCHITECT'].join(', ')}</div>` : ''}
+                            ${personsByRole['COMMISSIONER'] ? `<div><strong>👑 Commissioner(s):</strong> ${personsByRole['COMMISSIONER'].slice(0, 3).join(', ')}${personsByRole['COMMISSIONER'].length > 3 ? ` (+${personsByRole['COMMISSIONER'].length - 3} more)` : ''}</div>` : ''}
+                        </div>
+                        ${paintingsHtml}
+                    </div>
+                </div>
+            `;
+
+            el.innerHTML = cardHtml;
+
+            // Add click handlers for painting thumbnails
+            el.querySelectorAll('.room-painting-thumb').forEach(thumb => {
+                thumb.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const paintingId = thumb.dataset.paintingId;
+                    const detailsEl = document.getElementById(paintingId);
+                    
+                    if (detailsEl) {
+                        // Close all other open details in this room card
+                        el.querySelectorAll('.painting-details-dropdown').forEach(dd => {
+                            if (dd.id !== paintingId) {
+                                dd.style.display = 'none';
+                                // Reset border on corresponding thumbnail
+                                const otherThumb = el.querySelector(`[data-painting-id="${dd.id}"] img`);
+                                if (otherThumb) otherThumb.style.borderColor = 'transparent';
+                            }
+                        });
+                        
+                        // Toggle this one
+                        const isHidden = detailsEl.style.display === 'none';
+                        detailsEl.style.display = isHidden ? 'block' : 'none';
+                        
+                        // Highlight thumbnail border
+                        const img = thumb.querySelector('img');
+                        if (img) {
+                            img.style.borderColor = isHidden ? '#3498db' : 'transparent';
+                        }
+                    }
+                });
+            });
+
+            // Add click handlers for close buttons
+            el.querySelectorAll('.close-painting-details').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const targetId = btn.dataset.target;
+                    const detailsEl = document.getElementById(targetId);
+                    if (detailsEl) {
+                        detailsEl.style.display = 'none';
+                        // Reset border on thumbnail
+                        const thumb = el.querySelector(`[data-painting-id="${targetId}"] img`);
+                        if (thumb) thumb.style.borderColor = 'transparent';
+                    }
+                });
+            });
+
+            return room;
+        } catch (error) {
+            el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            throw error;
+        }
+    }
+
+    /**
+     * Render a building card with associated rooms, architects, and commissioners
+     * Rooms are expandable to show paintings, paintings are expandable to show details
+     * @param {string} container - CSS selector or DOM element
+     * @param {string} buildingId - UUID of the building
+     * @param {object} options - { showRooms: true, roomLimit: 12, showMap: false }
+     */
+    async function renderBuildingCard(container, buildingId, options = {}) {
+        const el = _getElement(container);
+        el.innerHTML = '<div class="loading">Loading building...</div>';
+
+        const { showRooms = true, roomLimit = 12, showMap = false } = options;
+
+        try {
+            // Get building details
+            const buildingSql = `
+                SELECT 
+                    b.building_id,
+                    b.name as building_name,
+                    b.function as building_function,
+                    b.location_state,
+                    b.construction_date,
+                    COUNT(DISTINCT p.nfdi_uri) as painting_count
+                FROM buildings b
+                LEFT JOIN paintings p ON b.building_id = p.building_id
+                WHERE b.building_id = '${buildingId}'
+                GROUP BY b.building_id, b.name, b.function, b.location_state, b.construction_date
+                LIMIT 1
+            `;
+            
+            const buildingData = await BaroqueDB.query(buildingSql);
+            
+            if (buildingData.length === 0) {
+                el.innerHTML = '<div class="no-data">Building not found in database.</div>';
+                return null;
+            }
+
+            const building = buildingData[0];
+
+            // Get persons associated with this building
+            const personsSql = `
+                SELECT person_name, role 
+                FROM building_persons 
+                WHERE building_id = '${buildingId}'
+                ORDER BY role, person_name
+            `;
+            const persons = await BaroqueDB.query(personsSql);
+
+            // Group by role
+            const personsByRole = {};
+            for (const p of persons) {
+                if (!personsByRole[p.role]) personsByRole[p.role] = [];
+                personsByRole[p.role].push(p.person_name);
+            }
+
+            // Generate unique ID for this building card
+            const buildingCardId = 'building-' + Math.random().toString(36).substr(2, 9);
+
+            // Get rooms in this building with painting counts
+            let roomsHtml = '';
+            let rooms = [];
+            if (showRooms) {
+                const roomsSql = `
+                    SELECT 
+                        r.room_id,
+                        r.name as room_name,
+                        r.function as room_function,
+                        COUNT(DISTINCT p.nfdi_uri) as painting_count
+                    FROM rooms r
+                    LEFT JOIN paintings p ON p.room_name = r.name AND p.building_name = '${building.building_name.replace(/'/g, "''")}'
+                    WHERE r.building_id = '${buildingId}'
+                    GROUP BY r.room_id, r.name, r.function
+                    ORDER BY painting_count DESC
+                    LIMIT ${roomLimit}
+                `;
+                rooms = await BaroqueDB.query(roomsSql);
+                
+                if (rooms.length > 0) {
+                    const roomItems = rooms.map((r, idx) => {
+                        const roomItemId = `${buildingCardId}-room-${idx}`;
+                        return `
+                            <div class="building-room-item" data-room-id="${roomItemId}" data-room-name="${r.room_name.replace(/"/g, '&quot;')}" 
+                                 style="padding: 10px 14px; background: #fff; border-radius: 6px; margin: 6px 0; cursor: pointer; border: 1px solid #ddd; transition: all 0.2s;">
+                                <div class="room-header" style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
+                                        <span class="room-expand-icon" style="display: inline-block; width: 20px; transition: transform 0.2s;">▶</span>
+                                        <span style="font-weight: 500;">${r.room_name}</span>
+                                        ${r.room_function ? `<span style="color: #888; font-size: 0.85em;"> · ${r.room_function}</span>` : ''}
+                                    </div>
+                                    <span style="color: #666; font-size: 0.85em; background: #f0f0f0; padding: 2px 8px; border-radius: 10px;">
+                                        🖼️ ${r.painting_count}
+                                    </span>
+                                </div>
+                                
+                                <!-- Expandable room content (paintings) -->
+                                <div id="${roomItemId}" class="room-paintings-content" style="display: none; margin-top: 12px; padding-top: 12px; border-top: 1px solid #eee;">
+                                    <div class="room-paintings-loading" style="color: #888; font-size: 0.85em;">Loading paintings...</div>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                    
+                    roomsHtml = `
+                        <div class="building-rooms-section" style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #ccc;">
+                            <strong style="font-size: 0.9em; color: #555;">🚪 Rooms (${rooms.length}):</strong>
+                            <p style="font-size: 0.8em; color: #888; margin: 5px 0 10px 0;">Click on a room to explore its paintings</p>
+                            <div class="building-rooms-list" style="margin-top: 8px;">
+                                ${roomItems}
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+
+            // Get a sample painting image for the header
+            const sampleImageSql = `
+                SELECT imageUrl FROM paintings 
+                WHERE building_id = '${buildingId}' AND imageUrl IS NOT NULL
+                LIMIT 1
+            `;
+            const sampleImage = await BaroqueDB.query(sampleImageSql);
+            const headerImage = sampleImage.length > 0 ? sampleImage[0].imageUrl : null;
+
+            const cardHtml = `
+                <div class="building-card" data-building-id="${buildingCardId}" data-building-name="${building.building_name.replace(/"/g, '&quot;')}"
+                     style="margin: 1em 0; border: 1px solid #bbb; border-radius: 8px; overflow: hidden; background: #fff; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                    ${headerImage ? `
+                        <div style="height: 150px; background: url('${headerImage}') center/cover; position: relative;">
+                            <div style="position: absolute; bottom: 0; left: 0; right: 0; background: linear-gradient(transparent, rgba(0,0,0,0.7)); padding: 20px 15px 10px;">
+                                <h4 style="margin: 0; color: #fff; font-size: 1.2em; text-shadow: 1px 1px 2px rgba(0,0,0,0.5);">
+                                    🏰 ${building.building_name}
+                                </h4>
+                            </div>
+                        </div>
+                    ` : `
+                        <div style="padding: 15px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                            <h4 style="margin: 0; color: #fff; font-size: 1.2em;">
+                                🏰 ${building.building_name}
+                            </h4>
+                        </div>
+                    `}
+                    <div style="padding: 15px;">
+                        <div style="font-size: 0.9em; color: #555; line-height: 1.7;">
+                            ${building.building_function ? `<div><strong>Type:</strong> ${building.building_function}</div>` : ''}
+                            <div><strong>🗺️ Region:</strong> ${building.location_state || 'Unknown'}</div>
+                            ${building.construction_date ? `<div><strong>📅 Construction:</strong> ${building.construction_date}</div>` : ''}
+                            <div><strong>🖼️ Total Paintings:</strong> ${building.painting_count}</div>
+                            ${personsByRole['ARCHITECT'] ? `<div><strong>🏗️ Architect(s):</strong> ${personsByRole['ARCHITECT'].slice(0, 3).join(', ')}${personsByRole['ARCHITECT'].length > 3 ? ` (+${personsByRole['ARCHITECT'].length - 3} more)` : ''}</div>` : ''}
+                            ${personsByRole['COMMISSIONER'] ? `<div><strong>👑 Commissioner(s):</strong> ${personsByRole['COMMISSIONER'].slice(0, 3).join(', ')}${personsByRole['COMMISSIONER'].length > 3 ? ` (+${personsByRole['COMMISSIONER'].length - 3} more)` : ''}</div>` : ''}
+                        </div>
+                        ${roomsHtml}
+                    </div>
+                </div>
+            `;
+
+            el.innerHTML = cardHtml;
+
+            // Add click handlers for room expansion
+            el.querySelectorAll('.building-room-item').forEach(roomItem => {
+                const roomHeader = roomItem.querySelector('.room-header');
+                const roomId = roomItem.dataset.roomId;
+                const roomName = roomItem.dataset.roomName;
+                const contentEl = document.getElementById(roomId);
+                const expandIcon = roomItem.querySelector('.room-expand-icon');
+                let loaded = false;
+
+                roomHeader.addEventListener('click', async (e) => {
+                    e.stopPropagation();
+                    
+                    const isExpanded = contentEl.style.display !== 'none';
+                    
+                    if (isExpanded) {
+                        // Collapse
+                        contentEl.style.display = 'none';
+                        expandIcon.style.transform = 'rotate(0deg)';
+                        roomItem.style.borderColor = '#ddd';
+                        roomItem.style.background = '#fff';
+                    } else {
+                        // Expand
+                        contentEl.style.display = 'block';
+                        expandIcon.style.transform = 'rotate(90deg)';
+                        roomItem.style.borderColor = '#3498db';
+                        roomItem.style.background = '#f8fafc';
+                        
+                        // Load paintings if not already loaded
+                        if (!loaded) {
+                            loaded = true;
+                            try {
+                                const paintingsSql = `
+                                    SELECT 
+                                        p.nfdi_uri, 
+                                        p.label, 
+                                        p.painters, 
+                                        p.commissioners,
+                                        p.year_start, 
+                                        p.year_end,
+                                        p.method,
+                                        p.imageUrl
+                                    FROM paintings p
+                                    WHERE p.room_name = '${roomName.replace(/'/g, "''")}'
+                                    AND p.building_name = '${building.building_name.replace(/'/g, "''")}'
+                                    LIMIT 12
+                                `;
+                                const paintings = await BaroqueDB.query(paintingsSql);
+                                
+                                if (paintings.length === 0) {
+                                    contentEl.innerHTML = '<div style="color: #888; font-size: 0.85em;">No paintings found in this room.</div>';
+                                } else {
+                                    const paintingsGrid = paintings.map((p, pIdx) => {
+                                        const paintingItemId = `${roomId}-painting-${pIdx}`;
+                                        const yearStr = p.year_start === p.year_end 
+                                            ? (p.year_start || 'Unknown') 
+                                            : `${p.year_start || '?'}–${p.year_end || '?'}`;
+                                        
+                                        return `
+                                            <div class="room-painting-item" style="margin-bottom: 8px;">
+                                                <div class="painting-thumb-row" data-painting-id="${paintingItemId}"
+                                                     style="display: flex; align-items: center; gap: 10px; padding: 8px; background: #fff; border-radius: 4px; cursor: pointer; border: 1px solid #eee; transition: all 0.2s;">
+                                                    ${p.imageUrl ? `
+                                                        <img src="${p.imageUrl}" alt="${p.label}" 
+                                                             style="width: 100px; height: 100px; object-fit: cover; border-radius: 4px; flex-shrink: 0;">
+                                                    ` : `
+                                                        <div style="width: 100px; height: 100px; background: #ddd; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #888; font-size: 0.7em; flex-shrink: 0;">
+                                                            No img
+                                                        </div>
+                                                    `}
+                                                    <div style="flex: 1; min-width: 0;">
+                                                        <div style="font-size: 0.85em; font-weight: 500; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                                            ${p.label}
+                                                        </div>
+                                                        <div style="font-size: 0.75em; color: #888;">
+                                                            ${yearStr}${p.painters ? ` · ` + _makeClickablePainterNames(p.painters.split('|')[0]) : ''}
+                                                        </div>
+                                                    </div>
+                                                    <div style="color: #3498db; font-size: 0.8em;">ℹ️</div>
+                                                </div>
+                                                
+                                                <!-- Expandable painting details -->
+                                                <div id="${paintingItemId}" class="painting-details-panel" 
+                                                     style="display: none; margin: 8px 0 8px 112px; padding: 12px; background: #fff; border: 1px solid #3498db; border-radius: 6px; box-shadow: 0 2px 8px rgba(52,152,219,0.2);">
+                                                    <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 10px;">
+                                                        <strong style="color: #2c3e50; font-size: 0.95em; line-height: 1.3;">${p.label}</strong>
+                                                        <button class="close-painting-panel" data-target="${paintingItemId}" 
+                                                                style="background: none; border: none; cursor: pointer; font-size: 1.2em; color: #888; padding: 0 4px;">×</button>
+                                                    </div>
+                                                    ${p.imageUrl ? `
+                                                        <a href="${p.nfdi_uri}" target="_blank" rel="noopener">
+                                                            <img src="${p.imageUrl}" alt="${p.label}" 
+                                                                 style="width: 100%; max-height: 200px; object-fit: contain; border-radius: 4px; background: #000; margin-bottom: 10px;">
+                                                        </a>
+                                                    ` : ''}
+                                                    <div style="font-size: 0.85em; color: #555; line-height: 1.6;">
+                                                        <div><strong>📅 Year:</strong> ${yearStr}</div>
+                                                        ${p.painters ? `<div><strong>🎨 Painter(s):</strong> ${_makeClickablePainterNames(p.painters)}</div>` : ''}
+                                                        ${p.commissioners ? `<div><strong>👑 Commissioner:</strong> ${p.commissioners}</div>` : ''}
+                                                        ${p.method ? `<div><strong>🖌️ Technique:</strong> ${p.method}</div>` : ''}
+                                                        <div style="margin-top: 8px;">
+                                                            <a href="${p.nfdi_uri}" target="_blank" rel="noopener" 
+                                                               style="color: #3498db; text-decoration: none; font-size: 0.9em;">
+                                                                View in CbDD →
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        `;
+                                    }).join('');
+                                    
+                                    contentEl.innerHTML = `
+                                        <div style="font-size: 0.8em; color: #666; margin-bottom: 8px;">
+                                            ${paintings.length} painting${paintings.length > 1 ? 's' : ''} · Click to see details
+                                        </div>
+                                        <div class="room-paintings-list">
+                                            ${paintingsGrid}
+                                        </div>
+                                    `;
+                                    
+                                    // Add click handlers for paintings in this room
+                                    contentEl.querySelectorAll('.painting-thumb-row').forEach(thumbRow => {
+                                        thumbRow.addEventListener('click', (pe) => {
+                                            pe.stopPropagation();
+                                            const paintingId = thumbRow.dataset.paintingId;
+                                            const detailsEl = document.getElementById(paintingId);
+                                            
+                                            if (detailsEl) {
+                                                // Close all other open painting panels in this room
+                                                contentEl.querySelectorAll('.painting-details-panel').forEach(panel => {
+                                                    if (panel.id !== paintingId) {
+                                                        panel.style.display = 'none';
+                                                        const otherRow = contentEl.querySelector(`[data-painting-id="${panel.id}"]`);
+                                                        if (otherRow) {
+                                                            otherRow.style.borderColor = '#eee';
+                                                            otherRow.style.background = '#fff';
+                                                        }
+                                                    }
+                                                });
+                                                
+                                                // Toggle this one
+                                                const isHidden = detailsEl.style.display === 'none';
+                                                detailsEl.style.display = isHidden ? 'block' : 'none';
+                                                thumbRow.style.borderColor = isHidden ? '#3498db' : '#eee';
+                                                thumbRow.style.background = isHidden ? '#f0f7ff' : '#fff';
+                                            }
+                                        });
+                                    });
+                                    
+                                    // Add close button handlers
+                                    contentEl.querySelectorAll('.close-painting-panel').forEach(btn => {
+                                        btn.addEventListener('click', (ce) => {
+                                            ce.stopPropagation();
+                                            const targetId = btn.dataset.target;
+                                            const detailsEl = document.getElementById(targetId);
+                                            if (detailsEl) {
+                                                detailsEl.style.display = 'none';
+                                                const thumbRow = contentEl.querySelector(`[data-painting-id="${targetId}"]`);
+                                                if (thumbRow) {
+                                                    thumbRow.style.borderColor = '#eee';
+                                                    thumbRow.style.background = '#fff';
+                                                }
+                                            }
+                                        });
+                                    });
+                                }
+                            } catch (err) {
+                                contentEl.innerHTML = `<div style="color: #c00; font-size: 0.85em;">Error loading paintings: ${err.message}</div>`;
+                            }
+                        }
+                    }
+                });
+            });
+
+            return building;
+        } catch (error) {
+            el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            throw error;
+        }
+    }
+
+    /**
+     * Render a gallery of paintings from specific painter(s)
+     * @param {string} container - CSS selector or DOM element
+     * @param {string|string[]} painterNames - Painter name(s) to search for
+     * @param {object} options - { limit: 6, showMythologyOnly: false }
+     */
+    async function renderPainterGallery(container, painterNames, options = {}) {
+        const el = _getElement(container);
+        el.innerHTML = '<div class="loading">Loading painter gallery...</div>';
+
+        const { limit = 6, showMythologyOnly = false } = options;
+        const names = Array.isArray(painterNames) ? painterNames : [painterNames];
+
+        try {
+            const nameConditions = names.map(n => `p.painters LIKE '%${n.replace(/'/g, "''")}%'`).join(' OR ');
+            
+            let sql = `
+                SELECT DISTINCT
+                    p.nfdi_uri,
+                    p.label,
+                    p.painters,
+                    p.commissioners,
+                    p.year_start,
+                    p.year_end,
+                    p.building_name,
+                    p.room_name,
+                    p.location_state,
+                    p.imageUrl
+                FROM paintings p
+                ${showMythologyOnly ? `
+                    JOIN painting_subjects ps ON p.nfdi_uri = ps.nfdi_uri
+                    JOIN subjects s ON ps.subject_uri = s.subject_uri
+                ` : ''}
+                WHERE (${nameConditions})
+                AND p.imageUrl IS NOT NULL AND p.imageUrl != ''
+                ${showMythologyOnly ? `AND s.subject_source = 'ICONCLASS' AND s.subject_uri LIKE '%iconclass.org/9%'` : ''}
+                ORDER BY p.year_start
+                LIMIT ${limit}
+            `;
+            
+            const data = await BaroqueDB.query(sql);
+            
+            if (data.length === 0) {
+                el.innerHTML = '<div class="no-data">No paintings found for this painter.</div>';
+                return [];
+            }
+
+            const galleryHtml = `
+                <div class="painter-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
+                    ${data.map(painting => {
+                        const yearStr = painting.year_start === painting.year_end 
+                            ? painting.year_start 
+                            : `${painting.year_start}–${painting.year_end}`;
+                        return `
+                            <figure style="margin: 0; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: #fafafa;">
+                                <a href="${painting.nfdi_uri}" target="_blank">
+                                    <img src="${painting.imageUrl}" alt="${painting.label}" 
+                                         style="width: 100%; height: 180px; object-fit: cover;">
+                                </a>
+                                <figcaption style="padding: 10px; font-size: 0.85em;">
+                                    <strong style="display: block; margin-bottom: 5px;">${painting.label}</strong>
+                                    <span style="color: #666;">${yearStr || '?'} · ${painting.building_name || 'Unknown'}</span>
+                                </figcaption>
+                            </figure>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+
+            el.innerHTML = galleryHtml;
+            return data;
+        } catch (error) {
+            el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            throw error;
+        }
+    }
+
+    /**
+     * Render a timeline of commissions during baroque period
+     * Shows yearly painting counts as an area chart
+     */
+    async function renderCommissionsTimeline(container, options = {}) {
+        const el = _getElement(container);
+        el.innerHTML = '<div class="loading">Loading commissions timeline...</div>';
+
+        const { startYear = 1600, endYear = 1800 } = options;
+
+        try {
+            const sql = `
+                SELECT 
+                    year_start as year,
+                    COUNT(*) as count
+                FROM paintings
+                WHERE year_start IS NOT NULL
+                  AND year_start >= ${startYear} AND year_start <= ${endYear}
+                GROUP BY year_start
+                ORDER BY year_start
+            `;
+            
+            const data = await BaroqueDB.query(sql);
+
+            const trace = {
+                x: data.map(d => d.year),
+                y: data.map(d => d.count),
+                type: 'scatter',
+                mode: 'lines',
+                fill: 'tozeroy',
+                fillcolor: 'rgba(52, 152, 219, 0.3)',
+                line: {
+                    color: COLORS.primary,
+                    width: 2
+                },
+                hovertemplate: '<b>%{x}</b><br>%{y} paintings commissioned<extra></extra>'
+            };
+
+            // Add annotations for key events
+            const annotations = [
+                { x: 1618, text: 'Start of 30 Years War', ay: -40 },
+                { x: 1648, text: 'Peace of Westphalia', ay: -60 },
+                { x: 1700, text: 'Baroque Peak', ay: -40 },
+                { x: 1756, text: 'Seven Years War', ay: -60 }
+            ].map(a => ({
+                x: a.x,
+                y: data.find(d => d.year === a.x)?.count || 0,
+                xref: 'x',
+                yref: 'y',
+                text: a.text,
+                showarrow: true,
+                arrowhead: 2,
+                ax: 0,
+                ay: a.ay,
+                font: { size: 10 }
+            }));
+
+            const layout = {
+                title: 'Ceiling Painting Commissions Over Time (1600–1800)',
+                xaxis: { 
+                    title: 'Year',
+                    tickangle: 0
+                },
+                yaxis: { title: 'Number of Commissions' },
+                margin: { l: 60, r: 30, t: 50, b: 60 },
+                height: 400,
+                annotations: annotations
+            };
+
+            Plotly.newPlot(el, [trace], layout, { responsive: true });
+            return data;
+        } catch (error) {
+            el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            throw error;
+        }
+    }
+
+    /**
+     * Render mythology-themed paintings gallery (ICONCLASS category 9)
+     */
+    async function renderMythologyGallery(container, options = {}) {
+        const el = _getElement(container);
+        el.innerHTML = '<div class="loading">Loading mythology paintings...</div>';
+
+        const { limit = 8, subject = null } = options;
+
+        try {
+            const subjectFilter = subject 
+                ? `AND (s.subject_label LIKE '%${subject}%' OR p.label LIKE '%${subject}%')`
+                : '';
+
+            const sql = `
+                SELECT DISTINCT
+                    p.nfdi_uri,
+                    p.label,
+                    p.painters,
+                    p.commissioners,
+                    p.year_start,
+                    p.year_end,
+                    p.building_name,
+                    p.location_state,
+                    p.imageUrl,
+                    s.subject_label
+                FROM paintings p
+                JOIN painting_subjects ps ON p.nfdi_uri = ps.nfdi_uri
+                JOIN subjects s ON ps.subject_uri = s.subject_uri
+                WHERE s.subject_source = 'ICONCLASS'
+                AND s.subject_uri LIKE '%iconclass.org/9%'
+                AND p.imageUrl IS NOT NULL AND p.imageUrl != ''
+                ${subjectFilter}
+                ORDER BY p.year_start
+                LIMIT ${limit}
+            `;
+            
+            const data = await BaroqueDB.query(sql);
+            
+            if (data.length === 0) {
+                el.innerHTML = '<div class="no-data">No mythology paintings found.</div>';
+                return [];
+            }
+
+            const galleryHtml = `
+                <div class="mythology-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 15px;">
+                    ${data.map(painting => {
+                        const yearStr = painting.year_start || '?';
+                        return `
+                            <figure style="margin: 0; border: 1px solid #c9a227; border-radius: 8px; overflow: hidden; background: linear-gradient(135deg, #fefcea 0%, #f1da36 100%); box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+                                <a href="${painting.nfdi_uri}" target="_blank">
+                                    <img src="${painting.imageUrl}" alt="${painting.label}" 
+                                         style="width: 100%; height: 160px; object-fit: cover;">
+                                </a>
+                                <figcaption style="padding: 10px; font-size: 0.85em; background: rgba(255,255,255,0.8);">
+                                    <strong style="display: block; margin-bottom: 3px; color: #333;">${painting.label}</strong>
+                                    <span style="color: #666; font-size: 0.9em;">
+                                        ${painting.painters ? _makeClickablePainterNames(painting.painters) : 'Unknown'} · ${yearStr}<br>
+                                        ${painting.building_name || ''}
+                                    </span>
+                                </figcaption>
+                            </figure>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+
+            el.innerHTML = galleryHtml;
+            return data;
+        } catch (error) {
+            el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            throw error;
+        }
+    }
+
+    /**
+     * Render paintings featuring a specific mythological figure (Hercules, Apollo, Venus, etc.)
+     */
+    async function renderMythFigureGallery(container, figureName, options = {}) {
+        const el = _getElement(container);
+        el.innerHTML = `<div class="loading">Loading ${figureName} paintings...</div>`;
+
+        const { limit = 6 } = options;
+
+        try {
+            const sql = `
+                SELECT DISTINCT
+                    p.nfdi_uri,
+                    p.label,
+                    p.painters,
+                    p.commissioners,
+                    p.year_start,
+                    p.year_end,
+                    p.building_name,
+                    p.room_name,
+                    p.location_state,
+                    p.imageUrl
+                FROM paintings p
+                WHERE (p.label LIKE '%${figureName}%' OR p.label LIKE '%${_getGermanVariant(figureName)}%')
+                AND p.imageUrl IS NOT NULL AND p.imageUrl != ''
+                ORDER BY p.year_start
+                LIMIT ${limit}
+            `;
+            
+            const data = await BaroqueDB.query(sql);
+            
+            if (data.length === 0) {
+                el.innerHTML = `<div class="no-data">No ${figureName} paintings found.</div>`;
+                return [];
+            }
+
+            const figureColor = {
+                'Hercules': '#e74c3c',
+                'Herkules': '#e74c3c', 
+                'Apollo': '#f39c12',
+                'Apoll': '#f39c12',
+                'Venus': '#e91e63',
+                'Mars': '#c0392b',
+                'Minerva': '#3498db',
+                'Jupiter': '#9b59b6',
+                'Diana': '#1abc9c'
+            }[figureName] || COLORS.primary;
+
+            const galleryHtml = `
+                <div class="myth-figure-gallery">
+                    <h4 style="color: ${figureColor}; border-bottom: 2px solid ${figureColor}; padding-bottom: 5px;">
+                        🏛️ ${figureName} in Baroque Ceiling Paintings
+                    </h4>
+                    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 15px; margin-top: 15px;">
+                        ${data.map(painting => {
+                            const yearStr = painting.year_start === painting.year_end 
+                                ? painting.year_start 
+                                : `${painting.year_start}–${painting.year_end || '?'}`;
+                            return `
+                                <figure style="margin: 0; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: #fff;">
+                                    <a href="${painting.nfdi_uri}" target="_blank">
+                                        <img src="${painting.imageUrl}" alt="${painting.label}" 
+                                             style="width: 100%; height: 180px; object-fit: cover;">
+                                    </a>
+                                    <figcaption style="padding: 12px; font-size: 0.85em;">
+                                        <strong style="display: block; margin-bottom: 5px;">${painting.label}</strong>
+                                        <div style="color: #666; line-height: 1.5;">
+                                            ${painting.painters ? `🎨 ${_makeClickablePainterNames(painting.painters)}<br>` : ''}
+                                            📅 ${yearStr || 'Unknown'}<br>
+                                            📍 ${painting.building_name || 'Unknown location'}
+                                            ${painting.commissioners ? `<br>👑 ${painting.commissioners}` : ''}
+                                        </div>
+                                    </figcaption>
+                                </figure>
+                            `;
+                        }).join('')}
+                    </div>
+                </div>
+            `;
+
+            el.innerHTML = galleryHtml;
+            return data;
+        } catch (error) {
+            el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            throw error;
+        }
+    }
+
+    /**
+     * Render an interactive painter biography explorer with map and chronological painting list
+     * @param {string} container - CSS selector or DOM element
+     * @param {string} initialPainter - Optional initial painter name to display
+     */
+    async function renderPainterExplorer(container, initialPainter = null) {
+        const el = _getElement(container);
+        const explorerId = 'painter-explorer-' + Math.random().toString(36).substr(2, 9);
+        
+        el.innerHTML = '<div class="loading">Initializing Painter Explorer...</div>';
+
+        try {
+            // Get list of all painters for the dropdown
+            const painterListSql = `
+                SELECT 
+                    pp.person_name,
+                    COUNT(DISTINCT pp.nfdi_uri) as painting_count,
+                    MIN(p.year_start) as earliest,
+                    MAX(p.year_end) as latest
+                FROM painting_persons pp
+                JOIN paintings p ON pp.nfdi_uri = p.nfdi_uri
+                WHERE pp.role = 'PAINTER' AND pp.person_name IS NOT NULL
+                GROUP BY pp.person_name
+                HAVING COUNT(DISTINCT pp.nfdi_uri) >= 2
+                ORDER BY painting_count DESC
+            `;
+            const allPainters = await BaroqueDB.query(painterListSql);
+
+            // Build the explorer HTML structure
+            el.innerHTML = `
+                <div id="${explorerId}" class="painter-explorer" style="border: 1px solid #ddd; border-radius: 12px; overflow: hidden; background: #f9fafb;">
+                    <!-- Header with painter selector -->
+                    <div class="explorer-header" style="padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white;">
+                        <h3 style="margin: 0 0 15px 0; font-size: 1.4em;">🎨 Painter Biography Explorer</h3>
+                        <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                            <label style="font-weight: 500;">Select a painter:</label>
+                            <div style="position: relative; flex: 1; min-width: 250px; max-width: 400px;">
+                                <input type="text" id="${explorerId}-search" placeholder="Search painters..." 
+                                       style="width: 100%; padding: 10px 15px; border: none; border-radius: 6px; font-size: 1em; box-shadow: 0 2px 8px rgba(0,0,0,0.15); color: #333; background: white;">
+                                <div id="${explorerId}-dropdown" class="painter-dropdown" 
+                                     style="display: none; position: absolute; top: 100%; left: 0; right: 0; max-height: 300px; overflow-y: auto; background: white; border-radius: 0 0 6px 6px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 1000;">
+                                </div>
+                            </div>
+                            <div id="${explorerId}-stats" style="font-size: 0.9em; opacity: 0.9;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Main content area -->
+                    <div class="explorer-content" style="display: grid; grid-template-columns: 1fr 1fr; min-height: 600px;">
+                        <!-- Left: Map -->
+                        <div class="explorer-map-container" style="border-right: 1px solid #ddd; position: relative;">
+                            <div id="${explorerId}-map" style="height: 100%; min-height: 600px;"></div>
+                            <!-- Navigation arrows -->
+                            <div class="map-navigation" style="position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px; z-index: 1000;">
+                                <button id="${explorerId}-prev" class="nav-btn" style="padding: 10px 20px; background: white; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; font-size: 1.1em; box-shadow: 0 2px 6px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 5px;" disabled>
+                                    ◀ Previous
+                                </button>
+                                <span id="${explorerId}-nav-info" style="padding: 10px 15px; background: rgba(255,255,255,0.95); border-radius: 6px; font-size: 0.9em; box-shadow: 0 2px 6px rgba(0,0,0,0.1);">
+                                    Select a painter
+                                </span>
+                                <button id="${explorerId}-next" class="nav-btn" style="padding: 10px 20px; background: white; border: 1px solid #ddd; border-radius: 6px; cursor: pointer; font-size: 1.1em; box-shadow: 0 2px 6px rgba(0,0,0,0.1); display: flex; align-items: center; gap: 5px;" disabled>
+                                    Next ▶
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <!-- Right: Chronological painting list -->
+                        <div class="explorer-paintings-container" style="overflow-y: auto; max-height: 700px; padding: 15px; background: #fff;">
+                            <div id="${explorerId}-paintings" style="min-height: 400px;">
+                                <div class="placeholder" style="text-align: center; color: #888; padding: 40px;">
+                                    <div style="font-size: 3em; margin-bottom: 15px;">🖼️</div>
+                                    <p>Select a painter from the dropdown to explore their works chronologically across buildings.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Building card modal -->
+                    <div id="${explorerId}-building-modal" class="building-modal" 
+                         style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center;">
+                        <div class="modal-content" style="background: white; border-radius: 12px; max-width: 700px; max-height: 80vh; overflow-y: auto; margin: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+                            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #eee;">
+                                <h4 style="margin: 0;">Building Details</h4>
+                                <button class="close-modal" style="background: none; border: none; font-size: 1.5em; cursor: pointer; color: #888;">&times;</button>
+                            </div>
+                            <div id="${explorerId}-building-content" style="padding: 20px;"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- Painting card modal -->
+                    <div id="${explorerId}-painting-modal" class="painting-modal" 
+                         style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center;">
+                        <div class="modal-content" style="background: white; border-radius: 12px; max-width: 600px; max-height: 85vh; overflow-y: auto; margin: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.3);">
+                            <div class="modal-header" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; border-bottom: 1px solid #eee;">
+                                <h4 style="margin: 0;">Painting Details</h4>
+                                <button class="close-modal" style="background: none; border: none; font-size: 1.5em; cursor: pointer; color: #888;">&times;</button>
+                            </div>
+                            <div id="${explorerId}-painting-content" style="padding: 20px;"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            // Initialize Leaflet map
+            const mapEl = document.getElementById(`${explorerId}-map`);
+            const map = L.map(mapEl).setView([51.0, 10.0], 6);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors'
+            }).addTo(map);
+
+            // State management
+            let currentPainter = null;
+            let buildings = [];
+            let currentBuildingIndex = 0;
+            let markers = {};
+
+            // Populate dropdown
+            const searchInput = document.getElementById(`${explorerId}-search`);
+            const dropdown = document.getElementById(`${explorerId}-dropdown`);
+            
+            function renderDropdown(filter = '') {
+                const filtered = allPainters.filter(p => 
+                    p.person_name.toLowerCase().includes(filter.toLowerCase())
+                ).slice(0, 50);
+                
+                dropdown.innerHTML = filtered.map(p => `
+                    <div class="painter-option" data-name="${p.person_name.replace(/"/g, '&quot;')}"
+                         style="padding: 10px 15px; cursor: pointer; border-bottom: 1px solid #eee; transition: background 0.2s;">
+                        <div style="font-weight: 500; color: #333;">${p.person_name}</div>
+                        <div style="font-size: 0.85em; color: #888;">${p.painting_count} paintings · ${p.earliest || '?'}–${p.latest || '?'}</div>
+                    </div>
+                `).join('');
+                
+                dropdown.style.display = filtered.length > 0 ? 'block' : 'none';
+                
+                // Add hover effects
+                dropdown.querySelectorAll('.painter-option').forEach(opt => {
+                    opt.addEventListener('mouseenter', () => opt.style.background = '#f0f4ff');
+                    opt.addEventListener('mouseleave', () => opt.style.background = 'white');
+                    opt.addEventListener('click', () => {
+                        loadPainter(opt.dataset.name);
+                        dropdown.style.display = 'none';
+                        searchInput.value = opt.dataset.name;
+                    });
+                });
+            }
+
+            searchInput.addEventListener('focus', () => renderDropdown(searchInput.value));
+            searchInput.addEventListener('input', () => renderDropdown(searchInput.value));
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest(`#${explorerId}-search`) && !e.target.closest(`#${explorerId}-dropdown`)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+
+            // Load painter data
+            async function loadPainter(painterName) {
+                currentPainter = painterName;
+                
+                // Update the search input to show the selected painter name
+                searchInput.value = painterName;
+                dropdown.style.display = 'none';
+                
+                const paintingsContainer = document.getElementById(`${explorerId}-paintings`);
+                const statsEl = document.getElementById(`${explorerId}-stats`);
+                
+                paintingsContainer.innerHTML = '<div class="loading" style="padding: 20px; text-align: center;">Loading painter data...</div>';
+
+                try {
+                    // First, detect coordinate columns in the buildings table
+                    const bCols = await BaroqueDB.query("PRAGMA table_info('buildings')");
+                    const buildingCols = bCols.map(c => c.name ? c.name.toLowerCase() : c.name);
+                    
+                    // Also check paintings table for coordinates
+                    const pCols = await BaroqueDB.query("PRAGMA table_info('paintings')");
+                    const paintingCols = pCols.map(c => c.name ? c.name.toLowerCase() : c.name);
+                    
+                    console.log('PainterExplorer: Building columns:', buildingCols);
+                    console.log('PainterExplorer: Painting columns:', paintingCols);
+                    
+                    const latCandidates = ['latitude', 'lat', 'location_latitude', 'y'];
+                    const lonCandidates = ['longitude', 'lon', 'location_longitude', 'x'];
+                    
+                    function findColumn(cols, candidates) {
+                        for (const c of candidates) {
+                            if (cols.indexOf(c) !== -1) return c;
+                        }
+                        return null;
+                    }
+                    
+                    const bLat = findColumn(buildingCols, latCandidates);
+                    const bLon = findColumn(buildingCols, lonCandidates);
+                    const pLat = findColumn(paintingCols, latCandidates);
+                    const pLon = findColumn(paintingCols, lonCandidates);
+                    const cityCol = findColumn(buildingCols, ['location_city', 'city', 'town']);
+                    
+                    console.log('PainterExplorer: Detected coords - bLat:', bLat, 'bLon:', bLon, 'pLat:', pLat, 'pLon:', pLon);
+                    
+                    // Build the SELECT clause for coordinates - prefer buildings, fallback to paintings
+                    let coordSelect;
+                    if (bLat && bLon) {
+                        coordSelect = `b.${bLat} as latitude, b.${bLon} as longitude`;
+                        console.log('PainterExplorer: Using building coordinates');
+                    } else if (pLat && pLon) {
+                        coordSelect = `p.${pLat} as latitude, p.${pLon} as longitude`;
+                        console.log('PainterExplorer: Using painting coordinates');
+                    } else {
+                        coordSelect = 'NULL as latitude, NULL as longitude';
+                        console.log('PainterExplorer: No coordinate columns found!');
+                    }
+                    const citySelect = cityCol ? `b.${cityCol} as location_city` : 'NULL as location_city';
+
+                    // Get all paintings by this painter with building coordinates
+                    const paintingsSql = `
+                        SELECT 
+                            p.nfdi_uri,
+                            p.label,
+                            p.painters,
+                            p.commissioners,
+                            p.year_start,
+                            p.year_end,
+                            p.building_id,
+                            p.building_name,
+                            p.room_name,
+                            p.location_state,
+                            p.imageUrl,
+                            p.method,
+                            ${coordSelect},
+                            ${citySelect}
+                        FROM paintings p
+                        JOIN painting_persons pp ON p.nfdi_uri = pp.nfdi_uri
+                        LEFT JOIN buildings b ON p.building_id = b.building_id
+                        WHERE pp.role = 'PAINTER' 
+                          AND pp.person_name = '${painterName.replace(/'/g, "''")}'
+                        ORDER BY p.year_start ASC, p.building_name ASC
+                    `;
+                    const paintings = await BaroqueDB.query(paintingsSql);
+                    
+                    console.log('PainterExplorer: Paintings found:', paintings.length);
+                    if (paintings.length > 0) {
+                        console.log('PainterExplorer: Sample painting:', paintings[0]);
+                        console.log('PainterExplorer: Sample coords:', paintings[0].latitude, paintings[0].longitude);
+                    }
+
+                    // Get subject labels for each painting
+                    const subjectsSql = `
+                        SELECT 
+                            ps.nfdi_uri,
+                            STRING_AGG(s.subject_label, ', ') as subjects
+                        FROM painting_subjects ps
+                        JOIN subjects s ON ps.subject_uri = s.subject_uri
+                        JOIN painting_persons pp ON ps.nfdi_uri = pp.nfdi_uri
+                        WHERE pp.role = 'PAINTER' 
+                          AND pp.person_name = '${painterName.replace(/'/g, "''")}'
+                          AND s.subject_source = 'ICONCLASS'
+                        GROUP BY ps.nfdi_uri
+                    `;
+                    const subjectsData = await BaroqueDB.query(subjectsSql);
+                    const subjectsMap = {};
+                    subjectsData.forEach(s => { subjectsMap[s.nfdi_uri] = s.subjects; });
+
+                    // Group paintings by building
+                    const buildingMap = {};
+                    paintings.forEach(p => {
+                        const key = p.building_id || p.building_name || 'Unknown';
+                        if (!buildingMap[key]) {
+                            buildingMap[key] = {
+                                building_id: p.building_id,
+                                building_name: p.building_name || 'Unknown Building',
+                                location_city: p.location_city,
+                                location_state: p.location_state,
+                                latitude: p.latitude,
+                                longitude: p.longitude,
+                                paintings: [],
+                                earliest: null,
+                                latest: null
+                            };
+                        }
+                        const subjects = subjectsMap[p.nfdi_uri] || '';
+                        buildingMap[key].paintings.push({ ...p, subjects });
+                        
+                        // Track earliest year for this building
+                        if (p.year_start && (!buildingMap[key].earliest || p.year_start < buildingMap[key].earliest)) {
+                            buildingMap[key].earliest = p.year_start;
+                        }
+                        if (p.year_end && (!buildingMap[key].latest || p.year_end > buildingMap[key].latest)) {
+                            buildingMap[key].latest = p.year_end;
+                        }
+                    });
+
+                    // Sort buildings chronologically
+                    buildings = Object.values(buildingMap).sort((a, b) => 
+                        (a.earliest || 9999) - (b.earliest || 9999)
+                    );
+                    currentBuildingIndex = 0;
+                    
+                    console.log('PainterExplorer: Buildings:', buildings.length);
+                    if (buildings.length > 0) {
+                        console.log('PainterExplorer: First building coords:', buildings[0].latitude, buildings[0].longitude);
+                    }
+
+                    // Update stats
+                    const painterInfo = allPainters.find(p => p.person_name === painterName);
+                    statsEl.innerHTML = `${paintings.length} paintings · ${buildings.length} buildings · ${painterInfo?.earliest || '?'}–${painterInfo?.latest || '?'}`;
+
+                    // Clear and update map
+                    Object.values(markers).forEach(m => map.removeLayer(m));
+                    markers = {};
+                    
+                    // Also clear any existing polylines
+                    map.eachLayer(layer => {
+                        if (layer instanceof L.Polyline && !(layer instanceof L.Polygon)) {
+                            map.removeLayer(layer);
+                        }
+                    });
+                    
+                    const validBuildings = buildings.filter(b => b.latitude && b.longitude);
+                    console.log('PainterExplorer: Valid buildings with coords:', validBuildings.length);
+                    
+                    // Create polylines (travel path) between buildings chronologically
+                    if (validBuildings.length > 1) {
+                        const pathCoords = validBuildings.map(b => [parseFloat(b.latitude), parseFloat(b.longitude)]);
+                        
+                        // Draw the path with arrows
+                        for (let i = 0; i < pathCoords.length - 1; i++) {
+                            const start = pathCoords[i];
+                            const end = pathCoords[i + 1];
+                            
+                            // Main line
+                            const polyline = L.polyline([start, end], {
+                                color: '#9b59b6',
+                                weight: 3,
+                                opacity: 0.7,
+                                dashArray: '10, 10'
+                            }).addTo(map);
+                            
+                            // Add arrow head at the end
+                            const angle = Math.atan2(end[0] - start[0], end[1] - start[1]);
+                            const arrowLength = 0.15; // degrees
+                            const arrowAngle = Math.PI / 6; // 30 degrees
+                            
+                            // Calculate arrow head points
+                            const arrowPoint1 = [
+                                end[0] - arrowLength * Math.sin(angle - arrowAngle),
+                                end[1] - arrowLength * Math.cos(angle - arrowAngle)
+                            ];
+                            const arrowPoint2 = [
+                                end[0] - arrowLength * Math.sin(angle + arrowAngle),
+                                end[1] - arrowLength * Math.cos(angle + arrowAngle)
+                            ];
+                            
+                            L.polyline([arrowPoint1, end, arrowPoint2], {
+                                color: '#9b59b6',
+                                weight: 3,
+                                opacity: 0.7
+                            }).addTo(map);
+                        }
+                    }
+                    
+                    // Add numbered markers for each building
+                    validBuildings.forEach((b, idx) => {
+                        const lat = parseFloat(b.latitude);
+                        const lng = parseFloat(b.longitude);
+                        if (!isNaN(lat) && !isNaN(lng)) {
+                            const isActive = idx === currentBuildingIndex;
+                            const markerIcon = L.divIcon({
+                                className: 'custom-marker',
+                                html: `<div style="
+                                    background: ${isActive ? '#e74c3c' : '#3498db'}; 
+                                    color: white; 
+                                    width: 36px; 
+                                    height: 36px; 
+                                    border-radius: 50%; 
+                                    display: flex; 
+                                    align-items: center; 
+                                    justify-content: center; 
+                                    font-weight: bold; 
+                                    font-size: 1em;
+                                    border: 3px solid ${isActive ? '#c0392b' : '#2980b9'};
+                                    box-shadow: 0 3px 8px rgba(0,0,0,0.4);
+                                    position: relative;
+                                    z-index: ${isActive ? 1000 : 100};
+                                ">${idx + 1}</div>`,
+                                iconSize: [36, 36],
+                                iconAnchor: [18, 18]
+                            });
+                            
+                            const marker = L.marker([lat, lng], { icon: markerIcon, zIndexOffset: isActive ? 1000 : 0 });
+                            marker.bindPopup(`
+                                <strong>${b.building_name}</strong><br>
+                                ${b.location_city || ''}, ${b.location_state || ''}<br>
+                                <em>${b.paintings.length} painting${b.paintings.length > 1 ? 's' : ''} by ${painterName}</em><br>
+                                <em>${b.earliest || '?'}${b.latest && b.latest !== b.earliest ? '–' + b.latest : ''}</em>
+                            `);
+                            marker.on('click', () => {
+                                currentBuildingIndex = idx;
+                                updateNavigation();
+                                highlightBuilding(idx);
+                                scrollToBuildingInList(b.building_id || b.building_name);
+                            });
+                            marker.addTo(map);
+                            markers[b.building_id || b.building_name] = marker;
+                        }
+                    });
+
+                    // Fit map to bounds
+                    if (validBuildings.length > 0) {
+                        const bounds = validBuildings.map(b => [parseFloat(b.latitude), parseFloat(b.longitude)]);
+                        map.fitBounds(bounds, { padding: [50, 50] });
+                    } else {
+                        // No coordinates found - show message
+                        console.warn('No valid building coordinates found for painter:', painterName);
+                    }
+
+                    // Render paintings list grouped by building
+                    renderPaintingsList();
+                    updateNavigation();
+
+                } catch (error) {
+                    paintingsContainer.innerHTML = `<div class="error" style="color: #c00; padding: 20px;">Error: ${error.message}</div>`;
+                }
+            }
+
+            function renderPaintingsList() {
+                const paintingsContainer = document.getElementById(`${explorerId}-paintings`);
+                
+                const html = buildings.map((building, bIdx) => {
+                    const paintingsHtml = building.paintings.map(p => {
+                        const yearStr = p.year_start === p.year_end 
+                            ? (p.year_start || 'Unknown') 
+                            : `${p.year_start || '?'}–${p.year_end || '?'}`;
+                        
+                        return `
+                            <div class="painting-item" data-uri="${p.nfdi_uri}" 
+                                 style="display: flex; gap: 12px; padding: 12px; background: #fff; border-radius: 6px; cursor: pointer; border: 1px solid #eee; margin-bottom: 8px; transition: all 0.2s;">
+                                ${p.imageUrl ? `
+                                    <img src="${p.imageUrl}" alt="${p.label}" 
+                                         style="width: 80px; height: 80px; object-fit: cover; border-radius: 6px; flex-shrink: 0;">
+                                ` : `
+                                    <div style="width: 80px; height: 80px; background: #ddd; border-radius: 6px; display: flex; align-items: center; justify-content: center; color: #888; font-size: 0.75em; flex-shrink: 0;">
+                                        No image
+                                    </div>
+                                `}
+                                <div style="flex: 1; min-width: 0;">
+                                    <div style="font-weight: 500; color: #333; margin-bottom: 4px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                        ${p.label}
+                                    </div>
+                                    <div style="font-size: 0.85em; color: #666; line-height: 1.5;">
+                                        <div>📅 ${yearStr}</div>
+                                        ${p.commissioners ? `<div>👑 ${p.commissioners}</div>` : ''}
+                                        ${p.subjects ? `<div style="overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">🏷️ ${p.subjects}</div>` : ''}
+                                    </div>
+                                </div>
+                                <div style="color: #3498db; font-size: 1.2em; align-self: center;">›</div>
+                            </div>
+                        `;
+                    }).join('');
+
+                    const isActive = bIdx === currentBuildingIndex;
+                    
+                    return `
+                        <div class="building-group" data-building="${building.building_id || building.building_name}" 
+                             style="margin-bottom: 20px; border: 2px solid ${isActive ? '#3498db' : '#e0e0e0'}; border-radius: 10px; overflow: hidden; transition: border-color 0.3s;">
+                            <div class="building-header" data-building-id="${building.building_id}" 
+                                 style="display: flex; justify-content: space-between; align-items: center; padding: 12px 15px; background: ${isActive ? 'linear-gradient(135deg, #3498db, #2980b9)' : '#f5f5f5'}; cursor: pointer;">
+                                <div>
+                                    <div style="display: flex; align-items: center; gap: 8px;">
+                                        <span style="background: ${isActive ? 'white' : '#3498db'}; color: ${isActive ? '#3498db' : 'white'}; width: 24px; height: 24px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8em; font-weight: bold;">${bIdx + 1}</span>
+                                        <strong style="color: ${isActive ? 'white' : '#333'};">${building.building_name}</strong>
+                                    </div>
+                                    <div style="font-size: 0.85em; color: ${isActive ? 'rgba(255,255,255,0.9)' : '#666'}; margin-top: 2px; margin-left: 32px;">
+                                        ${building.location_city || ''}${building.location_state ? ', ' + building.location_state : ''} · ${building.earliest || '?'}${building.latest && building.latest !== building.earliest ? '–' + building.latest : ''}
+                                    </div>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 10px;">
+                                    <span style="background: ${isActive ? 'rgba(255,255,255,0.2)' : '#e0e0e0'}; color: ${isActive ? 'white' : '#666'}; padding: 4px 10px; border-radius: 12px; font-size: 0.85em;">
+                                        ${building.paintings.length} 🖼️
+                                    </span>
+                                    <button class="view-building-btn" data-building-id="${building.building_id}" 
+                                            style="background: ${isActive ? 'white' : '#3498db'}; color: ${isActive ? '#3498db' : 'white'}; border: none; padding: 6px 12px; border-radius: 4px; cursor: pointer; font-size: 0.85em;">
+                                        Info
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="building-paintings" style="padding: 12px;">
+                                ${paintingsHtml}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                paintingsContainer.innerHTML = html || '<div style="text-align: center; color: #888; padding: 40px;">No paintings found for this painter.</div>';
+
+                // Add click handlers for paintings
+                paintingsContainer.querySelectorAll('.painting-item').forEach(item => {
+                    item.addEventListener('mouseenter', () => {
+                        item.style.borderColor = '#3498db';
+                        item.style.background = '#f8faff';
+                    });
+                    item.addEventListener('mouseleave', () => {
+                        item.style.borderColor = '#eee';
+                        item.style.background = '#fff';
+                    });
+                    item.addEventListener('click', () => showPaintingModal(item.dataset.uri));
+                });
+
+                // Add click handlers for building headers (pan to location)
+                paintingsContainer.querySelectorAll('.building-header').forEach(header => {
+                    header.addEventListener('click', (e) => {
+                        if (!e.target.classList.contains('view-building-btn')) {
+                            const buildingKey = header.closest('.building-group').dataset.building;
+                            const idx = buildings.findIndex(b => (b.building_id || b.building_name) === buildingKey);
+                            if (idx >= 0) {
+                                currentBuildingIndex = idx;
+                                updateNavigation();
+                                highlightBuilding(idx);
+                                panToBuilding(idx);
+                            }
+                        }
+                    });
+                });
+
+                // Add click handlers for building info buttons
+                paintingsContainer.querySelectorAll('.view-building-btn').forEach(btn => {
+                    btn.addEventListener('click', (e) => {
+                        e.stopPropagation();
+                        showBuildingModal(btn.dataset.buildingId);
+                    });
+                });
+            }
+
+            function updateNavigation() {
+                const prevBtn = document.getElementById(`${explorerId}-prev`);
+                const nextBtn = document.getElementById(`${explorerId}-next`);
+                const navInfo = document.getElementById(`${explorerId}-nav-info`);
+                
+                prevBtn.disabled = currentBuildingIndex <= 0;
+                nextBtn.disabled = currentBuildingIndex >= buildings.length - 1;
+                
+                if (buildings.length > 0) {
+                    const b = buildings[currentBuildingIndex];
+                    navInfo.innerHTML = `${currentBuildingIndex + 1}/${buildings.length}: ${b.building_name}`;
+                } else {
+                    navInfo.innerHTML = 'Select a painter';
+                }
+            }
+
+            function highlightBuilding(idx) {
+                // Update marker styles
+                buildings.forEach((b, i) => {
+                    const key = b.building_id || b.building_name;
+                    const marker = markers[key];
+                    if (marker) {
+                        const isActive = i === idx;
+                        const newIcon = L.divIcon({
+                            className: 'custom-marker',
+                            html: `<div style="
+                                background: ${isActive ? '#e74c3c' : '#3498db'}; 
+                                color: white; 
+                                width: 30px; 
+                                height: 30px; 
+                                border-radius: 50%; 
+                                display: flex; 
+                                align-items: center; 
+                                justify-content: center; 
+                                font-weight: bold; 
+                                font-size: 0.85em;
+                                border: 3px solid ${isActive ? '#c0392b' : '#2980b9'};
+                                box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+                            ">${i + 1}</div>`,
+                            iconSize: [30, 30],
+                            iconAnchor: [15, 15]
+                        });
+                        marker.setIcon(newIcon);
+                    }
+                });
+                
+                // Update list styling
+                renderPaintingsList();
+            }
+
+            function panToBuilding(idx) {
+                const b = buildings[idx];
+                if (b && b.latitude && b.longitude) {
+                    map.setView([parseFloat(b.latitude), parseFloat(b.longitude)], 10, { animate: true });
+                    const key = b.building_id || b.building_name;
+                    if (markers[key]) {
+                        markers[key].openPopup();
+                    }
+                }
+            }
+
+            function scrollToBuildingInList(buildingKey) {
+                const buildingGroup = document.querySelector(`[data-building="${buildingKey}"]`);
+                if (buildingGroup) {
+                    buildingGroup.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            }
+
+            async function showPaintingModal(uri) {
+                const modal = document.getElementById(`${explorerId}-painting-modal`);
+                const content = document.getElementById(`${explorerId}-painting-content`);
+                
+                modal.style.display = 'flex';
+                content.innerHTML = '<div class="loading" style="padding: 20px; text-align: center;">Loading painting details...</div>';
+
+                try {
+                    const sql = `
+                        SELECT 
+                            p.nfdi_uri,
+                            p.label,
+                            p.painters,
+                            p.commissioners,
+                            p.year_start,
+                            p.year_end,
+                            p.building_name,
+                            p.room_name,
+                            p.location_state,
+                            p.imageUrl,
+                            p.method
+                        FROM paintings p
+                        WHERE p.nfdi_uri = '${uri}'
+                    `;
+                    const data = await BaroqueDB.query(sql);
+                    
+                    if (data.length === 0) {
+                        content.innerHTML = '<div class="error">Painting not found.</div>';
+                        return;
+                    }
+
+                    const p = data[0];
+                    const yearStr = p.year_start === p.year_end 
+                        ? (p.year_start || 'Unknown') 
+                        : `${p.year_start || '?'}–${p.year_end || '?'}`;
+
+                    // Get subjects
+                    const subjectsSql = `
+                        SELECT s.subject_label
+                        FROM painting_subjects ps
+                        JOIN subjects s ON ps.subject_uri = s.subject_uri
+                        WHERE ps.nfdi_uri = '${uri}' AND s.subject_source = 'ICONCLASS'
+                    `;
+                    const subjects = await BaroqueDB.query(subjectsSql);
+
+                    content.innerHTML = `
+                        ${p.imageUrl ? `
+                            <a href="${p.nfdi_uri}" target="_blank" rel="noopener">
+                                <img src="${p.imageUrl}" alt="${p.label}" 
+                                     style="width: 100%; max-height: 350px; object-fit: contain; border-radius: 8px; background: #000; margin-bottom: 15px;">
+                            </a>
+                        ` : ''}
+                        <h4 style="margin: 0 0 15px 0; color: #2c3e50;">${p.label}</h4>
+                        <div style="font-size: 0.95em; color: #555; line-height: 1.8;">
+                            <div><strong>📅 Year:</strong> ${yearStr}</div>
+                            <div><strong>📍 Location:</strong> ${p.building_name || 'Unknown'}${p.room_name ? ', ' + p.room_name : ''}</div>
+                            <div><strong>🗺️ Region:</strong> ${p.location_state || 'Unknown'}</div>
+                            ${p.painters ? `<div><strong>🎨 Painter(s):</strong> ${_makeClickablePainterNames(p.painters)}</div>` : ''}
+                            ${p.commissioners ? `<div><strong>👑 Commissioner:</strong> ${p.commissioners}</div>` : ''}
+                            ${p.method ? `<div><strong>🖌️ Technique:</strong> ${p.method}</div>` : ''}
+                            ${subjects.length > 0 ? `<div><strong>🏷️ Subjects:</strong> ${subjects.map(s => s.subject_label).join(', ')}</div>` : ''}
+                        </div>
+                        <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid #eee;">
+                            <a href="${p.nfdi_uri}" target="_blank" rel="noopener" 
+                               style="color: #3498db; text-decoration: none; font-size: 0.95em;">
+                                View in CbDD →
+                            </a>
+                        </div>
+                    `;
+                } catch (error) {
+                    content.innerHTML = `<div class="error" style="color: #c00;">Error: ${error.message}</div>`;
+                }
+            }
+
+            async function showBuildingModal(buildingId) {
+                const modal = document.getElementById(`${explorerId}-building-modal`);
+                const content = document.getElementById(`${explorerId}-building-content`);
+                
+                modal.style.display = 'flex';
+                content.innerHTML = '<div class="loading" style="padding: 20px; text-align: center;">Loading building details...</div>';
+
+                try {
+                    // First detect available columns in buildings table
+                    const bCols = await BaroqueDB.query("PRAGMA table_info('buildings')");
+                    const buildingCols = bCols.map(c => c.name ? c.name.toLowerCase() : c.name);
+                    const hasLocationCity = buildingCols.includes('location_city');
+                    
+                    const sql = `
+                        SELECT 
+                            b.building_id,
+                            b.name as building_name,
+                            b.function as building_function,
+                            b.location_state,
+                            ${hasLocationCity ? 'b.location_city,' : ''}
+                            b.construction_date,
+                            COUNT(DISTINCT p.nfdi_uri) as total_paintings
+                        FROM buildings b
+                        LEFT JOIN paintings p ON b.building_id = p.building_id
+                        WHERE b.building_id = '${buildingId}'
+                        GROUP BY b.building_id, b.name, b.function, b.location_state, ${hasLocationCity ? 'b.location_city,' : ''} b.construction_date
+                    `;
+                    const data = await BaroqueDB.query(sql);
+                    
+                    if (data.length === 0) {
+                        content.innerHTML = '<div class="error">Building not found.</div>';
+                        return;
+                    }
+
+                    const b = data[0];
+
+                    // Get associated persons
+                    const personsSql = `
+                        SELECT person_name, role 
+                        FROM building_persons 
+                        WHERE building_id = '${buildingId}'
+                        ORDER BY role, person_name
+                    `;
+                    const persons = await BaroqueDB.query(personsSql);
+                    const personsByRole = {};
+                    persons.forEach(p => {
+                        if (!personsByRole[p.role]) personsByRole[p.role] = [];
+                        personsByRole[p.role].push(p.person_name);
+                    });
+
+                    content.innerHTML = `
+                        <h4 style="margin: 0 0 15px 0; color: #2c3e50;">🏰 ${b.building_name}</h4>
+                        <div style="font-size: 0.95em; color: #555; line-height: 1.8;">
+                            ${b.building_function ? `<div><strong>Type:</strong> ${b.building_function}</div>` : ''}
+                            <div><strong>📍 Location:</strong> ${b.location_city || ''}${b.location_state ? ', ' + b.location_state : ''}</div>
+                            ${b.construction_date ? `<div><strong>📅 Construction:</strong> ${b.construction_date}</div>` : ''}
+                            <div><strong>🖼️ Total Paintings:</strong> ${b.total_paintings}</div>
+                            ${personsByRole['ARCHITECT'] ? `<div><strong>🏗️ Architect(s):</strong> ${personsByRole['ARCHITECT'].join(', ')}</div>` : ''}
+                            ${personsByRole['COMMISSIONER'] ? `<div><strong>👑 Commissioner(s):</strong> ${personsByRole['COMMISSIONER'].join(', ')}</div>` : ''}
+                        </div>
+                    `;
+                } catch (error) {
+                    content.innerHTML = `<div class="error" style="color: #c00;">Error: ${error.message}</div>`;
+                }
+            }
+
+            // Modal close handlers
+            document.querySelectorAll(`#${explorerId} .close-modal`).forEach(btn => {
+                btn.addEventListener('click', () => {
+                    document.getElementById(`${explorerId}-building-modal`).style.display = 'none';
+                    document.getElementById(`${explorerId}-painting-modal`).style.display = 'none';
+                });
+            });
+
+            // Close modals on backdrop click
+            [document.getElementById(`${explorerId}-building-modal`), document.getElementById(`${explorerId}-painting-modal`)].forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) modal.style.display = 'none';
+                });
+            });
+
+            // Navigation button handlers
+            document.getElementById(`${explorerId}-prev`).addEventListener('click', () => {
+                if (currentBuildingIndex > 0) {
+                    currentBuildingIndex--;
+                    updateNavigation();
+                    highlightBuilding(currentBuildingIndex);
+                    panToBuilding(currentBuildingIndex);
+                    scrollToBuildingInList(buildings[currentBuildingIndex].building_id || buildings[currentBuildingIndex].building_name);
+                }
+            });
+
+            document.getElementById(`${explorerId}-next`).addEventListener('click', () => {
+                if (currentBuildingIndex < buildings.length - 1) {
+                    currentBuildingIndex++;
+                    updateNavigation();
+                    highlightBuilding(currentBuildingIndex);
+                    panToBuilding(currentBuildingIndex);
+                    scrollToBuildingInList(buildings[currentBuildingIndex].building_id || buildings[currentBuildingIndex].building_name);
+                }
+            });
+
+            // Load initial painter if provided
+            if (initialPainter) {
+                searchInput.value = initialPainter;
+                loadPainter(initialPainter);
+            }
+
+            // Expose loadPainter globally for external links
+            window.loadPainterInExplorer = async function(painterName) {
+                // Update the search input
+                searchInput.value = painterName;
+                dropdown.style.display = 'none';
+                // Load the painter data
+                await loadPainter(painterName);
+            };
+            window.scrollToPainterExplorer = () => {
+                el.scrollIntoView({ behavior: 'smooth' });
+            };
+
+            return { map, loadPainter };
+        } catch (error) {
+            el.innerHTML = `<div class="error">Error initializing explorer: ${error.message}</div>`;
+            throw error;
+        }
+    }
+
+    /**
+     * Helper: Make painter name(s) clickable with jump-to-biography functionality
+     * Uses data attributes and event delegation for robust handling
+     * @param {string|string[]} names - Single painter name or array of names
+     *        - If array: each element is a full painter name
+     *        - If string: pipe-separated (|) or semicolon-separated (;) full names
+     *        - NOTE: Do NOT split on comma as names are often "Last, First" format
+     * @param {string} separator - Separator between names in output (default: ', ')
+     * @returns {string} HTML string with clickable painter links
+     */
+    function _makeClickablePainterNames(names, separator = ', ') {
+        if (!names) return '';
+        
+        let nameArray;
+        if (Array.isArray(names)) {
+            // Already an array of names - use directly
+            nameArray = names.map(n => typeof n === 'string' ? n.trim() : '').filter(n => n);
+        } else if (typeof names === 'string') {
+            // String input - split by pipe or semicolon ONLY (not comma, as names are "Last, First")
+            // First check if it contains pipes (common format: "Name1|Name2|Name3")
+            if (names.includes('|')) {
+                nameArray = names.split('|').map(n => n.trim()).filter(n => n);
+            } else if (names.includes(';')) {
+                nameArray = names.split(';').map(n => n.trim()).filter(n => n);
+            } else {
+                // Single name or comma-separated "Last, First" format - treat as single name
+                nameArray = [names.trim()].filter(n => n);
+            }
+        } else {
+            nameArray = [];
+        }
+        
+        return nameArray.map(name => {
+            // Encode the name for safe use in data attribute
+            const encodedName = name.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+            return `<a href="#painter-explorer" 
+               class="painter-jump-link" 
+               data-painter-name="${encodedName}"
+               title="Jump to biography"
+               style="color: #3498db; text-decoration: none; cursor: pointer; border-bottom: 1px dotted #3498db;">${name}</a>`;
+        }).join(separator);
+    }
+    
+    // Global event delegation for painter links - only set up once
+    if (!window._painterLinkHandlerInitialized) {
+        document.addEventListener('click', function(e) {
+            const link = e.target.closest('.painter-jump-link');
+            if (link) {
+                e.preventDefault();
+                const painterName = link.getAttribute('data-painter-name');
+                if (painterName && window.loadPainterInExplorer) {
+                    if (window.scrollToPainterExplorer) {
+                        window.scrollToPainterExplorer();
+                    }
+                    window.loadPainterInExplorer(painterName);
+                } else {
+                    console.warn('Painter Explorer not yet initialized. Please scroll to the Painter Explorer section first.');
+                }
+            }
+        });
+        window._painterLinkHandlerInitialized = true;
+    }
+
+    /**
+     * Helper: Get German variant of mythological name
+     */
+    function _getGermanVariant(name) {
+        const variants = {
+            'Hercules': 'Herkules',
+            'Apollo': 'Apoll',
+            'Jupiter': 'Zeus',
+            'Mercury': 'Merkur',
+            'Minerva': 'Athena'
+        };
+        return variants[name] || name;
+    }
+
+    /**
      * Helper: Get DOM element
      */
     function _getElement(container) {
@@ -722,6 +2573,14 @@ window.BaroqueViz = (function() {
         renderPainterBiography,
         renderCustomQuery,
         renderCoPainterPairs,
+        renderPaintingCard,
+        renderRoomCard,
+        renderBuildingCard,
+        renderPainterGallery,
+        renderCommissionsTimeline,
+        renderMythologyGallery,
+        renderMythFigureGallery,
+        renderPainterExplorer,
         QUERIES,
         COLORS,
         ICONCLASS_LABELS
