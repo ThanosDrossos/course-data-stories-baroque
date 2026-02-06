@@ -1080,14 +1080,6 @@ While Nymphenburg’s frescoes celebrated peace and plenty, elsewhere mythologic
 
 At the center of the Mannheim stairway ceiling shone “Das Urteil des Paris” – the Judgment of Paris, a scene that set in motion the events of the Trojan War and eventually the founding of Rome. Asam’s original fresco (signed “Cosmas D. Asam von München 1730”) was destroyed in World War II, but descriptions and reconstructions allow us to envision its content. Paris, depicted as a shepherd prince under a tree, is approached by Mercury (Hermes) delivering the gods’ command that he choose the fairest goddess. Before Paris stand the three goddesses contending for the golden apple: Juno (Hera) with her peacock, Venus (Aphrodite) receiving the prize apple of victory, and Minerva (Athena) off to the side with her attendant nymphs. A winged figure of Fama brings a wreath to crown Venus as the victor in this fateful beauty contest. By including this scene, the fresco symbolically alluded to the origins of the Trojan War – an epic conflict that ultimately led, via Aeneas, to the rise of Rome and thus (by medieval extension) to the ancestry of European rulers. It was a subtle way for the Palatine Elector to insert his rule into the grand sweep of classical destiny.
 
-Flanking the central Paris panel were two large oval tondi with further episodes from the Aeneid saga, one on each side of the ceiling vault. On the eastern side, Asam painted “Venus and Aeneas in the Forge of Vulcan”: the goddess Venus, mother of Aeneas, persuades Vulcan to forge weapons for her son before he goes to war. In Asam’s rendition, Venus descends from her swan-drawn chariot and sits enthroned at the center, accompanied by the youthful hero Aeneas and the smith-god Vulcan himself. Around them bustle Cyclops and helpers carrying a heavy shield, while in the background three elegant ladies in modern baroque court dress watch the scene – a charming anachronism, these were likely meant to represent the three granddaughters of Elector Carl Philipp, thus tying the ancient myth to the living dynasty. On the western side, the fresco “Juno, Aeolus and the Storm at Sea” portrayed an episode where Juno, queen of the gods, enlists Aeolus, god of the winds, to wreck Aeneas’s fleet at sea. Asam depicted Juno enthroned under a billowing canopy with her peacocks, gesturing commandingly to Aeolus on a rocky shore; below them, muscular personifications of the winds and waters are shown unleashing a tempest – putti stoke storms, river-gods pour out floods from urns. This dramatic scene of divine wrath balanced the Venus vignette across the hall, illustrating both divine favor and divine opposition in Aeneas’s journey.
-
-Taken together, Mannheim’s stairhall paintings formed a three-part narrative: the Judgment of Paris (the cause of the Trojan War) in the center, flanked by Aeneas’s divine aid (Venus and Vulcan) and trials (Juno’s storm) on either side. The choice of these subjects was rich in meaning. The Aeneid was a favored source in Baroque art because Aeneas, legendary survivor of Troy and ancestor of the Romans, was seen as a model of pietas (duty) and the mythical forefather of rulers (even the Habsburgs traced lineage to him). By having Asam paint Aeneas’s story, Elector Carl Philipp aligned himself with this hero’s virtues and destiny. Contemporary guidelines on fresco programs advised that depictions of ancient battles and adventures could “through their examples incite the viewer to virtuous life”, and Virgil’s epic was considered especially apt for its themes of heroism, founding a new homeland, and devotion to the gods. Mannheim’s implementation was accordingly didactic: the viewer ascending the grand staircase would see, step by step, how gods and heroes shaped the Elector’s illustrious antecedents, implicitly urging loyalty and bravery.
-
-It is notable that Cosmas Damian Asam’s originals were lost to wartime fires in the 1940s, but the ceiling paintings were later reconstructed (1955–61) by artist Carolus Vocke using surviving photographs. While Vocke’s secco reproductions lack some of Asam’s original vibrancy and Baroque dynamism – one critic found the modern colors “cool and dry, without radiance” – the iconography was preserved intact. Today, visitors can once again admire Paris with his golden apple and Aeneas amid the gods on the ceiling of Mannheim’s reconstructed staircase, a modern echo of the Baroque ambition to connect local dynastic glory with epic myth.
-
-// Parisurteil Schloss Mannheim
-
 <div id="parisurteil-card" class="painting-card-container"></div>
 
 <script type="module">
@@ -1099,16 +1091,30 @@ It is notable that Cosmas Damian Asam’s originals were lost to wartime fires i
 })();
 </script> 
 
+Flanking the central Paris panel were two large oval tondi with further episodes from the Aeneid saga, one on each side of the ceiling vault. On the eastern side, Asam painted “Venus and Aeneas in the Forge of Vulcan”: the goddess Venus, mother of Aeneas, persuades Vulcan to forge weapons for her son before he goes to war. In Asam’s rendition, Venus descends from her swan-drawn chariot and sits enthroned at the center, accompanied by the youthful hero Aeneas and the smith-god Vulcan himself. Around them bustle Cyclops and helpers carrying a heavy shield, while in the background three elegant ladies in modern baroque court dress watch the scene – a charming anachronism, these were likely meant to represent the three granddaughters of Elector Carl Philipp, thus tying the ancient myth to the living dynasty. On the western side, the fresco “Juno, Aeolus and the Storm at Sea” portrayed an episode where Juno, queen of the gods, enlists Aeolus, god of the winds, to wreck Aeneas’s fleet at sea. Asam depicted Juno enthroned under a billowing canopy with her peacocks, gesturing commandingly to Aeolus on a rocky shore; below them, muscular personifications of the winds and waters are shown unleashing a tempest – putti stoke storms, river-gods pour out floods from urns. This dramatic scene of divine wrath balanced the Venus vignette across the hall, illustrating both divine favor and divine opposition in Aeneas’s journey.
+
+Taken together, Mannheim’s stairhall paintings formed a three-part narrative: the Judgment of Paris (the cause of the Trojan War) in the center, flanked by Aeneas’s divine aid (Venus and Vulcan) and trials (Juno’s storm) on either side. The choice of these subjects was rich in meaning. The Aeneid was a favored source in Baroque art because Aeneas, legendary survivor of Troy and ancestor of the Romans, was seen as a model of pietas (duty) and the mythical forefather of rulers (even the Habsburgs traced lineage to him). By having Asam paint Aeneas’s story, Elector Carl Philipp aligned himself with this hero’s virtues and destiny. Contemporary guidelines on fresco programs advised that depictions of ancient battles and adventures could “through their examples incite the viewer to virtuous life”, and Virgil’s epic was considered especially apt for its themes of heroism, founding a new homeland, and devotion to the gods. Mannheim’s implementation was accordingly didactic: the viewer ascending the grand staircase would see, step by step, how gods and heroes shaped the Elector’s illustrious antecedents, implicitly urging loyalty and bravery.
+
+<div id="mannheim-treppenhaus-card" class="room-card-container"></div>
+
+<script type="module">
+(async function() {
+    while (!BaroqueDB.isReady()) {
+        await new Promise(r => setTimeout(r, 100));
+    }
+    await BaroqueViz.renderRoomCard('#mannheim-treppenhaus-card', '7430f064-80a8-4b74-b447-55c655cfab4e');
+})();
+</script>
+
+It is notable that Cosmas Damian Asam’s originals were lost to wartime fires in the 1940s, but the ceiling paintings were later reconstructed (1955–61) by artist Carolus Vocke using surviving photographs. While Vocke’s secco reproductions lack some of Asam’s original vibrancy and Baroque dynamism – one critic found the modern colors “cool and dry, without radiance” – the iconography was preserved intact. Today, visitors can once again admire Paris with his golden apple and Aeneas amid the gods on the ceiling of Mannheim’s reconstructed staircase, a modern echo of the Baroque ambition to connect local dynastic glory with epic myth.
+
+
 
 ### Arolsen Castle: Apollo and the Muses – Patronage of the Arts
 
 Not all Baroque mythological ceilings emphasized war or political allegory; some celebrated cultural enlightenment and the arts themselves. A case in point is the Residenzschloss Arolsen in Hesse, residence of the Princes of Waldeck. Built largely in the early 18th century (construction from 1713 to 1728, with interiors continuing into the 1740s), Arolsen’s design included a splendid Gartensaal (Garden Hall) also known as the Steinerner Saal. Around 1721–1722, the Italian painter Carlo Ludovico Castelli was commissioned to decorate the vaulted ceiling of this hall with a fresco that exalts the arts and sciences in classical guise.
 
 Castelli’s ceiling painting in Arolsen’s Garden Hall depicts Apollo, the god of light and the arts, accompanied by the nine Muses. The composition shows Apollo seated at the center on an elevated cloud, strumming his lyre as leader of the Muses, who array themselves around him on the billowing clouds of Mount Parnassus. A key detail is the inclusion of Pegasus, the winged horse: in the fresco, Pegasus is shown flying off into the sky in the background. In mythology Pegasus’s hooves released the spring of the Muses (Hippocrene), symbolizing the wellspring of poetic inspiration – an appropriate nod in a gathering of the Muses. Scattered about are putti (cherubs) bearing laurel wreaths and branches, which they bring toward Apollo and the poetic goddesses. The laurel, sacred to Apollo, here signifies eternal glory bestowed on achievement in the arts. The entire scene, set against an ethereal blue sky, radiates a serene harmony. Apollo’s presence as sun-god and leader of the chorus suggests that under the Waldeck princes, the arts flourish in a divinely sanctioned golden age. This message would not have been lost on contemporaries: small princely courts like Waldeck were eager to present themselves as enlightened patrons of culture, keeping pace with larger realms.
-
-Stylistically, Castelli’s work in Arolsen is interesting for its mixture of influences. Research shows that Castelli, who hailed from the Italian-Swiss Ticino region, compiled his design from prints after famous Roman Baroque works. Apollo’s pose, for example, was lifted from a depiction of the gods by Giovanni Lanfranco (1624), while some of the Muses were inspired by Andrea Sacchi’s fresco of Divine Wisdom (1629–30) – likely known to Castelli through engraving reproductions. Such creative borrowing was common practice, enabling artists far from Rome to keep up with the latest artistic models. Castelli executed the Arolsen ceiling in a mixed secco technique (painted on dry plaster with layered glazes), rather than true fresco, which has allowed the work to survive, albeit darkened, into the 21st century. In the late 20th century (1987–2006) the Apollo and Muses painting was carefully restored to its former brightness, so modern visitors can once more appreciate its delicate color harmonies and lively figures.
-
-The iconography of Apollo and the Muses was perfectly suited to a Festsaal of an Enlightenment-era prince. By featuring Apollo Musagetes (leader of Muses), Prince Friedrich Anton Ulrich of Waldeck advertised himself as a cultivated ruler under whose beneficent light the arts thrive. The hall would have hosted musical performances and literary receptions, literally bringing the theme to life. In this way, Arolsen’s mythological ceiling is less about political power and more about cultural prestige. It proclaims that this small German court participates in the grand tradition of artistic patronage, guided by Apollo’s divine inspiration. Such an image was an important part of a prince’s self-fashioning in the Baroque era, complementing the more overtly political allegories elsewhere.
 
 <div id="arolsen-musen-card" class="painting-card-container"></div>
 
@@ -1122,6 +1128,12 @@ The iconography of Apollo and the Muses was perfectly suited to a Festsaal of an
 </script>
 
 
+Stylistically, Castelli’s work in Arolsen is interesting for its mixture of influences. Research shows that Castelli, who hailed from the Italian-Swiss Ticino region, compiled his design from prints after famous Roman Baroque works. Apollo’s pose, for example, was lifted from a depiction of the gods by Giovanni Lanfranco (1624), while some of the Muses were inspired by Andrea Sacchi’s fresco of Divine Wisdom (1629–30) – likely known to Castelli through engraving reproductions. Such creative borrowing was common practice, enabling artists far from Rome to keep up with the latest artistic models. Castelli executed the Arolsen ceiling in a mixed secco technique (painted on dry plaster with layered glazes), rather than true fresco, which has allowed the work to survive, albeit darkened, into the 21st century. In the late 20th century (1987–2006) the Apollo and Muses painting was carefully restored to its former brightness, so modern visitors can once more appreciate its delicate color harmonies and lively figures.
+
+The iconography of Apollo and the Muses was perfectly suited to a Festsaal of an Enlightenment-era prince. By featuring Apollo Musagetes (leader of Muses), Prince Friedrich Anton Ulrich of Waldeck advertised himself as a cultivated ruler under whose beneficent light the arts thrive. The hall would have hosted musical performances and literary receptions, literally bringing the theme to life. In this way, Arolsen’s mythological ceiling is less about political power and more about cultural prestige. It proclaims that this small German court participates in the grand tradition of artistic patronage, guided by Apollo’s divine inspiration. Such an image was an important part of a prince’s self-fashioning in the Baroque era, complementing the more overtly political allegories elsewhere.
+
+
+
 ### Sondershausen Palace: Ovidian Transformations and Princely Elevation
 
 One of the most extensive mythological programs of German Baroque adorns the Riesensaal (Giants’ Hall) of Residenzschloss Sondershausen in Thuringia. Sondershausen was the seat of the Counts of Schwarzburg-Sondershausen, who in 1697 were elevated to princely status within the Holy Roman Empire. To reflect this elevation, Fürst (Prince) Christian Wilhelm undertook a lavish redecoration of the palace’s state rooms around 1700. Central to this was the Riesensaal, a great hall on the second floor of the south wing, completed by 1703 with an elaborate stucco ceiling containing no fewer than 22 painted scenes from Ovid’s Metamorphoses. This unified cycle of myths about transformation was uniquely apt, as it subtly paralleled the “metamorphosis” of Christian Wilhelm’s own dynasty – from minor counts to high princes – and placed his court in dialogue with the international vogue for Ovidian imagery.
@@ -1131,10 +1143,6 @@ The Riesensaal’s ceiling is a marvel of quadratura stuccowork and narrative pa
 This Ovidian gallery of gods and heroes in action created a rich allegorical environment. A contemporary description notes that the Sondershausen ceiling “shows hunting, battle, and love scenes from the Metamorphoses of Ovid” in a lively, dramatic style. The paintings are executed in a warm color palette – lots of earthy reds, greens, and blues, with bright highlights – and the figures are rendered with the energetic, somewhat provincial Baroque manner of central Germany around 1700. (Art historians cannot definitively identify the painter; candidates include court painters like Johann W. Richter or itinerant Italians, but documentation is scarce.) The stucco framing was provided by the Italian Carlo Domenico and Antonio Carcani, whose workshop of Ticinese stuccoists was active across Thuringia at the time. They sculpted life-sized Atlas figures (giants) at the corners to “support” the vault and added trophy reliefs of weapons and armor in the coves – an allusion to martial prowess appropriate for a knightly hall.
 
 Importantly, the choice of Metamorphoses as the unifying theme carried symbolic resonance for the patron. Christian Wilhelm’s elevation to Reichsfürst (Imperial Prince) was a dramatic social transformation – a metamorphosis of rank – and the ceiling’s parade of transformations could be read as an elaborate metaphor for that change. While no written “program” survives to explicate the intent, scholars surmise that the prince wished to associate his regime with the cycle of renewal and change depicted by Ovid. Just as the characters in the frescoes are elevated, chastised, or transfigured by divine forces, so too had the House of Schwarzburg been transformed by imperial grace. One can imagine the prince’s contemporaries, gathered in this hall for ceremonies or balls, glancing up at Jupiter’s eagle or Diana’s hounds and drawing parallels to the fortunes of their own realm. The very abundance of mythological exempla was a statement: this small principality knew the great stories of the classical world and saw its own story as part of that continuum.
-
-Even beyond the political subtext, the Riesensaal’s decorative scheme spoke to Baroque viewers on a moral level. The scenes offered lessons on virtue and vice: Apollo versus Marsyas taught the value of humility before the gods, Mercury’s theft of Apollo’s cattle (also depicted in a corner medallion) illustrated cunning and consequences, and so forth. A 19th-century restoration by artist Julius Meyer in 1859 repainted sections of the frescoes, altering some colors (blue skies and green landscapes were refreshed) but otherwise left the compositions intact. Thus, the cycle remains a rare surviving example of a full Ovidian ceiling in northern Europe. It stands as a Baroque encyclopedia of metamorphosis – both artistic and dynastic – witnessing how a newly-minted prince used mythology to legitimize his ancien régime-style authority.
-Sondershausen Palace: Ovidian Transformations and Princely Elevation
-
 
 <div id="sondershausen-card" class="building-card-container"></div>
 <script type="module">
@@ -1146,9 +1154,26 @@ Sondershausen Palace: Ovidian Transformations and Princely Elevation
 })();
 </script>
 
+Even beyond the political subtext, the Riesensaal’s decorative scheme spoke to Baroque viewers on a moral level. The scenes offered lessons on virtue and vice: Apollo versus Marsyas taught the value of humility before the gods, Mercury’s theft of Apollo’s cattle (also depicted in a corner medallion) illustrated cunning and consequences, and so forth. A 19th-century restoration by artist Julius Meyer in 1859 repainted sections of the frescoes, altering some colors (blue skies and green landscapes were refreshed) but otherwise left the compositions intact. Thus, the cycle remains a rare surviving example of a full Ovidian ceiling in northern Europe. It stands as a Baroque encyclopedia of metamorphosis – both artistic and dynastic – witnessing how a newly-minted prince used mythology to legitimize his ancien régime-style authority.
+Sondershausen Palace: Ovidian Transformations and Princely Elevation
+
+
+
 ### Rastatt Palace: Hercules in Olympus – The Apotheosis of a Warrior Prince
 
 If one Baroque fresco cycle epitomizes personal dynastic glorification, it is the Ancestral Hall (Ahnensaal) ceiling of Schloss Rastatt in Baden. Here, the central theme is the apotheosis (deification) of a hero – a transparent parallel to the glorification of the building’s owner, Margrave Ludwig Wilhelm of Baden-Baden. Ludwig Wilhelm (1655–1707), famed as the military hero “Türkenlouis” for his battles against Ottoman forces, constructed Rastatt Palace around 1700 to rival the grandest courts. For the crowning ceiling of his great hall, he brought in Italian talent: Giuseppe Maria Roli of Bologna, who in 1704–1705 painted “Die Aufnahme des Herkules in den Olymp” – The Reception of Hercules into Olympus. This fresco, surrounded by smaller corner scenes and sumptuous stucco, explicitly casts the margrave’s life in allegorical terms of Herculean virtue rewarded by eternal fame.
+
+
+<div id="ahnensaal-saal-card" class="room-card-container"></div>
+
+<script type="module">
+(async function() {
+    while (!BaroqueDB.isReady()) {
+        await new Promise(r => setTimeout(r, 100));
+    }
+    await BaroqueViz.renderRoomCard('#ahnensaal-saal-card', '72df9922-340f-42fa-b7cc-df0ef351cc57');
+})();
+</script>
 
 Roli’s composition unfolds across a pseudo-circular opening in a painted sky, where the gods of Olympus welcome the ascendant Hercules. At the zenith sits Jupiter, thundering king of gods, with eagle by his side (in some interpretations, Jupiter’s eagle was represented indirectly – more on that below). On the right half of the fresco, the muscular Hercules is shown rising from the earthly realm up to the heavens. He is draped in a blue cloak, brandishes his trademark club, and wears a laurel wreath as sign of his virtue. Notably, Hercules does not gaze upward at Jupiter, but instead looks downward – significantly, toward the walls of the hall where Ludwig Wilhelm’s ancestral portraits hung in a gallery around the cornice. This clever detail made Hercules a stand-in for the margrave: the hero acknowledges his mortal lineage (the ancestors on the walls) even as he is elevated to godhood. Hercules is flanked by allegorical figures: one of his companions on the cloud bank is a personification of Virtue, who in Baroque iconography often guides Hercules. At Hercules’ feet, putti remove his lion-skin and arms – symbols that his labors are complete and peace has been won.
 
@@ -1159,9 +1184,6 @@ Above, on a bank of clouds, other gods observe the apotheosis. We see Minerva (A
 Perhaps the most personal touch in Roli’s design is found at the lower edge of the fresco. There, painted as if perched on the architectural rim, is a large eagle’s nest with a mother eagle and her eaglets. The mother eagle rears back, wings spread protectively, while the fledgling eaglets gaze upward. In the preparatory drawing for this fresco (which survives in Karlsruhe), Roli annotated this motif with a Latin motto from Horace: “Non generant aquilae columbas” – eagles do not beget doves. The meaning was clear: great parents produce great offspring. The eagle, a long-standing symbol of power and a device of Jupiter (and by extension imperial power), here alluded to the House of Baden-Baden itself. Margrave Ludwig Wilhelm had married into the Imperial Habsburg family and had high hopes for his descendants. The eagle nest in the fresco is positioned as if on the threshold between the mortal realm and Olympus, implying that the margrave’s young heirs (the eaglets) will carry on his heroic virtues and one day soar among the gods as well. Jupiter himself casts his gaze down toward the nest, linking the divine favor to the princely lineage on earth.
 
 In its totality, the Ahnensaal ceiling at Rastatt is a masterful piece of Baroque political theatre. It takes the classical myth of Hercules – long a favorite allegory for rulers (the so-called Herculean Virtue theme) – and customizes it to Ludwig Wilhelm’s narrative. The margrave was nicknamed “Türkenlouis” for his victories against the Ottoman Turks, and indeed four corner sculptures in the hall depict captured Turks in chains, literally supporting the cornice as caryatids. This ties directly to Hercules’ story: just as Hercules vanquished monstrous threats in his Labors, Türkenlouis subdued the “infidel” enemies of Austria. A contemporary description of the hall noted that “the ceiling fresco showing the reception of Hercules into Olympus clearly refers to the victorious margrave; even the statues of the fettered Ottomans speak volumes”. The Apotheosis of Hercules thus operates on multiple levels – celebrating military success, moral virtue, dynastic continuity, and the just governance of the prince. It is propaganda in pigment and plaster, executed with Italian Baroque skill. Notably, Giuseppe Roli’s fresco in Rastatt remains very well preserved (having fortunately escaped war damage). Art historians regard it as one of the finest Italian frescoes north of the Alps, and its iconography of ruler-as-Hercules influenced many later works (for instance, it likely inspired a similar Hercules apotheosis painted by Carlo Carlone in the Würzburg Residenz in the 1740s).
-
-In sum, the mythological ceilings at Nymphenburg, Mannheim, Arolsen, Sondershausen, and Rastatt each demonstrate a different facet of Baroque storytelling. Whether the emphasis was on peace and prosperity (Nymphenburg), epic lineage and virtue (Mannheim), cultural enlightenment (Arolsen), metamorphic destiny (Sondershausen), or heroic apotheosis (Rastatt), all these programs harnessed the power of classical myths to convey messages about the rulers and their values. They turned the ceilings and walls of palatial rooms into grand canvases where history, politics, and art were seamlessly intertwined.
-
 
 <div id="hercules-rastatt-card" class="painting-card-container"></div>
 
@@ -1174,6 +1196,21 @@ In sum, the mythological ceilings at Nymphenburg, Mannheim, Arolsen, Sondershaus
 })();
 </script>
 
+#### Excursus: Hercules in Baroque Art
+
+Hercules (German: Herkules) was among the most popular mythological figures in Baroque ceiling painting. His labors symbolized virtuous struggle, and his apotheosis represented the reward of immortal fame for earthly deeds – themes that resonated deeply with noble patrons seeking to glorify their dynasties:
+
+
+<div id="hercules-gallery" class="baroque-gallery"></div>
+
+<script type="module">
+(async function() {
+    while (!BaroqueDB.isReady()) {
+        await new Promise(r => setTimeout(r, 100));
+    }
+    await BaroqueViz.renderMythFigureGallery('#hercules-gallery', 'Herkules', { limit: 9 });
+})();
+</script>
 
 ### Commissions Over Time: War, Peace, and the Rhythm of Baroque Art
 
@@ -1213,8 +1250,6 @@ Carlo Ludovico Castelli was an Italian painter and decorator from Melide in the 
 
 Castelli’s style was informed by the High Baroque models of Italy – he cleverly adapted compositions from artists like Lanfranco and Sacchi, as noted, blending them into new syntheses. Working often in fresco-secco (a technique allowing more time for detail by painting on dry plaster with binder), he produced durable works that could withstand the northern climate. Outside Arolsen, Castelli is documented to have participated in decorative schemes in Würzburg (the Juliusspital hospital church, early 1720s) and possibly in Altenburg and Gera. Records indicate he partnered with his brother or cousin, the stuccoist Giovanni Pietro Castelli, on some of these commissions. Carlo Ludovico was esteemed enough that several German princes sought his service; for example, the Duke of Sachsen-Gotha engaged him briefly. By the mid-1730s, Castelli returned to Italy, where he died in 1738.
 
-In summary, Carlo Ludovico Castelli exemplifies the cosmopolitan artistry of Baroque Europe – an Italian who worked across German states to spread the splendors of mythological painting. His legacy includes not only surviving works like the Apollo fresco at Arolsen, but also the influence he imparted to local German artists through his designs and methods. Today, he is recognized as a key figure who helped infuse the German Baroque interiors with an international flavor of classicism and allegory.
-
 
 <div id="castelli-gallery" class="baroque-gallery"></div>
 
@@ -1223,8 +1258,7 @@ In summary, Carlo Ludovico Castelli exemplifies the cosmopolitan artistry of Bar
     while (!BaroqueDB.isReady()) {
         await new Promise(r => setTimeout(r, 100));
     }
-    await BaroqueViz.renderPainterGallery('#castelli-gallery', ['Castelli, Carlo Ludovico'], { limit: 4 });
-    await BaroqueViz.renderPainterGallery('#castelli-gallery', ['Castelli, Carlo Ludovico'], { limit: 4 });
+    await BaroqueViz.renderPainterGallery('#castelli-gallery', ['Castelli, Carlo Ludovico'], { limit: 6 });
 })();
 </script>
 
@@ -1239,9 +1273,6 @@ One of Paduano’s notable contributions was his work on the so-called Narrentre
 Historically, Alessandro Paduano is recorded in the Bavarian court accounts and was described as an essential assistant. He is even said to have been Sustris’s brother-in-law, which explains the close partnership. His versatility extended from secular to religious projects, but it’s his secular mythological work that stands out. Paduano brought Italian Mannerist training to Bavaria, helping to lay the groundwork for what would become the German Baroque ceiling tradition. Though he worked a few generations before the likes of Zimmermann or Asam, he directly influenced the courtly aesthetic of integrating classical myths into architectural space. After about 1596, Paduano fades from the records, and it’s presumed he either died or left Bavaria. By then, however, he had helped decorate multiple palatial rooms and perhaps even taught younger German artists (one Hans Werl apprenticed under him in 1588–89).
 
 
-In retrospect, Alessandro Paduano’s career illustrates the early diffusion of Italian painting expertise into Germany. He was a pioneer who demonstrated how allegorical and theatrical motifs from the South could be transplanted into a German court context. The exuberant spirit of late Renaissance Munich – with its mix of classical imagery and Counter-Reformation display – owes much to artisans like Paduano. His legacy continued indirectly as the Bavarian court maintained a taste for Italianate decoration, culminating a century later in projects such as Nymphenburg’s Steinerner Saal.
-
-
 <div id="paduano-gallery" class="baroque-gallery" style="margin-top: 20px;"></div>
 
 <script type="module">
@@ -1249,30 +1280,14 @@ In retrospect, Alessandro Paduano’s career illustrates the early diffusion of 
     while (!BaroqueDB.isReady()) {
         await new Promise(r => setTimeout(r, 100));
     }
-    await BaroqueViz.renderPainterGallery('#paduano-gallery', 'Paduano, Alessandro', { limit: 4 });
+    await BaroqueViz.renderPainterGallery('#paduano-gallery', 'Paduano, Alessandro', { limit: 6 });
 })();
 </script>
 
 
-#### Hercules in Baroque Art
 
-Hercules (German: Herkules) was among the most popular mythological figures in Baroque ceiling painting. His labors symbolized virtuous struggle, and his apotheosis represented the reward of immortal fame for earthly deeds – themes that resonated deeply with noble patrons seeking to glorify their dynasties:
-
-
-<div id="hercules-gallery" class="baroque-gallery"></div>
-
-<script type="module">
-(async function() {
-    while (!BaroqueDB.isReady()) {
-        await new Promise(r => setTimeout(r, 100));
-    }
-    await BaroqueViz.renderMythFigureGallery('#hercules-gallery', 'Herkules', { limit: 9 });
-})();
-</script>
 
 In conclusion, the mythological ceiling and wall paintings of the German Baroque were far more than opulent ornament; they were visual manifestos of an age. Through the examples of Nymphenburg, Mannheim, Arolsen, Sondershausen, and Rastatt, we have seen how ancient myths were ingeniously repurposed to celebrate contemporary themes – peace after war, the heroism and legitimacy of rulers, the flourishing of arts, the transformation and continuity of dynasties, and the ultimate aspiration for eternal fame. These grand compositions required a convergence of talents (patron, painter, stucco sculptor, architect) and could only thrive under favorable historical conditions. When those conditions waned – under the strain of war or changing taste – the commissions slowed and finally ceased, giving way to new artistic paradigms.
-
-Yet the surviving Baroque mythological paintings continue to speak. In their allegories one finds a window into the Baroque mindset: profoundly learned yet theatrical, pious yet worldly, and ever eager to cast the present in the guise of the exalted past. In palace after palace, Olympus was invited to reside on the ceiling, and the Olympians dutifully extolled the patrons below. The dialogue between heaven and earth in these artworks is what makes them so compelling. They are richly layered narratives that still captivate scholars and visitors alike, testifying to a time when art, power, and myth seamlessly entwined to elevate both buildings and the ambitions of those who built them.
 
 ---
 
