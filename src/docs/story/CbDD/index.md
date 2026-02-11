@@ -1001,6 +1001,372 @@ This section provides an overview of how themes of social order, political life,
 ## Church and Religion in Baroque Ceiling Paintings
 
 
+This micro perspective zooms into **ICONCLASS 1 (Religion & Magic)** and its five major sub-branches:
+
+- **10** · creation, cosmos, universe, life (symbolic representations)  
+- **11** · Christian religion  
+- **12** · non-Christian religions  
+- **13** · magic, supernaturalism, occultism  
+- **14** · astrology  
+
+Use the selector below to explore **where** each subtheme concentrates (states), **when** it peaks (timeline), and **who** paints it most often (top painter + gallery).  
+Tip: the counts always refer to **distinct paintings (nfdi_uri)**, even if a painting has multiple related subject tags.
+
+<!-- =========================
+     RELIGION MICRO DASHBOARD (ICONCLASS 10–14)
+     - Subtheme tabs (10..14), default 11
+     - Core counts + 2 charts + gallery + representative painter card
+========================= -->
+
+<div class="rel-wrap">
+  <div class="rel-header">
+    <div class="rel-title">
+      <span id="rel-title-main">Christian Religion</span>
+      <span class="rel-sub">(ICONCLASS <span id="rel-prefix">11</span>)</span>
+    </div>
+
+    <div class="rel-controls">
+      <label class="rel-label">Gallery size:</label>
+      <select id="rel-gallery-n" class="rel-select">
+        <option>4</option>
+        <option selected>6</option>
+        <option>8</option>
+        <option>12</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="rel-tabs" id="rel-tabs"></div>
+
+  <!-- Core counts -->
+  <section class="rel-card rel-corewide">
+    <div class="rel-card-title">Core counts (selected subtheme)</div>
+    <table class="rel-table">
+      <thead>
+        <tr><th>Metric</th><th style="text-align:right">Value</th></tr>
+      </thead>
+      <tbody id="rel-core-body">
+        <tr><td>Paintings</td><td style="text-align:right">…</td></tr>
+        <tr><td>Painters (role=PAINTER)</td><td style="text-align:right">…</td></tr>
+        <tr><td>States</td><td style="text-align:right">…</td></tr>
+        <tr><td>Buildings</td><td style="text-align:right">…</td></tr>
+      </tbody>
+    </table>
+    <div class="rel-note">
+      We filter by <b>subject_uri LIKE '%iconclass.org/&lt;prefix&gt;%'</b>.  
+      Example: prefix <b>11</b> matches codes such as <b>11D…</b>.
+    </div>
+  </section>
+
+  <!-- Charts -->
+  <div class="rel-grid-2">
+    <section class="rel-card">
+      <div class="rel-card-title">Where does it concentrate?</div>
+      <div id="rel-state-chart" class="baroque-chart"></div>
+      <div class="rel-hint">Top states by number of paintings.</div>
+    </section>
+
+    <section class="rel-card">
+      <div class="rel-card-title">When does it peak?</div>
+      <div id="rel-timeline-chart" class="baroque-chart"></div>
+      <div class="rel-hint">Paintings by decade (1600–1800).</div>
+    </section>
+  </div>
+
+  <!-- Gallery -->
+  <section class="rel-card" style="margin-top:14px;">
+    <div class="rel-card-title">Sample paintings (click to open in CbDD)</div>
+    <div id="rel-gallery" class="baroque-gallery"></div>
+  </section>
+
+  <!-- Representative painter -->
+  <section class="rel-card" style="margin-top:14px;">
+    <div class="rel-card-title">Representative painter (most frequent in this subtheme)</div>
+    <div id="rel-painter-card">Loading…</div>
+  </section>
+</div>
+
+<style>
+  .rel-wrap{ margin: 10px 0 26px; }
+  .rel-header{
+    display:flex; align-items:flex-end; justify-content:space-between;
+    gap:14px; margin-bottom: 10px;
+  }
+  .rel-title{ font-weight:800; font-size:18px; line-height:1.2; }
+  .rel-sub{ font-weight:600; font-size:13px; opacity:.65; margin-left:8px; }
+
+  .rel-controls{ display:flex; align-items:center; gap:8px; }
+  .rel-label{ font-size:13px; opacity:.7; }
+  .rel-select{
+    border: 1px solid rgba(0,0,0,.18);
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 14px;
+    background: white;
+  }
+
+  .rel-tabs{ display:flex; flex-wrap:wrap; gap:8px; margin: 8px 0 14px; }
+  .rel-tab{
+    border: 1px solid rgba(0,0,0,.14);
+    border-radius: 999px;
+    padding: 7px 10px;
+    font-size: 13px;
+    background: rgba(255,255,255,.92);
+    cursor:pointer;
+    user-select:none;
+    transition: transform .05s ease, box-shadow .12s ease, border-color .12s ease;
+  }
+  .rel-tab:hover{ box-shadow: 0 8px 18px rgba(0,0,0,.06); border-color: rgba(0,0,0,.22); }
+  .rel-tab:active{ transform: scale(.99); }
+  .rel-tab.is-active{
+    border-color: rgba(20,110,200,.55);
+    box-shadow: 0 10px 22px rgba(20,110,200,.12);
+  }
+
+  .rel-card{
+    border-radius: 16px;
+    background: rgba(255,255,255,.92);
+    box-shadow: 0 6px 24px rgba(0,0,0,.06);
+    padding: 14px;
+  }
+  .rel-card-title{ font-weight:800; margin-bottom:10px; }
+  .rel-corewide{ width:100%; margin-bottom: 14px; }
+
+  .rel-grid-2{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    align-items: start;
+  }
+
+  .rel-table{ width:100%; border-collapse: collapse; font-size: 14px; }
+  .rel-table th{
+    text-align:left;
+    font-size: 12.5px;
+    letter-spacing:.01em;
+    opacity:.65;
+    border-bottom: 1px solid rgba(0,0,0,.10);
+    padding: 8px 4px;
+  }
+  .rel-table td{ padding: 10px 4px; border-bottom: 1px solid rgba(0,0,0,.06); }
+  .rel-note{ margin-top: 10px; font-size: 12.5px; opacity: .65; }
+  .rel-hint{ margin-top: 6px; font-size: 12.5px; opacity: .65; }
+
+  @media (max-width: 980px){
+    .rel-grid-2{ grid-template-columns: 1fr; }
+  }
+</style>
+
+<script type="module">
+(async function(){
+  const wait = (ms) => new Promise(r => setTimeout(r, ms));
+  const $ = (id) => document.getElementById(id);
+
+  while (typeof BaroqueDB === 'undefined' || !BaroqueDB.isReady || !BaroqueDB.isReady()){
+    await wait(100);
+  }
+
+  // --- Subtheme labels (ICONCLASS 1 → 10..14) ---
+  const REL_LABELS = {
+    '10': '(symbolic) creation, cosmos, universe, life',
+    '11': 'Christian religion',
+    '12': 'non-Christian religions',
+    '13': 'magic, supernaturalism, occultism',
+    '14': 'astrology'
+  };
+
+  let currentPrefix = '11';
+
+  // Render tabs
+  const tabsEl = $('rel-tabs');
+  tabsEl.innerHTML = Object.keys(REL_LABELS).map(p => `
+    <div class="rel-tab ${p===currentPrefix ? 'is-active':''}" data-prefix="${p}">
+      ${p} · ${REL_LABELS[p]}
+    </div>
+  `).join('');
+
+  function setActiveTab(){
+    for (const el of tabsEl.querySelectorAll('.rel-tab')){
+      el.classList.toggle('is-active', el.dataset.prefix === currentPrefix);
+    }
+    $('rel-title-main').textContent = REL_LABELS[currentPrefix] || 'ICONCLASS';
+    $('rel-prefix').textContent = currentPrefix;
+  }
+
+  function esc(s){
+    return String(s ?? '').replace(/[&<>"']/g, (c) => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+    }[c]));
+  }
+
+  async function query(sql){ return await BaroqueDB.query(sql); }
+
+  function iconclassPrefixCTE(){
+    return `
+      WITH rel_paintings AS (
+        SELECT DISTINCT ps.nfdi_uri
+        FROM painting_subjects ps
+        JOIN subjects s ON ps.subject_uri = s.subject_uri
+        WHERE s.subject_source='ICONCLASS'
+          AND s.subject_uri LIKE '%iconclass.org/${currentPrefix}%'
+      )
+    `;
+  }
+
+  async function refresh(){
+    setActiveTab();
+
+    const galleryN = parseInt($('rel-gallery-n').value, 10);
+
+    // 1) Core counts
+    const core = await query(`
+      ${iconclassPrefixCTE()}
+      SELECT
+        (SELECT COUNT(*) FROM rel_paintings) AS paintings,
+        (SELECT COUNT(DISTINCT pp.person_name)
+           FROM painting_persons pp
+           JOIN rel_paintings rp ON rp.nfdi_uri=pp.nfdi_uri
+          WHERE pp.role='PAINTER' AND pp.person_name IS NOT NULL) AS painters,
+        (SELECT COUNT(DISTINCT p.location_state)
+           FROM paintings p
+           JOIN rel_paintings rp ON rp.nfdi_uri=p.nfdi_uri
+          WHERE p.location_state IS NOT NULL AND p.location_state <> '') AS states,
+        (SELECT COUNT(DISTINCT p.building_name)
+           FROM paintings p
+           JOIN rel_paintings rp ON rp.nfdi_uri=p.nfdi_uri
+          WHERE p.building_name IS NOT NULL AND p.building_name <> '') AS buildings
+    `);
+    const c = core?.[0] || {paintings:0,painters:0,states:0,buildings:0};
+    $('rel-core-body').innerHTML = `
+      <tr><td>Paintings (ICONCLASS ${currentPrefix}…)</td><td style="text-align:right"><b>${c.paintings ?? 0}</b></td></tr>
+      <tr><td>Painters (role=PAINTER)</td><td style="text-align:right"><b>${c.painters ?? 0}</b></td></tr>
+      <tr><td>States</td><td style="text-align:right"><b>${c.states ?? 0}</b></td></tr>
+      <tr><td>Buildings</td><td style="text-align:right"><b>${c.buildings ?? 0}</b></td></tr>
+    `;
+
+    // 2) State distribution (top 12)
+    const byState = await query(`
+      ${iconclassPrefixCTE()}
+      SELECT
+        p.location_state AS state,
+        COUNT(DISTINCT p.nfdi_uri) AS painting_count
+      FROM paintings p
+      JOIN rel_paintings rp ON rp.nfdi_uri = p.nfdi_uri
+      WHERE p.location_state IS NOT NULL AND p.location_state <> ''
+      GROUP BY p.location_state
+      ORDER BY painting_count DESC
+      LIMIT 12
+    `);
+
+    Plotly.newPlot($('rel-state-chart'), [{
+      x: byState.map(d => d.painting_count),
+      y: byState.map(d => d.state),
+      type: 'bar',
+      orientation: 'h',
+      hovertemplate: '%{y}<br>%{x} paintings<extra></extra>'
+    }], {
+      margin: {l: 140, r: 20, t: 20, b: 40},
+      height: 360,
+      xaxis: {title: 'Paintings'},
+      yaxis: {automargin: true}
+    }, {responsive: true});
+
+    // 3) Timeline by decade (1600–1800)
+    const byDecade = await query(`
+      ${iconclassPrefixCTE()}
+      SELECT
+        CAST(FLOOR(p.year_start/10)*10 AS INTEGER) AS decade,
+        COUNT(DISTINCT p.nfdi_uri) AS painting_count
+      FROM paintings p
+      JOIN rel_paintings rp ON rp.nfdi_uri = p.nfdi_uri
+      WHERE p.year_start IS NOT NULL AND p.year_start BETWEEN 1600 AND 1800
+      GROUP BY FLOOR(p.year_start/10)*10
+      ORDER BY decade
+    `);
+
+    Plotly.newPlot($('rel-timeline-chart'), [{
+      x: byDecade.map(d => d.decade),
+      y: byDecade.map(d => d.painting_count),
+      type: 'bar',
+      hovertemplate: '%{x}s<br>%{y} paintings<extra></extra>'
+    }], {
+      margin: {l: 60, r: 20, t: 20, b: 60},
+      height: 360,
+      xaxis: {title: 'Decade', tickangle: -45},
+      yaxis: {title: 'Paintings'}
+    }, {responsive: true});
+
+    // 4) Gallery
+    const gallery = await query(`
+      ${iconclassPrefixCTE()}
+      SELECT DISTINCT
+        p.nfdi_uri,
+        p.label,
+        p.painters,
+        p.year_start,
+        p.building_name,
+        p.imageUrl
+      FROM paintings p
+      JOIN rel_paintings rp ON rp.nfdi_uri = p.nfdi_uri
+      WHERE p.imageUrl IS NOT NULL AND p.imageUrl <> ''
+      ORDER BY p.year_start
+      LIMIT ${galleryN}
+    `);
+
+    $('rel-gallery').innerHTML = `
+      <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px;">
+        ${gallery.map(g => `
+          <figure style="margin:0; border: 1px solid rgba(0,0,0,.12); border-radius: 12px; overflow:hidden; background: white;">
+            <a href="${g.nfdi_uri}" target="_blank" rel="noopener">
+              <img src="${g.imageUrl}" alt="${esc(g.label)}" style="width:100%; height: 160px; object-fit: cover;">
+            </a>
+            <figcaption style="padding:10px; font-size:.85em; line-height:1.35;">
+              <strong style="display:block; margin-bottom:4px;">${esc(g.label)}</strong>
+              <span style="opacity:.75">${esc(g.painters || 'Unknown')} · ${g.year_start || '?'}<br>${esc(g.building_name || '')}</span>
+            </figcaption>
+          </figure>
+        `).join('')}
+      </div>
+    `;
+
+    // 5) Representative painter (most frequent)
+    const topPainter = await query(`
+      ${iconclassPrefixCTE()}
+      SELECT
+        pp.person_name AS painter,
+        COUNT(DISTINCT pp.nfdi_uri) AS painting_count
+      FROM painting_persons pp
+      JOIN rel_paintings rp ON rp.nfdi_uri = pp.nfdi_uri
+      WHERE pp.role='PAINTER' AND pp.person_name IS NOT NULL AND pp.person_name <> ''
+      GROUP BY pp.person_name
+      ORDER BY painting_count DESC
+      LIMIT 1
+    `);
+
+    const painterName = topPainter?.[0]?.painter;
+    if (!painterName){
+      $('rel-painter-card').innerHTML = '<div class="ic-empty">No painter found for this subtheme.</div>';
+    } else {
+      await BaroqueViz.renderPainterBiography('#rel-painter-card', painterName);
+    }
+  }
+
+  // Events
+  tabsEl.addEventListener('click', (e) => {
+    const t = e.target.closest('.rel-tab');
+    if (!t) return;
+    currentPrefix = t.dataset.prefix;
+    refresh();
+  });
+  $('rel-gallery-n').addEventListener('change', refresh);
+
+  refresh();
+})();
+</script>
+
+
+
 ---
 ---
 <a id="analysis-society"></a>
