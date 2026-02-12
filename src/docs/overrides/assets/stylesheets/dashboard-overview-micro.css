@@ -1,0 +1,108 @@
+.ic-wrap{ margin: 10px 0 26px; }
+.ic-header{
+  display:flex; align-items:flex-end; justify-content:space-between;
+  gap:14px; margin-bottom: 10px;
+}
+.ic-title{ font-weight:800; font-size:18px; line-height:1.2; }
+.ic-sub{ font-weight:600; font-size:13px; opacity:.65; margin-left:8px; }
+.ic-controls{ display:flex; align-items:center; gap:8px; }
+.ic-label{ font-size:13px; opacity:.7; }
+.ic-select{
+  border: 1px solid rgba(0,0,0,.18);
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 14px;
+  background: white;
+}
+
+.ic-tabs{
+  display:flex; flex-wrap:wrap; gap:8px;
+  margin: 8px 0 14px;
+}
+.ic-tab{
+  border: 1px solid rgba(0,0,0,.14);
+  border-radius: 999px;
+  padding: 7px 10px;
+  font-size: 13px;
+  background: rgba(255,255,255,.92);
+  cursor:pointer;
+  user-select:none;
+  transition: transform .05s ease, box-shadow .12s ease, border-color .12s ease;
+}
+.ic-tab:hover{ box-shadow: 0 8px 18px rgba(0,0,0,.06); border-color: rgba(0,0,0,.22); }
+.ic-tab:active{ transform: scale(.99); }
+.ic-tab.is-active{
+  border-color: rgba(20,110,200,.55);
+  box-shadow: 0 10px 22px rgba(20,110,200,.12);
+}
+
+.ic-card{
+  border-radius: 16px;
+  background: rgba(255,255,255,.92);
+  box-shadow: 0 6px 24px rgba(0,0,0,.06);
+  padding: 14px;
+}
+.ic-card-title{ font-weight:800; margin-bottom:10px; }
+
+/* core full width */
+.ic-corewide{
+  width:100%;
+  margin-bottom: 14px;
+}
+
+/* bottom 2x2 grid */
+.ic-grid-2x2{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.ic-table{
+  width:100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+.ic-table th{
+  text-align:left;
+  font-size: 12.5px;
+  letter-spacing:.01em;
+  opacity:.65;
+  border-bottom: 1px solid rgba(0,0,0,.10);
+  padding: 8px 4px;
+}
+.ic-table td{
+  padding: 10px 4px;
+  border-bottom: 1px solid rgba(0,0,0,.06);
+}
+.ic-note{
+  margin-top: 10px;
+  font-size: 12.5px;
+  opacity: .65;
+}
+
+.ic-list{ display:flex; flex-direction:column; gap:8px; }
+.ic-row{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  padding: 9px 10px;
+  border: 1px solid rgba(0,0,0,.07);
+  border-radius: 12px;
+  background: white;
+}
+.ic-row .k{ font-weight:650; font-size: 13.5px; }
+.ic-row .v{ font-variant-numeric: tabular-nums; opacity:.8; }
+
+.ic-empty{
+  padding: 10px;
+  font-size: 13px;
+  opacity: .7;
+  border: 1px dashed rgba(0,0,0,.18);
+  border-radius: 12px;
+  background: rgba(0,0,0,.02);
+}
+
+@media (max-width: 980px){
+  .ic-grid-2x2{ grid-template-columns: 1fr; }
+}

@@ -19,11 +19,15 @@ extra_javascript:
   - overrides/assets/vendor/lib/leaflet/leaflet.js
   - overrides/assets/javascripts/duckdb-wasm-loader.js
   - overrides/assets/javascripts/baroque-viz.js
+  - overrides/assets/javascripts/dashboard-overview-micro.js
 
 extra_css:
   - overrides/assets/stylesheets/jquery.dataTables.min.css
   - overrides/assets/vendor/lib/leaflet/leaflet.css
   - overrides/assets/stylesheets/extra.css
+  - overrides/assets/stylesheets/dashboard-overview-micro.css
+
+
 
 plugins:
   - search
