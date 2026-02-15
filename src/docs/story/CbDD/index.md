@@ -504,10 +504,19 @@ This section provides an overview of how themes of social order, political life,
 
 ---
 <a id="analysis-church"></a>
+
 ## Church and Religion in Baroque Ceiling Paintings
 
+Religious and spiritual themes played a central role in Baroque visual culture.  
+Ceiling paintings in the 17th and 18th centuries were not only decorative, but also served as powerful visual narratives that communicated ideas about faith, the cosmos, divine order, and the supernatural.
 
-This micro perspective zooms into **ICONCLASS 1 (Religion & Magic)** and its five major sub-branches:
+Beyond institutional religion, Baroque imagery also reflects a broader early modern worldview that included:
+- symbolic representations of creation and the universe,
+- different religious traditions,
+- beliefs in miracles, magic, and supernatural forces,
+- and interest in astrology and cosmic influence.
+
+This micro perspective explores **ICONCLASS 1 (Religion & Magic)** and its five major sub-branches:
 
 - **10** · creation, cosmos, universe, life (symbolic representations)  
 - **11** · Christian religion  
@@ -515,14 +524,39 @@ This micro perspective zooms into **ICONCLASS 1 (Religion & Magic)** and its fiv
 - **13** · magic, supernaturalism, occultism  
 - **14** · astrology  
 
-Use the selector below to explore **where** each subtheme concentrates (states), **when** it peaks (timeline), and **who** paints it most often (top painter + gallery).  
-Tip: the counts always refer to **distinct paintings (nfdi_uri)**, even if a painting has multiple related subject tags.
+Use the selector below to explore how each subtheme differs in:
+- **Where** it concentrates (regional distribution)
+- **When** it peaks (temporal trends)
+- **Who** paints it most often (representative painters and sample works)
+
+All counts refer to **distinct paintings (nfdi_uri)**, even if a painting has multiple subject tags.
+
+Together, these categories illustrate how Baroque ceiling paintings visualized a comprehensive early modern worldview — one that connected institutional religion with ideas about the cosmos, divine order, and supernatural forces.
+
+The following interactive exploration reveals how these themes were structured in space, time, and artistic production.
+
+#### Regional patterns
+
+This regional clustering suggests that Baroque ceiling painting was supported by stable local patronage networks and artistic centers rather than being a uniformly distributed artistic practice.
 
 <!-- =========================
      RELIGION MICRO DASHBOARD (ICONCLASS 10–14)
      - Subtheme tabs (10..14), default 11
      - Core counts + 2 charts + gallery + representative painter card
 ========================= -->
+
+#### Exploring thematic structures
+
+Use the dashboard below to compare the five subthemes of ICONCLASS 1.  
+For each category, the data reveals:
+
+- overall scale of production,
+- regional concentration,
+- periods of peak activity,
+- and the painters most strongly associated with the theme.
+
+Together, these indicators show how different aspects of religious and spiritual imagery were embedded in the artistic system of the Baroque period.
+
 
 <div class="rel-wrap">
   <div class="rel-header">
@@ -565,6 +599,13 @@ Tip: the counts always refer to **distinct paintings (nfdi_uri)**, even if a pai
     </div>
   </section>
 
+<h4>Temporal development</h4>
+
+<p>
+Across subthemes, most production concentrates between <strong>1700 and 1750</strong>, the high period of Baroque and early Rococo art.  
+This phase reflects a period of intensive investment in monumental interior decoration, when churches, monasteries, and courts used ceiling painting to shape powerful visual environments.
+</p>
+
   <!-- Charts -->
   <div class="rel-grid-2">
     <section class="rel-card">
@@ -587,6 +628,14 @@ Tip: the counts always refer to **distinct paintings (nfdi_uri)**, even if a pai
   </section>
 
   <!-- Representative painter -->
+
+<h4>Artistic production</h4>
+
+<p>
+The data shows that thematic production was often dominated by a limited number of highly active painters.  
+This pattern reflects the workshop-based organization of Baroque art, where experienced decorative specialists received repeated commissions across multiple buildings and regions.
+</p>
+
   <section class="rel-card" style="margin-top:14px;">
     <div class="rel-card-title">Representative painter (most frequent in this subtheme)</div>
     <div id="rel-painter-card">Loading…</div>
@@ -871,10 +920,16 @@ Tip: the counts always refer to **distinct paintings (nfdi_uri)**, even if a pai
 })();
 </script>
 
+### What does this reveal?
 
+The patterns across theme, region, time, and artistic activity show that religious ceiling painting was not a random collection of images, but part of a structured cultural system.
 
----
-<a id="analysis-church"></a>
+Baroque religious imagery was:
+- geographically concentrated,
+- historically time-bound,
+- and produced within specialized artistic networks.
+
+Together, these works formed a coordinated visual language that expressed how early modern society understood religion, the universe, and the relationship between the earthly and the divine.
 
 ---
 <a id="analysis-society"></a>
