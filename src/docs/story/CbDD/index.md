@@ -18,7 +18,7 @@ NFDI4Culture Data Story
 
 ## Introduction
 
-Baroque ceiling and wall paintings were a hallmark of interior decoration between the 16th and 18th centuries, transforming churches, palaces, and grand halls with vibrant allegorical frescoes. In Germany alone, a dedicated research corpus (Corpus der barocken Deckenmalerei in Deutschland, CbDD) has documented over 4,000 (CHECK EXACT NUMBER) such artworks along with their locations and artists. Harnessing this rich cultural heritage data, we set out to explore the careers of Baroque ceiling painters and the distribution and themes of their works. To do so, we leverage linked data and modern analysis tools to combine information from multiple sources. This integrated approach allows us to ask: Who were the key Baroque ceiling painters, when and where did they create their works, and what subjects did they depict? By uniting a specialized art-historical dataset with external knowledge graphs and archives, our data story uncovers patterns and insights that would be difficult to see in isolation. The result is an interactive narrative that not only presents quantitative analyses of these artworks and artists, but also demonstrates the power of semantic data integration in cultural heritage research.
+Baroque ceiling and wall paintings were a hallmark of interior decoration between the 16th and 18th centuries, transforming churches, palaces, and grand halls with vibrant allegorical frescoes. In Germany alone, a dedicated research corpus (Corpus der barocken Deckenmalerei in Deutschland, CbDD) has documented 4,594 such artworks along with their locations and artists. Harnessing this rich cultural heritage data, we set out to explore the careers of Baroque ceiling painters and the distribution and themes of their works. To do so, we leverage linked data and modern analysis tools to combine information from multiple sources. This integrated approach allows us to ask: Who were the key Baroque ceiling painters, when and where did they create their works, and what subjects did they depict? By uniting a specialized art-historical dataset with external knowledge graphs and archives, our data story uncovers patterns and insights that would be difficult to see in isolation. The result is an interactive narrative that not only presents quantitative analyses of these artworks and artists, but also demonstrates the power of semantic data integration in cultural heritage research.
 
 ### Methods 
 
@@ -26,15 +26,27 @@ We followed a multi-step data pipeline to gather and analyze the information:
 
 1. Data Retrieval via SPARQL: We used SPARQL queries to retrieve structured data on Baroque ceiling paintings and artists from online knowledge graphs. In particular, the core list of paintings and their metadata was obtained from the CbDD’s digital dataset (via a SPARQL endpoint in NFDI). Using SPARQL ensured that we could precisely filter for relevant works (e.g. paintings dated 1550–1800 in Germany) and fetch associated attributes like titles, locations, dates, and painter names in a single query.
 
-2. Data Enrichment: To enhance the dataset, we cross-linked entities across different sources. Painter names from the corpus were reconciled with the original CbDD knowledg graph entries to gather consistent biographical details (e.g. birth/death years) and further connections between the paintings and buildings.. We also connected the paintings to the Bildindex der Kunst und Architektur (the German art and architecture image index) to confirm the existence of high-quality photographs and to retrieve image metadata. This enrichment step added valuable context and helped unify records that refer to the same person or artwork under different identifiers.
+2. Data Enrichment: To enhance the dataset, we cross-linked entities across different sources. Painter names from the corpus were reconciled with the original CbDD knowledg graph entries to gather consistent biographical details (e.g. birth/death years) and further connections between the paintings and buildings. We also connected the paintings to the Bildindex der Kunst und Architektur (the German art and architecture image index) to retrieve image metadata and detailled arhitectural data. This was done by matching GND identifiers and other metadata fields, allowing us to enrich our dataset with historical photographs and additional contextual information about the artworks.
 
-3. Data Integration and Cleaning: All retrieved and enriched data were then merged into a single cohesive dataset. We carefully matched paintings from the CbDD corpus with entries in the Bildindex (and other sources) by comparing titles, locations, and other attributes, flagging any ambiguities or duplicates. Each artwork entry was augmented with the identifiers from multiple sources (such as corpus IDs, ICONLASS, GND numbers, and image links) to enable seamless cross-reference. Unmatched items were reviewed and noted for exclusion. The outcome was a unified table of 4,594 paintings by 332 painters, representing the breadth of Baroque ceiling art in Germany.
+3. Data Integration and Cleaning: All retrieved and enriched data were then merged into a single cohesive dataset. We carefully matched paintings from the CbDD corpus with entries in the Bildindex (and other sources) by comparing titles, locations, and other attributes, flagging any ambiguities or duplicates. Each artwork entry was augmented with the identifiers from multiple sources (such as corpus IDs, ICONLASS, GND numbers, and image links) to enable seamless cross-reference. Unmatched items were reviewed and noted for exclusion. The outcome was a unified dataset of 4,594 paintings, representing the breadth of Baroque ceiling art in Germany.
 
 4. Database and Analysis: The consolidated dataset was imported into a local DuckDB relational database, chosen for its efficiency in analytical querying. Using DuckDB via Python, we could perform complex SQL queries and manipulations on the data directly within our notebook. We analyzed key aspects of the data – for example, counting paintings per artist, examining the timeline of commissions, mapping the geographic distribution of works across regions, and identifying common iconographic themes. We utilized Python libraries (such as Polars for data handling and Altair for charting) to derive summary statistics and create visualizations. This approach allowed interactive exploration of the data with fast query performance on the ~4k records.
 
-5. Visualization and Presentation: Finally, we presented our findings in an interactive format using SHMARQL, a Linked Data storytelling platform. SHMARQL (running in a Docker container for our project) renders the data story Markdown and executes live SPARQL queries embedded in the text. In practice, this means that each figure or chart in our story is generated on the fly by querying the underlying SPARQL endpoints or our prepared dataset. The visualizations (e.g. timelines, maps, bar charts) are thus always consistent with the latest data and can be interactive. By deploying the story via a SHMARQL instance, readers can engage with dynamic charts and even adjust queries or filters in real time. This containerized setup made it straightforward to share the story: the Docker-based SHMARQL server encapsulates the environment needed to serve the narrative and ensures that our integrated data (and any external endpoints required) can be queried seamlessly. In summary, the methods combine semantic data querying, data integration, and modern analytics to transform raw cultural data into a coherent, engaging analysis.
+5. Visualization and Presentation: Finally, we presented our findings in an interactive format using SHMARQL, a Linked Data storytelling platform. SHMARQL (running in a Docker container for our project) renders the data story Markdown and executes live SPARQL queries embedded in the text. In practice, this means that each figure or chart in our story is generated on the fly by querying the underlying SPARQL endpoints or our prepared dataset. The visualizations (e.g. timelines, maps, bar charts) are thus always consistent with the latest data and can be interactive. Graphs are created using Altair, while maps are rendered with Leaflet. The DuckDB database is accessed via a WASM client-side implementation, allowing users to run SQL queries directly in their browser for a responsive experience. This setup enables us to tell a dynamic data story that combines narrative text with live data exploration.
 
 ![Methods Overview](methods.png)
+
+### Limitations
+
+While our data story provides a comprehensive overview of Baroque ceiling paintings in Germany, there are several limitations to consider:
+
+1. **Data Completeness**: The CbDD corpus, while extensive, may not capture every existing Baroque ceiling painting in Germany. Since it CbDD is still considered a work in progress, there may be gaps in the dataset and the dataset has a bias towards weel-documented artworks in Bavaria. Hence, it may not fully represent the diversity of ceiling paintings across all regions and the biographical details of lesser-known artists may be incomplete.
+
+2. **Data Quality and Consistency**: The data retrieved from different sources (CbDD, Bildindex, etc.) may have inconsistencies in naming conventions, metadata formats, and completeness. For example, painter names may be spelled differently across sources, and some paintings may lack precise dating or location information. This can lead to challenges in data integration and may affect the accuracy of our analyses. We have found discrepancies between NFDI and the original CbDD dataset, which we had to resolve manually. Changes in the CbDD dataset were often not reflected in the NFDI endpoint, leading to further mismatches and missing data.
+
+3. **Analytical Scope**: Our analyses are limited to the attributes available in the dataset, which may not capture all relevant aspects of Baroque ceiling paintings. For example, we focus on quantifiable attributes such as the number of paintings per artist or geographic distribution, but we do not analyze the stylistic features, iconography, or artistic techniques in depth. Additionally, our temporal analysis is constrained by the dating information available for each painting, which may be imprecise or missing for some works.
+
+4. **Interpretation of Results**: The patterns and trends we identify in the data may be influenced by the biases and limitations of the dataset, as well as our analytical choices. For example, the prominence of certain artists or regions may reflect historical documentation biases rather than actual production patterns. Therefore, our interpretations should be made with caution and in the context of existing art historical knowledge.
 
 ### Dataset Overview
 
@@ -261,25 +273,34 @@ WITH painters AS (
   WHERE role='PAINTER' AND person_name IS NOT NULL
 ),
 pairs AS (
-  SELECT
-    a.painter AS p1,
-    b.painter AS p2,
-    COUNT(*) AS n_co
+  SELECT a.painter AS p1, b.painter AS p2, COUNT(*) AS n_co
   FROM painters a
   JOIN painters b
     ON a.nfdi_uri = b.nfdi_uri
    AND a.painter < b.painter
   GROUP BY 1,2
+),
+collab_counts AS (
+  SELECT painter, SUM(n_co) AS total_collab
+  FROM (
+    SELECT p1 AS painter, n_co FROM pairs
+    UNION ALL
+    SELECT p2 AS painter, n_co FROM pairs
+  )
+  GROUP BY painter
+  ORDER BY total_collab DESC
+  LIMIT 50
 )
-SELECT *
-FROM pairs
-WHERE n_co >= 8
-ORDER BY n_co DESC
-LIMIT 30
+SELECT p.p1, p.p2, p.n_co
+FROM pairs p
+WHERE p.p1 IN (SELECT painter FROM collab_counts)
+  AND p.p2 IN (SELECT painter FROM collab_counts)
+  AND p.n_co >= 2
+ORDER BY p.n_co DESC
 ```
 ///
 
-**Observation:** Repeated co-painter pairs suggest stable collaboration (e.g., workshop teams or recurring commissions). This highlights that ceiling painting production was often network-based rather than purely individual authorship.
+**Observation:** The network graph reveals clusters of closely collaborating painters. Node size reflects each painter's total number of collaborative works, while edge thickness encodes the intensity of each specific partnership. Repeated co-painter pairs suggest stable workshop teams or recurring commissions, highlighting that ceiling painting production was often network-based rather than purely individual authorship.
 
 ---
 

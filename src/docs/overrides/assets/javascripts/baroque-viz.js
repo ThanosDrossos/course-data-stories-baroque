@@ -281,82 +281,214 @@ window.BaroqueViz = (function() {
     /**
      * Render top co-painter relationships (pairs)
      */
-    async function renderCoPainterPairs(container, minCo = 6, limit = 120) {
+    async function renderCoPainterPairs(container) {
         const el = _getElement(container);
-        el.innerHTML = '<div class="loading">Loading co-painter relationships...</div>';
-      
+        el.innerHTML = '<div class="loading">Loading co-painter network…</div>';
+
         try {
-          const sql = `
-            WITH painters AS (
-              SELECT nfdi_uri, person_name AS painter
-              FROM painting_persons
-              WHERE role='PAINTER' AND person_name IS NOT NULL
-            ),
-            pairs AS (
-              SELECT
-                a.painter AS p1,
-                b.painter AS p2,
-                COUNT(*) AS n_co
-              FROM painters a
-              JOIN painters b
-                ON a.nfdi_uri = b.nfdi_uri
-               AND a.painter < b.painter
-              GROUP BY 1,2
-            )
-            SELECT *
-            FROM pairs
-            WHERE n_co >= ${minCo}
-            ORDER BY n_co DESC
-            LIMIT ${limit}
-          `;
-      
-          const data = await BaroqueDB.query(sql);
-      
-          Plotly.purge(el);
-          el.innerHTML = '';
-          
-          const paintersA = [...new Set(data.map(d => d.p1))];
-      
-          const paintersB = [...new Set(data.map(d => d.p2))];
-      
-          const traces = paintersB.map((p2, i) => {
-            const xVals = paintersA.map(p1 => {
-              const row = data.find(d => d.p1 === p1 && d.p2 === p2);
-              return row ? row.n_co : 0;
+            /* ── 1. Query: top-50 collaborative painters & their mutual edges ── */
+            const sql = `
+              WITH painters AS (
+                SELECT nfdi_uri, person_name AS painter
+                FROM painting_persons
+                WHERE role='PAINTER' AND person_name IS NOT NULL
+              ),
+              pairs AS (
+                SELECT a.painter AS p1, b.painter AS p2, COUNT(*) AS n_co
+                FROM painters a
+                JOIN painters b ON a.nfdi_uri = b.nfdi_uri AND a.painter < b.painter
+                GROUP BY 1,2
+              ),
+              collab_counts AS (
+                SELECT painter, SUM(n_co) AS total_collab
+                FROM (
+                  SELECT p1 AS painter, n_co FROM pairs
+                  UNION ALL
+                  SELECT p2 AS painter, n_co FROM pairs
+                )
+                GROUP BY painter
+                ORDER BY total_collab DESC
+                LIMIT 50
+              )
+              SELECT p.p1, p.p2, p.n_co
+              FROM pairs p
+              WHERE p.p1 IN (SELECT painter FROM collab_counts)
+                AND p.p2 IN (SELECT painter FROM collab_counts)
+                AND p.n_co >= 2
+              ORDER BY p.n_co DESC
+            `;
+            const edges = await BaroqueDB.query(sql);
+
+            if (!edges.length) {
+                el.innerHTML = '<div class="error">No co-painter data found.</div>';
+                return;
+            }
+
+            /* ── 2. Build node list with total collaboration weight ── */
+            const nodeWeight = {};
+            for (const e of edges) {
+                nodeWeight[e.p1] = (nodeWeight[e.p1] || 0) + e.n_co;
+                nodeWeight[e.p2] = (nodeWeight[e.p2] || 0) + e.n_co;
+            }
+            const nodes = Object.keys(nodeWeight);
+            const nodeIndex = {};
+            nodes.forEach((n, i) => { nodeIndex[n] = i; });
+
+            /* ── 3. Simple force-directed layout (iterative spring model) ── */
+            const N = nodes.length;
+            const pos = nodes.map((_, i) => ({
+                x: Math.cos(2 * Math.PI * i / N) * 8,
+                y: Math.sin(2 * Math.PI * i / N) * 8
+            }));
+
+            const ITERATIONS = 500;
+            const K_REPULSE = 4.0;
+            const K_ATTRACT = 0.008;
+            const DAMPING   = 0.90;
+            const vel = nodes.map(() => ({ x: 0, y: 0 }));
+
+            for (let iter = 0; iter < ITERATIONS; iter++) {
+                // Repulsion between all pairs
+                for (let i = 0; i < N; i++) {
+                    for (let j = i + 1; j < N; j++) {
+                        let dx = pos[i].x - pos[j].x;
+                        let dy = pos[i].y - pos[j].y;
+                        let dist = Math.sqrt(dx * dx + dy * dy) || 0.01;
+                        let force = K_REPULSE / (dist * dist);
+                        let fx = (dx / dist) * force;
+                        let fy = (dy / dist) * force;
+                        vel[i].x += fx;  vel[i].y += fy;
+                        vel[j].x -= fx;  vel[j].y -= fy;
+                    }
+                }
+                // Attraction along edges
+                for (const e of edges) {
+                    const i = nodeIndex[e.p1], j = nodeIndex[e.p2];
+                    let dx = pos[j].x - pos[i].x;
+                    let dy = pos[j].y - pos[i].y;
+                    let dist = Math.sqrt(dx * dx + dy * dy) || 0.01;
+                    // Stronger attraction for heavier edges
+                    let force = K_ATTRACT * Math.log(1 + e.n_co) * dist;
+                    let fx = (dx / dist) * force;
+                    let fy = (dy / dist) * force;
+                    vel[i].x += fx;  vel[i].y += fy;
+                    vel[j].x -= fx;  vel[j].y -= fy;
+                }
+                // Apply velocity + damping
+                for (let i = 0; i < N; i++) {
+                    vel[i].x *= DAMPING;
+                    vel[i].y *= DAMPING;
+                    pos[i].x += vel[i].x;
+                    pos[i].y += vel[i].y;
+                }
+            }
+
+            /* ── 4. Build Plotly traces ── */
+            const maxCo = Math.max(...edges.map(e => e.n_co));
+            const minCo = Math.min(...edges.map(e => e.n_co));
+
+            // Build edge lines as Plotly shapes (these always render reliably)
+            const edgeShapes = edges.map(e => {
+                const i = nodeIndex[e.p1], j = nodeIndex[e.p2];
+                const w = minCo === maxCo
+                    ? 8
+                    : 3 + (e.n_co - minCo) / (maxCo - minCo) * 21;
+                const op = minCo === maxCo
+                    ? 0.7
+                    : 0.3 + (e.n_co - minCo) / (maxCo - minCo) * 0.5;
+                return {
+                    type: 'line',
+                    x0: pos[i].x, y0: pos[i].y,
+                    x1: pos[j].x, y1: pos[j].y,
+                    line: { width: w, color: `rgba(52, 73, 94, ${op})` },
+                    layer: 'below'
+                };
             });
-      
-            return {
-              type: 'bar',
-              orientation: 'h',
-              name: p2,
-              y: paintersA,
-              x: xVals,
-              hovertemplate:
-                'Painter A: %{y}<br>' +
-                `Painter B: ${p2}<br>` +
-                'Co-painted works: %{x}<extra></extra>',
-              marker: { color: COLORS.states[i % COLORS.states.length] }
+
+            // Invisible scatter trace at midpoints for edge hover tooltips
+            const edgeHoverTrace = {
+                type: 'scatter',
+                x: edges.map(e => (pos[nodeIndex[e.p1]].x + pos[nodeIndex[e.p2]].x) / 2),
+                y: edges.map(e => (pos[nodeIndex[e.p1]].y + pos[nodeIndex[e.p2]].y) / 2),
+                text: edges.map(e => `${e.p1} ↔ ${e.p2}: ${e.n_co} co-painted works`),
+                mode: 'markers+text',
+                texttemplate: edges.map(e => `${e.n_co}`),
+                textfont: { size: 10, color: '#888' },
+                textposition: 'middle center',
+                marker: { size: 8, color: 'rgba(0,0,0,0)' },
+                hoverinfo: 'text',
+                showlegend: false
             };
-          });
-      
-          const layout = {
-            title: 'Top Co-painter Relationships (Stacked by Partner)',
-            barmode: 'stack',
-            xaxis: { title: 'Co-painted works' },
-            yaxis: { automargin: true, title: 'Painter A' },
-            margin: { l: 220, r: 30, t: 60, b: 50 },
-            height: 650,
-            legend: { title: { text: 'Painter B' } }
-          };
-      
-          await Plotly.newPlot(el, traces, layout, { responsive: true });
-          return data;
-      
+
+            // Node trace
+            const maxWeight = Math.max(...nodes.map(n => nodeWeight[n]));
+            const minWeight = Math.min(...nodes.map(n => nodeWeight[n]));
+            const nodeSizes = nodes.map(n => {
+                const w = nodeWeight[n];
+                return minWeight === maxWeight
+                    ? 22
+                    : 12 + (w - minWeight) / (maxWeight - minWeight) * 26;
+            });
+
+            const nodeTrace = {
+                type: 'scatter',
+                x: pos.map(p => p.x),
+                y: pos.map(p => p.y),
+                text: nodes.map(n => {
+                    const shortName = n.length > 20 ? n.slice(0, 18) + '…' : n;
+                    return shortName;
+                }),
+                customdata: nodes.map(n => `<b>${n}</b><br>Total co-painted: ${nodeWeight[n]}`),
+                hovertemplate: '%{customdata}<extra></extra>',
+                mode: 'markers+text',
+                textposition: 'top center',
+                textfont: { size: 9, color: '#2c3e50', family: 'sans-serif' },
+                marker: {
+                    size: nodeSizes,
+                    color: nodes.map((_, i) => COLORS.states[i % COLORS.states.length]),
+                    line: { width: 2, color: '#fff' },
+                    opacity: 0.92
+                },
+                showlegend: false
+            };
+
+            /* ── 5. Layout & render ── */
+            Plotly.purge(el);
+            el.innerHTML = '';
+
+            const layout = {
+                title: {
+                    text: 'Co-painter Network (top 50 collaborative painters)',
+                    font: { size: 16 }
+                },
+                hovermode: 'closest',
+                xaxis: { visible: false, zeroline: false },
+                yaxis: { visible: false, zeroline: false, scaleanchor: 'x' },
+                margin: { l: 20, r: 20, t: 50, b: 20 },
+                height: 900,
+                shapes: edgeShapes,
+                plot_bgcolor: 'rgba(0,0,0,0)',
+                paper_bgcolor: 'rgba(0,0,0,0)',
+                annotations: [{
+                    text: 'Node size = total collaborative works · Edge thickness = co-painted works between pair',
+                    xref: 'paper', yref: 'paper',
+                    x: 0.5, y: -0.01,
+                    showarrow: false,
+                    font: { size: 11, color: '#888' }
+                }]
+            };
+
+            await Plotly.newPlot(el, [edgeHoverTrace, nodeTrace], layout, {
+                responsive: true,
+                displayModeBar: false
+            });
+            return edges;
+
         } catch (error) {
-          el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
-          throw error;
+            el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            throw error;
         }
-      }
+    }
       
     /**
      * Render ICONCLASS category distribution
