@@ -964,41 +964,6 @@ The Baroque era in German-speaking lands produced a dazzling array of ceiling an
 })();
 </script>
 
-### Rebuilding Splendor after the Thirty Years’ War
-
-In the first half of the 17th century, Germany was devastated by the Thirty Years’ War (1618–1648). This protracted conflict not only decimated populations and economies, but also brought high art patronage to a standstill. As one contemporary art historian lamented, “Queen Germania saw her palaces and churches with their magnificent paintings go up in flames... those who made it their profession fell into poverty and contempt, putting away their palette and instead taking up a pike or beggar’s staff”. Indeed, the war was a catastrophe that caused a sharp decline in artistic production – many artists fled or turned to other trades to survive.
-
-Yet, once peace was established in 1648, the German states slowly recovered. By the late 17th century, a generation of rulers embarked on ambitious building projects to assert their renewed power and prestige. These post-war princes drew inspiration from Italian and French Baroque models, adorning their new palaces with lavish mythological frescoes that proclaimed a return of stability and the arts. As we will see, each major commission carried an implicit message: the horrors of war have given way to a golden age under wise and victorious leadership. Nowhere is this more evident than in Nymphenburg Palace near Munich, whose very inception and decoration are tied to themes of peace and prosperity.
-
-
-### Patronage and the Baroque Cult of Magnificence
-
-Importantly, these grand mythological paintings did not emerge in a vacuum – they were typically commissioned by the nobility of the Baroque era. Kings, princes, dukes, prince-bishops and other aristocrats (Adel) enthusiastically paid artists to fill their residences with scenes from antiquity. The practice was rooted in the Baroque (and Renaissance) notion of princely magnificence. Following the examples of ancient Roman emperors and the Italian Renaissance princes, Baroque rulers embraced the idea that a sovereign’s greatness should be manifest in lavish art and architecture. In the Baroque age of absolutism, art was a form of propaganda and self-fashioning: monarchs and princes used mythological allegory to magnify their status. As art historians note, “absolute monarchs embraced the ancient notion of princely magnificence… translated into expensive and sumptuous displays of wealth through… monumental scale, and allegorical symbolism”. Nowhere was this more evident than in the painted ceiling frescoes and grand canvases adorning Baroque palaces. These works often literally placed the patron among the gods – sometimes the ruler’s portrait features would appear on a figure like Apollo or Hercules – or at least drew flattering parallels between the patron and the virtues of mythic heroes.
-
-<div id="apollo-gallery" class="baroque-gallery"></div>
-
-<script type="module">
-(async function() {
-    while (!BaroqueDB.isReady()) {
-        await new Promise(r => setTimeout(r, 100));
-    }
-    await BaroqueViz.renderMythFigureGallery('#apollo-gallery', 'Apollo', { limit: 6 });
-})();
-</script>
-
-
----
-
-
-### Nymphenburg Palace: An Olympian Vision of Peace and Prosperity
-
-The ceiling of the Steinerner Saal (Stone Hall) at Nymphenburg Palace presents an Olympian assembly celebrating the return of a golden age of peace. Painted by Johann Baptist Zimmermann in 1755–57, this monumental fresco – framed by lush Rococo stucco – allegorically links the reign of the Bavarian elector to a time of prosperity and plenty.
-
-Nymphenburg Palace was founded in 1664 as a summer residence for Elector Ferdinand Maria of Bavaria and his wife Henriette Adelaide, to celebrate the birth of their heir Max Emanuel. The central pavilion (the core of today’s palace) was constructed in the late 1660s, but major expansions stalled during subsequent conflicts. For example, during the War of the Spanish Succession, after Bavaria’s defeat at the Battle of Höchstädt in 1704, work on Nymphenburg was halted – at that point only the main pavilion and one wing were habitable. It was only after peace was restored and Elector Max Emanuel returned from exile in 1715 that construction resumed with renewed vigor. By the mid-18th century, Max Emanuel’s grandson Max III. Joseph undertook a final magnificent refurbishment of the palace’s great hall, the Steinerner Saal, to serve as the symbolic heart of his court.
-
-Under Max III. Joseph’s patronage, between 1755 and 1758 the aging Johann Baptist Zimmermann – one of Bavaria’s premier fresco painters – created his last masterpiece on the ceiling of the Steinerner Saal. This vast composition is explicitly allegorical. “Alluding to the ruler’s duty to bring and preserve peace, the huge ceiling painting depicts the Olympian sky”, notes the official palace description. In the center, the gods of Mount Olympus convene under a radiant sky, celebrating the restoration of peace and prosperity under the Elector’s enlightened rule. Jupiter presides, while Apollo in his sun chariot brings light – a reference to the elector as a sun bringing enlightenment to his lands. On the west side of the fresco (facing the gardens), a train of cheerful nymphs pays homage to Flora, a nymph-turned-goddess of flowering abundance, which pointedly nods to the palace’s name (Nymphenburg, “castle of the nymphs”) and its idyllic park.
-
-Surrounding the central scene are smaller mythological vignettes that reinforce the message of peace and flourishing. For instance, one corner shows Mars and Venus, an allegory of love triumphing over war; another panel depicts Zephyr and Flora, symbolizing gentle winds and springtime fecundity. We also find Fama and Clio (the personifications of Fame and History) – suggesting that the fame of the Wittelsbach dynasty will be recorded for posterity – and Astronomy and Urania (muse of astronomy), underscoring patronage of knowledge and science. Even cautionary tales appear: the fresco cycle includes Latona turning the Lycian peasants into frogs (a myth about disrespect to the divine), perhaps as a moral reminder to viewers, and playful putti (cherubs) at play, symbolizing the joy and innocence of a peaceful era. Together, these seven mythological scenes and the colossal central tableau form a visual hymn to the Wohlstand und Blüte des Landes im Frieden – the prosperity and blossoming of the land in peace, as contemporary sources described the theme. Zimmermann’s ceiling, completed in 1758, remained untouched through the centuries and still today greets visitors with its authentic Rococo splendor, a testament to how Baroque art glorified peace after turmoil.
 
 ### Nymphenburg Palace: An Olympian Vision of Peace and Prosperity
 
