@@ -1487,6 +1487,354 @@ The art-historical descriptions and contextual interpretations presented here ar
 [22] Allerdings benennt Käpplinger bereits das Cosimo I. gewidmete Stichwerk als „Venationes“, da ihm das nachfolgende Stichwerk der „Venationes“ offenbar nicht bekannt war.
 [23] Die übersichtliche Darstellung der Zyklen ist Käpplinger, Jagd, 2011 zu verdanken.
 
+
+---
+### Leutenberg, ehem. Schloss "Friedensburg"
+
+In the 17th century, Count Albert Anton von Schwarzburg-Rudolstadt had Friedensburg Castle decorated with room-filling murals by the court painter Seivert Lammers in two campaigns (1688 and 1698). The paintings remained intact for a long time and were only destroyed by a fire in 1934.
+
+<div style="text-align:center; margin:30px 0;">
+  <img src="Postkarte_SchlossFriedensburg_Leuterberg.jpg" style="max-width:900px; width:100%; border-radius:10px;">
+  <div style="font-size:14px; opacity:0.7; margin-top:8px;">
+    Leutenberg, Schloss Friedensburg; Psotkarte; Corpus der barocken Deckenmalerei; https://www.deckenmalerei.eu/de638dcc-a435-4778-8a28-e9c3276e1843 
+  </div>
+</div>
+
+
+The so-called Battle Hall ("Schlachtensaal") on the third floor was probably the main hall of the castle. Its seven wall panels, framed by heart-shaped friezes, mainly depicted war scenes in grisaille painting with strong light-dark contrasts, giving the room its name.
+
+War was depicted “in all its diversity, but not glorified.” No specific historical event can be identified: “The scenes are neither from the Old Testament nor ancient mythology, nor are they depictions of current events – such as the Turkish Wars.” Above the windows and doors were additional painted curtain draperies.
+
+The depictions are spread across all walls of the room and include battle scenes, cavalry skirmishes, and camp and everyday scenes.
+
+
+
+<!-- =========================
+     Leutenberg (Schloss Friedensburg) — Battle Hall (2x2)
+     - click card opens image in lightbox (bigger)
+     - separate link opens CbDD anchor
+     - adds metadata (artist, date, patron, technique, location)
+========================= -->
+
+<style>
+  .cbdd-grid-2x2{
+    display:grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap:26px;
+    margin:22px 0 34px;
+  }
+  @media (max-width: 900px){
+    .cbdd-grid-2x2{ grid-template-columns: 1fr; }
+  }
+
+  .cbdd-card{
+    background:#fffdf6;
+    border:1px solid #e6d8a8;
+    border-radius:14px;
+    overflow:hidden;
+    transition:transform .18s ease, box-shadow .18s ease;
+  }
+  .cbdd-card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 10px 24px rgba(0,0,0,.12);
+  }
+
+  .cbdd-imgbtn{
+    padding:0;
+    border:0;
+    background:transparent;
+    width:100%;
+    cursor:pointer;
+    display:block;
+  }
+  .cbdd-imgbtn img{
+    width:100%;
+    height:260px;
+    object-fit:cover;
+    display:block;
+  }
+
+  .cbdd-body{ padding:14px 16px 18px; }
+  .cbdd-title{
+    font-weight:650;
+    font-size:16px;
+    margin:0 0 8px;
+  }
+
+  /* NEW: metadata lines */
+  .cbdd-metaLine{
+    font-size:13px;
+    line-height:1.35;
+    opacity:.85;
+    margin:0 0 10px;
+  }
+  .cbdd-metaLine strong{ font-weight:650; opacity:.95; }
+  .cbdd-metaLine + .cbdd-metaLine{ margin-top:-6px; } /* tighten if two lines */
+
+  .cbdd-desc{
+    font-size:14px;
+    line-height:1.45;
+    opacity:.92;
+    margin:0;
+  }
+
+  .cbdd-meta{
+    margin-top:10px;
+    font-size:13px;
+    opacity:.85;
+  }
+  .cbdd-meta a{
+    text-decoration:underline;
+    color:inherit;
+  }
+
+  /* ================= Lightbox ================= */
+  .cbdd-lightbox{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.72);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:9999;
+    padding:22px;
+  }
+  .cbdd-lightbox.is-open{ display:flex; }
+
+  .cbdd-lightbox__panel{
+    position:relative;
+    max-width:min(1100px, 96vw);
+    max-height:92vh;
+  }
+  .cbdd-lightbox__img{
+    display:block;
+    max-width:100%;
+    max-height:92vh;
+    border-radius:12px;
+    box-shadow:0 18px 50px rgba(0,0,0,.35);
+    background:#111;
+  }
+  .cbdd-lightbox__cap{
+    margin-top:10px;
+    color:#fff;
+    font-size:14px;
+    line-height:1.35;
+    opacity:.92;
+  }
+  .cbdd-lightbox__close{
+    position:absolute;
+    top:-10px;
+    right:-10px;
+    width:40px;
+    height:40px;
+    border-radius:999px;
+    border:0;
+    cursor:pointer;
+    background:#fff;
+    box-shadow:0 10px 25px rgba(0,0,0,.25);
+    font-size:18px;
+  }
+</style>
+
+## Leutenberg — Schloss Friedensburg (Battle Hall)
+
+<div class="cbdd-grid-2x2">
+
+  <!-- SOUTH -->
+  <div class="cbdd-card">
+    <button class="cbdd-imgbtn"
+            data-full="sued.jpg"
+            data-caption="South wall — Large battle painting (“Das Schlachtfeld”), executed in glue paint (grisaille). Estimated size: 2.2 × 5.5 m. Dated via the room’s 1698 inscription."
+            aria-label="Open image larger">
+      <img src="sued.jpg" alt="Friedensburg — South wall">
+    </button>
+    <div class="cbdd-body">
+      <p class="cbdd-title">South wall</p>
+
+      <p class="cbdd-metaLine">
+        <strong>Artist:</strong> Seivert Lammers ·
+        <strong>Date:</strong> 1698 (inscribed) ·
+        <strong>Technique:</strong> glue paint, grisaille
+      </p>
+      <p class="cbdd-metaLine">
+        <strong>Site:</strong> Schloss Friedensburg, Battle Hall (3rd floor, north wing) ·
+        <strong>Status:</strong> destroyed by fire (1934)
+      </p>
+
+      <p class="cbdd-desc">A large multi-figure battle panorama covers the entire wall above the socle zone (known in research as “Das Schlachtfeld”). The background includes a temple ruin and a tree. The center is emphasized by the rear view of a packhorse.</p>
+
+      <div class="cbdd-meta">
+        <a target="_blank" rel="noopener"
+           href="https://www.deckenmalerei.eu/d8ff05f9-cca7-4875-8f82-be4e1670678d">
+          Open on CbDD →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- EAST -->
+  <div class="cbdd-card">
+    <button class="cbdd-imgbtn"
+            data-full="ost.jpg"
+            data-caption="East wall — Two cavalry combats (“Das Gemetzel” / “Der Überfall”), documented by photographs (1925). Connected by a continuous heart-band frieze."
+            aria-label="Open image larger">
+      <img src="ost.jpg" alt="Friedensburg — East wall">
+    </button>
+    <div class="cbdd-body">
+      <p class="cbdd-title">East wall</p>
+
+      <p class="cbdd-metaLine">
+        <strong>Artist:</strong> Seivert Lammers ·
+        <strong>Date:</strong> before/around 1698 ·
+        <strong>Evidence:</strong> photo documentation (1925)
+      </p>
+      <p class="cbdd-metaLine">
+        <strong>Technique:</strong> glue paint, grisaille ·
+        <strong>Status:</strong> destroyed by fire (1934)
+      </p>
+
+      <p class="cbdd-desc">On either side of the central door, one cavalry combat is shown. Research refers to them as “Das Gemetzel” and “Der Überfall”. Both scenes were originally conceived as one composition connected by the frieze.</p>
+
+      <div class="cbdd-meta">
+        <a target="_blank" rel="noopener"
+           href="https://www.deckenmalerei.eu/cf9d56be-2913-4cbb-a9f5-e62c036ceac7">
+          Open on CbDD →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- WEST -->
+  <div class="cbdd-card">
+    <button class="cbdd-imgbtn"
+            data-full="west.jpg"
+            data-caption="West wall — Pack animals and canteen women (Marketenderinnen). Partial photographic survival; a tent weather-vane reportedly carried the date 1695."
+            aria-label="Open image larger">
+      <img src="west.jpg" alt="Friedensburg — West wall">
+    </button>
+    <div class="cbdd-body">
+      <p class="cbdd-title">West wall</p>
+
+      <p class="cbdd-metaLine">
+        <strong>Artist:</strong> Seivert Lammers ·
+        <strong>Date:</strong> 1698 (room) / 1695 (reported detail) ·
+        <strong>Evidence:</strong> partial photos
+      </p>
+      <p class="cbdd-metaLine">
+        <strong>Motifs:</strong> pack donkey with rider; canteen scene ·
+        <strong>Status:</strong> destroyed by fire (1934)
+      </p>
+
+      <p class="cbdd-desc">The surviving documentation shows a pack donkey with rider and canteen women. At the transition from the south to the west wall, riders continued across the corner of the room.</p>
+
+      <div class="cbdd-meta">
+        <a target="_blank" rel="noopener"
+           href="https://www.deckenmalerei.eu/6559a9c1-e9e7-4ef5-8be2-24c266714c4f">
+          Open on CbDD →
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- NORTH -->
+  <div class="cbdd-card">
+    <button class="cbdd-imgbtn"
+            data-full="nord.jpg"
+            data-caption="North wall — Scenes between three windows: a wine-serving scene and a fight over a flag. Photographically documented."
+            aria-label="Open image larger">
+      <img src="nord.jpg" alt="Friedensburg — North wall">
+    </button>
+    <div class="cbdd-body">
+      <p class="cbdd-title">North wall</p>
+
+      <p class="cbdd-metaLine">
+        <strong>Artist:</strong> Seivert Lammers ·
+        <strong>Date:</strong> 1698 (inscribed) ·
+        <strong>Evidence:</strong> photos (scenes between windows)
+      </p>
+      <p class="cbdd-metaLine">
+        <strong>Technique:</strong> glue paint, grisaille ·
+        <strong>Status:</strong> destroyed by fire (1934)
+      </p>
+
+      <p class="cbdd-desc">Between the windows, one scene shows a wine-serving situation (tapper, woman with bread, soldier).</p>
+
+      <div class="cbdd-meta">
+        <a target="_blank" rel="noopener"
+           href="https://www.deckenmalerei.eu/96d3d340-bcd1-4d5c-ad4f-3be8bc4ddfba">
+          Open on CbDD →
+        </a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Lightbox -->
+<div class="cbdd-lightbox" id="cbdd-lightbox" aria-hidden="true">
+  <div class="cbdd-lightbox__panel" role="dialog" aria-modal="true">
+    <button class="cbdd-lightbox__close" id="cbdd-lightbox-close" aria-label="Close">✕</button>
+    <img class="cbdd-lightbox__img" id="cbdd-lightbox-img" alt="">
+    <div class="cbdd-lightbox__cap" id="cbdd-lightbox-cap"></div>
+  </div>
+</div>
+
+<script>
+  (function(){
+    const lb = document.getElementById('cbdd-lightbox');
+    const lbImg = document.getElementById('cbdd-lightbox-img');
+    const lbCap = document.getElementById('cbdd-lightbox-cap');
+    const lbClose = document.getElementById('cbdd-lightbox-close');
+
+    function openLightbox(src, caption, alt){
+      lbImg.src = src;
+      lbImg.alt = alt || '';
+      lbCap.textContent = caption || '';
+      lb.classList.add('is-open');
+      lb.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeLightbox(){
+      lb.classList.remove('is-open');
+      lb.setAttribute('aria-hidden', 'true');
+      lbImg.src = '';
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.cbdd-imgbtn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        openLightbox(btn.dataset.full, btn.dataset.caption, btn.querySelector('img')?.alt);
+      });
+    });
+
+    lb.addEventListener('click', (e) => { if(e.target === lb) closeLightbox(); });
+    lbClose.addEventListener('click', closeLightbox);
+
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && lb.classList.contains('is-open')) closeLightbox();
+    });
+  })();
+</script>
+
+
+
+---
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ---
 <a id="analysis-mythology"></a>
 
