@@ -76,7 +76,7 @@ This data story addresses the following research questions:
 
 ## User experience 
 
-This data story invites users to explore Baroque ceiling painting between **1600 and 1750** through two complementary perspectives: a **macro perspective** and a **micro perspective**.
+This data story invites users to explore Baroque ceiling painting between **1500 and 1750** through two complementary perspectives: a **macro perspective** and a **micro perspective**.
 
 **Macro perspective:**
 This perspective provides an overview of the period by presenting temporal, spatial, and historical information. It visualizes how ceiling paintings are distributed over time, highlights their geographical occurrence across regions and building types, and situates the artworks within broader political and historical settings of the era. This perspective is intended to support orientation and to offer contextual reference points.
@@ -406,13 +406,8 @@ LIMIT 20
 
 - **CbDD**: Corpus of Baroque Ceiling Painting in Germany, accessed via NFDI4Culture Knowledge Graph
 - **Bildindex**: Historical photograph archive from Bildindex der Kunst und Architektur
-
-### Technology Stack
-
-- **DuckDB WASM**: Client-side analytical database (~16MB)
-- **Plotly.js**: Interactive charts and visualizations
-- **Leaflet**: Geographic mapping with marker clustering
-- **DataTables**: Sortable, searchable result tables
+- **GND**: Integrated Authority File for cross-referencing artists and buildings
+- **ICONCLASS**: Subject classification system for art and iconography
 
 ### Database Schema
 
@@ -507,7 +502,7 @@ Together, these categories illustrate how Baroque ceiling paintings visualized a
 
 The following interactive exploration reveals how these themes were structured in space, time, and artistic production.
 
-#### Regional patterns
+### Regional patterns
 
 This regional clustering suggests that Baroque ceiling painting was supported by stable local patronage networks and artistic centers rather than being a uniformly distributed artistic practice.
 
@@ -517,7 +512,7 @@ This regional clustering suggests that Baroque ceiling painting was supported by
      - Core counts + 2 charts + gallery + representative painter card
 ========================= -->
 
-#### Exploring thematic structures
+### Exploring thematic structures
 
 Use the dashboard below to compare the five subthemes of ICONCLASS 1.  
 For each category, the data reveals:
@@ -647,11 +642,11 @@ Together, these works formed a coordinated visual language that expressed how ea
 
 <a id="analysis-society"></a>
 
-# Society & Culture
+## Society & Culture
 
 Across Baroque residences, painted interiors did more than decorate walls and ceilings — they structured how society was perceived and communicated. Hunting scenes, images of rulership, and depictions of warfare together formed visual programs that articulated hierarchy, authority, and social roles. Noble hunts showed regulated interaction between humans, animals, and landscape, while military imagery depicted conflict, equipment, and perceived threats of the time. This section follows these domains through selected interiors and artworks, using image data and iconographic categories (ICONCLASS) to trace recurring visual patterns through which painters organized representations of society and culture.
 
-## Hunting and Social Hierarchy - Schlossanlage Weikersheim
+### Hunting and Social Hierarchy - Schlossanlage Weikersheim
 
 The palace complex of Weikersheim provides a particularly comprehensive example of how hunting was integrated into a broader program of rule. 
 
@@ -689,7 +684,7 @@ The castle complex comprises several buildings. The oldest building still standi
 
 This Great Hall, today known as the "Rittersaal" measures 36.4 × 11.7 meters and rises to a height of 8.25 meters [3] and was furnished between 1601 and 1605. The ceiling paintings were created by Balthasar Katzenberger, who completed the entire cycle roughly thirteen months after signing the contract, around 1602 [2,4]. Only in the early eighteenth century was the room adapted to Baroque taste and reinterpreted as "Rittersaal" [5]. 
 
-### Hunting and Social Order in the Rittersaal
+#### Hunting and Social Order in the Rittersaal
 
 In the early modern period, hunting was far more than a means of obtaining food. It functioned as a tool for securing and displaying rule and social order and was understood as a real practice of power [6]. At the same time, hunting rights were reserved for the nobility, while the population was burdened by hunting prohibitions, compulsory services, and damage caused by game; demands for free hunting even became part of the peasants’ program during the German Peasants’ War but remained unsuccessful [7,8].
 
@@ -699,7 +694,7 @@ Hunting thus became a social event and a status symbol of the aristocracy [10].
 
 This broader historical function of hunting provides the context for the decoration of the "Rittersaal" of "Weikersheimer Schloss": the ceiling paintings present hunting scenes in an ordered sequence and arrangement, reflecting contemporary ideas about hunting and social hierarchy documented for the Baroque period.
 
-### Contract Conditions, Ceiling Paintings and Sources
+#### Contract Conditions, Ceiling Paintings and Sources
 
 The furnishing of the hall did not emerge as a purely artistic creation but followed precise specifications. A surviving contract between Count Wolfgang II and Katzenberger stipulates that the ceiling was to be executed in water- or glue-based paints on canvas with scenes of hunting and venery. Themes and motifs were determined by the patron and could be supplemented continuously [11]. The paintings were produced in the workshop and subsequently installed. As payment the painter received 195 guilders as well as daily meals of bread and soup; execution in oil would have increased the remuneration [12]. Katzenberger worked without a partner, only with assistants, exclusively in daylight, and required thirteen months for the entire cycle, which he completed on 22 November 1602 [13]. This corresponds to an average of roughly five working days per painting [14]. Only a reworking of 1710/11 intensified the colours and gave the room its today more strongly Baroque appearance [15].
 
@@ -1132,6 +1127,17 @@ While the Battle Hall in Leutenberg presents war without reference to a specific
     Asamkirche in Munich; Bildarchiv Foto Marburg; Schmidt-Glassner, Helga; https://www.deckenmalerei.eu/ee55b797-2950-49b8-9204-1c0fcf6b671b
   </div>
 </div>
+
+<div id="asamkirche-card" class="building-card-container"></div>
+<script type="module">
+(async function() {
+    while (!BaroqueDB.isReady()) {
+        await new Promise(r => setTimeout(r, 100));
+    }
+    await BaroqueViz.renderBuildingCard('#asamkirche-card', '5d7628b4-b9ce-4d66-bcc4-65ebf58c0fac');
+})();
+</script>
+
 
 The Asam Church (St. Johann Nepomuk) in Munich was built by Egid Quirin Asam as a private chapel next to his home starting in 1733 and was consecrated in 1746. The painting was done by his brother Cosmas Damian Asam, who created the frescoes starting in 1734; a chronogram dates the main fresco to 1735. The church is considered one of the most important works of South German Baroque and Rococo fresco painting.
 

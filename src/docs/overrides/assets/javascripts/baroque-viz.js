@@ -1432,6 +1432,8 @@ window.BaroqueViz = (function() {
                                     // Add click handlers for paintings in this room
                                     contentEl.querySelectorAll('.painting-thumb-row').forEach(thumbRow => {
                                         thumbRow.addEventListener('click', (pe) => {
+                                            // Let painter-jump-link clicks propagate to global handler
+                                            if (pe.target.closest('.painter-jump-link')) return;
                                             pe.stopPropagation();
                                             const paintingId = thumbRow.dataset.paintingId;
                                             const detailsEl = document.getElementById(paintingId);
