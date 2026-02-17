@@ -698,31 +698,30 @@ On this basis, the ceiling paintings can now be explored from the intended viewi
 
 
 <!-- ================= RITTERSAAL: OVERVIEW (3 SECTIONS) + INTERAKTIV (Hotspots) ================= -->
-<div markdown="0">
-
+<div class="rittersaal-block">
 <!-- ================= 1) OVERVIEW: 3 SECTION TILES (West -> East) ================= -->
 <div class="rs-overview">
-  <div class="rs-overview-title">Explore the ceiling from west to east — choose a section to jump in:</div>
+<div class="rs-overview-title">Explore the ceiling from west to east — choose a section to jump in:</div>
 
-  <div class="rs-overview-grid">
-    <!-- WEST -->
-    <div class="rs-tile" onclick="jumpToRoom(0)">
-      <img src="Rittersaal1.jpg">
-      <div class="rs-tile-label">West — Fireplace side</div>
-    </div>
+<div class="rs-overview-grid">
+<!-- WEST -->
+<div class="rs-tile" onclick="jumpToRoom(0)">
+<img src="Rittersaal1.jpg">
+<div class="rs-tile-label">West — Fireplace side</div>
+</div>
 
-    <!-- CENTER -->
-    <div class="rs-tile" onclick="jumpToRoom(1)">
-      <img src="Rittersaal2.jpg">
-      <div class="rs-tile-label">Central section</div>
-    </div>
+<!-- CENTER -->
+<div class="rs-tile" onclick="jumpToRoom(1)">
+<img src="Rittersaal2.jpg">
+<div class="rs-tile-label">Central section</div>
+</div>
 
-    <!-- EAST -->
-    <div class="rs-tile" onclick="jumpToRoom(2)">
-      <img src="Rittersaal3.jpg">
-      <div class="rs-tile-label">East — Towards the Tafelstube</div>
-    </div>
-  </div>
+<!-- EAST -->
+<div class="rs-tile" onclick="jumpToRoom(2)">
+<img src="Rittersaal3.jpg">
+<div class="rs-tile-label">East — Towards the Tafelstube</div>
+</div>
+</div>
 </div>
 
 <!-- ================= 2) INTERAKTIV: Slider + Hotspots + Popups ================= -->
@@ -730,164 +729,164 @@ On this basis, the ceiling paintings can now be explored from the intended viewi
 
 <div class="rittersaal-wrapper" id="rittersaalInteractive">
 
-  <!-- NAVIGATION -->
-  <button class="navbtn prev" onclick="prevImg()">❮</button>
-  <button class="navbtn next" onclick="nextImg()">❯</button>
+<!-- NAVIGATION -->
+<button class="navbtn prev" onclick="prevImg()">❮</button>
+<button class="navbtn next" onclick="nextImg()">❯</button>
 
-  <!-- DECKENBILD -->
-  <img id="ceilingImg" src="Rittersaal1.jpg" class="rittersaal-img" alt="Ceiling section">
+<!-- DECKENBILD -->
+<img id="ceilingImg" src="Rittersaal1.jpg" class="rittersaal-img" alt="Ceiling section">
 
-  <!-- LEGENDE -->
-  <div class="legend">
-    <div class="legend-title">Types of hunting</div>
-    <div class="legend-item">
-      <div class="legend-color legend-mammal"></div>
-      mammal hunting
-    </div>
-    <div class="legend-item">
-      <div class="legend-color legend-bird"></div>
-      bird hunting
-    </div>
-    <div class="legend-item">
-      <div class="legend-color legend-fish"></div>
-      fishing
-    </div>
-  </div>
+<!-- LEGENDE -->
+<div class="legend">
+<div class="legend-title">Types of hunting</div>
+<div class="legend-item">
+<div class="legend-color legend-mammal"></div>
+mammal hunting
+</div>
+<div class="legend-item">
+<div class="legend-color legend-bird"></div>
+bird hunting
+</div>
+<div class="legend-item">
+<div class="legend-color legend-fish"></div>
+fishing
+</div>
+</div>
 
-  <!-- ================= HOTSPOTS ================= -->
+<!-- ================= HOTSPOTS ================= -->
 
-  <!-- Bild 1 (Rittersaal1 / West) — A1 ORPHEUS (mammal) -->
-  <button class="hotspot mammal"
-    data-room="0"
-    style="left:38%; top:10%; width:27%; height:12%;"
-    data-title="A1 – Orpheus"
-    data-img="A1_Orpheus.jpg"
-    data-text="A1 Orpheus: The cycle of mammal hunting does not begin with a hunting scene but with Orpheus, who gathers animals around him through his “his song and the lyre of Apollo”. He sits before a densely wooded area, while in the distance to the left a view opens toward a city by a lake. Numerous animals assemble around Orpheus in peaceful unity — including elephant, elk, stag, roe deer, wolf, fox, hedgehog, and wildcat. Further species appear distributed across the scene (among them wild boar, bear, leopard, lion, badger, and rabbit). Two monkeys sit in the tree - one accompanies Orpheus, imitating a human, on a self-made violin. The only creature not affected by the spell is a hunting dog: it grooms itself, looks directly at the viewer, and reappears as the exact same dog later in the ox hunt. The dog and the physiognomy of Orpheus thus function as “connecting elements” linking the following hunting cycle to the viewer."
-  ></button>
-
- 
-  <!-- Bild 2 (Rittersaal1 / West) — A5 HIRSCHJAGD (mammal) -->
-  <button class="hotspot mammal"
-    data-room="0"
-    style="left:58%; top:47%; width:22%; height:14%;"
-    data-title="A5 – Hirschjagd"
-    data-img="A5_Hirschjagd.jpg"
-    data-text="A5 Stag hunting: The stag hunt takes place in two settings. On the right, the painting shows an enclosed hunt: stags and roe deer have been driven into an area surrounded by hanging cloths; in the center stands a green tent from which a courtly hunting party observes the scene through viewing slits. Two hunters shoot at the animals from the side out of the tent using firearms. In the foreground (left), a stag that had previously attacked a hunter is itself attacked by dogs. At the front right stands a hunter with a facial expression “like Orpheus.” His noble status is indicated by the “coat-of-arms collar” of one of his hunting dogs. He stands with his back to the viewer, turns his head, and gestures “invitingly” with his right hand toward the enclosed hunt. In the background, Hercules is shown in miniature fighting the Ceryneian hind.
-    For this scene Katzenberger combined two models by Stradanus: the stag (Nachdruck Olms, pl. 10) and the hunter with his hunting dogs (Nachdruck Olms, pl. 11). It is also explicitly noted that through the constellation of figures Katzenberger “once again takes up the motif of princely care through hunting."
-  ></button>
+<!-- Bild 1 (Rittersaal1 / West) — A1 ORPHEUS (mammal) -->
+<button class="hotspot mammal"
+data-room="0"
+style="left:38%; top:10%; width:27%; height:12%;"
+data-title="A1 – Orpheus"
+data-img="A1_Orpheus.jpg"
+data-text="A1 Orpheus: The cycle of mammal hunting does not begin with a hunting scene but with Orpheus, who gathers animals around him through his “his song and the lyre of Apollo”. He sits before a densely wooded area, while in the distance to the left a view opens toward a city by a lake. Numerous animals assemble around Orpheus in peaceful unity — including elephant, elk, stag, roe deer, wolf, fox, hedgehog, and wildcat. Further species appear distributed across the scene (among them wild boar, bear, leopard, lion, badger, and rabbit). Two monkeys sit in the tree - one accompanies Orpheus, imitating a human, on a self-made violin. The only creature not affected by the spell is a hunting dog: it grooms itself, looks directly at the viewer, and reappears as the exact same dog later in the ox hunt. The dog and the physiognomy of Orpheus thus function as “connecting elements” linking the following hunting cycle to the viewer."
+></button>
 
 
-  <!-- Bild 3 (Rittersaal2 / Central) — A13 WILDKATZENJAGD (mammal) -->
-  <button class="hotspot mammal"
-    data-room="1"
-    style="left:38%; top:58%; width:22%; height:14%;"
-    data-title="A13 – Wildkatzenjagd"
-    data-img="A13_Wildkatzenjagd.jpg"
-    data-text="
+<!-- Bild 2 (Rittersaal1 / West) — A5 HIRSCHJAGD (mammal) -->
+<button class="hotspot mammal"
+data-room="0"
+style="left:58%; top:47%; width:22%; height:14%;"
+data-title="A5 – Hirschjagd"
+data-img="A5_Hirschjagd.jpg"
+data-text="A5 Stag hunting: The stag hunt takes place in two settings. On the right, the painting shows an enclosed hunt: stags and roe deer have been driven into an area surrounded by hanging cloths; in the center stands a green tent from which a courtly hunting party observes the scene through viewing slits. Two hunters shoot at the animals from the side out of the tent using firearms. In the foreground (left), a stag that had previously attacked a hunter is itself attacked by dogs. At the front right stands a hunter with a facial expression “like Orpheus.” His noble status is indicated by the “coat-of-arms collar” of one of his hunting dogs. He stands with his back to the viewer, turns his head, and gestures “invitingly” with his right hand toward the enclosed hunt. In the background, Hercules is shown in miniature fighting the Ceryneian hind.
+For this scene Katzenberger combined two models by Stradanus: the stag (Nachdruck Olms, pl. 10) and the hunter with his hunting dogs (Nachdruck Olms, pl. 11). It is also explicitly noted that through the constellation of figures Katzenberger “once again takes up the motif of princely care through hunting."
+></button>
+
+
+<!-- Bild 3 (Rittersaal2 / Central) — A13 WILDKATZENJAGD (mammal) -->
+<button class="hotspot mammal"
+data-room="1"
+style="left:38%; top:58%; width:22%; height:14%;"
+data-title="A13 – Wildkatzenjagd"
+data-img="A13_Wildkatzenjagd.jpg"
+data-text="
 <p>A13 Wildcat hunting: The painting of the wildcat hunt is described as an “art-historical highlight.” Katzenberger prominently includes himself in the scene “in reference to his surname.” He divides the image with a tree: on the left, peasant-clad hunters attempt to drive cats out of the trees with long lances. On the right stands Katzenberger himself, wearing yellow trousers, a black coat, white collar, and black hat. As signs of his profession he holds a “brush and palette” as well as a mahlstick. At the lower right edge of the image he places the signature: “Balthasar Katzenberger … hat diese gantze Decken in 13 monat alleins gemalet 1602.” The model for this painting can be seen here (Nachdruck Olms, Tf. 17):</p>
 
 <img src='A13_Stradanus.jpg' style='max-width:350px;border-radius:8px;margin-top:10px;'>
 
 <p>The tree, a climbing cat, and close combat were retained. Katzenberger himself and a farmer with a lance were added.</p>
 "
-  ></button>
+></button>
 
 
 
-  <!-- Bild 4 (Rittersaal2 / Central) — A14 HASENJAGD (mammal) -->
-  <button class="hotspot mammal"
-    data-room="1"
-    style="left:58%; top:72%; width:22%; height:14%;"
-    data-title="A14 – Hasenjagd"
-    data-img="A14_Hasenjagd.jpg"
-    data-text="
+<!-- Bild 4 (Rittersaal2 / Central) — A14 HASENJAGD (mammal) -->
+<button class="hotspot mammal"
+data-room="1"
+style="left:58%; top:72%; width:22%; height:14%;"
+data-title="A14 – Hasenjagd"
+data-img="A14_Hasenjagd.jpg"
+data-text="
 <p> A14 Rabbit hunting: In the middle ground, the hare hunt is carried out “almost single-handedly by the dogs.” In the foreground, a man in a yellow doublet leads a hunting dog on a leash while blowing a hunting horn as he walks. On the left, another hunter gives commands to a dog that is barking at a fox. On the right, a man rides a horse wearing a slouch hat with striking red pom-poms. Behind him, a wildcat or leopard sits chained to a box. The model for this painting can be seen here:</p>
 
 <img src='A14_Stradanus.jpg' style='max-width:350px;border-radius:8px;margin-top:10px;'>
 
 <p>Independent additions include a landscape view (a pointed mountain range), an owl, and a detail on a back-turned figure whose puffed trousers slip down slightly. The text describes this as a possible indication of the “peasant character” of small-game hunting.</p>
 "
-  ></button>
+></button>
 
 
-  
-  <!-- Bild 5  -->
-  <button class="hotspot bird"
-    data-room="0"
-    style="left:65%; top:10%; width:10%; height:10%;"
-    data-title="Q1 – Entenjagd"
-    data-img="Q1_Entenjagd.jpg"
-    data-text="
+
+<!-- Bild 5  -->
+<button class="hotspot bird"
+data-room="0"
+style="left:65%; top:10%; width:10%; height:10%;"
+data-title="Q1 – Entenjagd"
+data-img="Q1_Entenjagd.jpg"
+data-text="
 <p> Q1 duck hunting: The first scene of the bird hunts occupies a special position within the cycle. With the man with a black beard and black slouch hat sitting in front of a tree on the left edge of the picture, it probably contains another portrait after those of Count Wolfgang and/or his sons in the large octagonal pictures. The man wears a shiny yellow hunting suit, and a black fox tail hangs from his hat. On the right, a hunter with a shotgun crawls on the ground. Together with his dog, he observes the ducks in a body of water in the middle ground. The landscape is wintry with bare trees. A monumental rock with a castle rises from a wide river valley in the center. The model for this painting can be seen here (Nachdruck Olms, Tf. 42):</p>
 
 <img src='Q1_Stradanus.jpg' style='max-width:350px;border-radius:8px;margin-top:10px;'>
 <p></p>
 "
-  ></button>
+></button>
 
-  <!-- Bild 6  -->
-  <button class="hotspot bird"
-    data-room="2"
-    style="left:27%; top:57%; width:10%; height:8%;"
-    data-title=""
-    data-img="Q17.jpg"
-    data-text="The most famous tourist image of the Weikersheim ceiling shows a hunter squatting, smoking a pipe and watching a net in which a partridge is caught. Meanwhile, another hunter on the right-hand edge of the picture is relieving himself, turning his bare backside towards the viewer."
-  ></button>
+<!-- Bild 6  -->
+<button class="hotspot bird"
+data-room="2"
+style="left:27%; top:57%; width:10%; height:8%;"
+data-title=""
+data-img="Q17.jpg"
+data-text="The most famous tourist image of the Weikersheim ceiling shows a hunter squatting, smoking a pipe and watching a net in which a partridge is caught. Meanwhile, another hunter on the right-hand edge of the picture is relieving himself, turning his bare backside towards the viewer."
+></button>
 
-  <!-- Bild 7  -->
-  <button class="hotspot bird"
-    data-room="2"
-    style="left:27%; top:31%; width:10%; height:8%;"
-    data-title="Q14 - Quail hunting with a cow decoy"
-    data-img="Q14.jpg"
-    data-text="
+<!-- Bild 7  -->
+<button class="hotspot bird"
+data-room="2"
+style="left:27%; top:31%; width:10%; height:8%;"
+data-title="Q14 - Quail hunting with a cow decoy"
+data-img="Q14.jpg"
+data-text="
 <p>Q14 Quail hunting with a cow decoy: A hunter with a shotgun and hunting bag sneaks up from the right on quails pecking at grain in a field. A large brown cow dummy with a bell provides him with cover. The image is based on an engraving by Stradanus (reprint Olms, Tf. 39): </p>
 
 <img src='Q14_Stradanus.jpg' style='max-width:350px;border-radius:8px;margin-top:10px;'>
 <p>In addition to the hunter, the cow dummy, and the pecking birds, the large plant in the foreground was also reproduced </p>
 "
-  ></button>
+></button>
 
-  <!-- Bild 8  -->
-  <button class="hotspot fish"
-    data-room="0"
-    style="left:75%; top:10%; width:11%; height:13%;"
-    data-title="otter hunting"
-    data-img="HA1.jpg"
-    data-text="HA1 Otter hunting: A man wearing shorts, a red doublet, and rolled-up shirt sleeves stands on the riverbank holding a trident. An otter swims in the river with a fish in its mouth. Next to the man, a black poodle leans down into the water. In the background, beyond a small wooden bridge, lies the Weikersheim Palace Garden, at the end of which the palace and the town can be seen. The castle is perfectly symmetrical and beautifully finished. The knights' hall, with only seven window axes, is symmetrically flanked by three-axis risalits. The east wing, which had not yet been built at the time, is crowned by large triangular gables, as is the south wing. On the ridge behind it stands a gallows as a sign of the count's high jurisdiction. The sky is overcast, but just above the town, a hole in the clouds allows broad rays of yellow sunlight to shine down. In keeping with its task of depicting the castle grounds surrounded by the Lauter River, including the town and domain, the painting was given the highest place in the fishing cycle. It is located heraldically on the right, close to the fireplace."
-  ></button>
+<!-- Bild 8  -->
+<button class="hotspot fish"
+data-room="0"
+style="left:75%; top:10%; width:11%; height:13%;"
+data-title="otter hunting"
+data-img="HA1.jpg"
+data-text="HA1 Otter hunting: A man wearing shorts, a red doublet, and rolled-up shirt sleeves stands on the riverbank holding a trident. An otter swims in the river with a fish in its mouth. Next to the man, a black poodle leans down into the water. In the background, beyond a small wooden bridge, lies the Weikersheim Palace Garden, at the end of which the palace and the town can be seen. The castle is perfectly symmetrical and beautifully finished. The knights' hall, with only seven window axes, is symmetrically flanked by three-axis risalits. The east wing, which had not yet been built at the time, is crowned by large triangular gables, as is the south wing. On the ridge behind it stands a gallows as a sign of the count's high jurisdiction. The sky is overcast, but just above the town, a hole in the clouds allows broad rays of yellow sunlight to shine down. In keeping with its task of depicting the castle grounds surrounded by the Lauter River, including the town and domain, the painting was given the highest place in the fishing cycle. It is located heraldically on the right, close to the fireplace."
+></button>
 
 
 
-  <!-- Bild 9  -->
-  <button class="hotspot fish"
-    data-room="0"
-    style="left:75%; top:35%; width:11%; height:13%;"
-    data-title="HA3 Duck hunting with reed barriers"
-    data-img="HA3.jpg"
-    data-text="HA3 Duck hunting with reed barriers: The duck hunt depicted in this painting and its counterpart biologically belongs to the category of bird hunting, which has already been discussed in relation to the square paintings. However, the ducks are not shot with shotguns, as shown in the bird cycle (Q1), but caught on the water using traps and other tools. This is technically similar to fishing and probably justified its inclusion in the fishing cycle. 
-    The duck hunt is depicted as a courtly event. On the shore stands a three-story stone house in the most modern Renaissance style. From a loggia on the top floor, a courtly society looks down on the pond at their feet. There, naked men wearing hats use sticks to drive an otter in front of them, which in turn drives a whole fleet of ducks in front of it. The goal is a specially constructed reed enclosure on the shore, where the ducks will end up in cages. In the foreground on the right-hand edge of the picture, a magnificently dressed couple with a dog watches the scene. They are probably Count Wolfgang and his wife Magdalena von Nassau-Katzenelnbogen. The countess in particular, with her portrait-like features, is very beautifully dressed."
-  ></button>
+<!-- Bild 9  -->
+<button class="hotspot fish"
+data-room="0"
+style="left:75%; top:35%; width:11%; height:13%;"
+data-title="HA3 Duck hunting with reed barriers"
+data-img="HA3.jpg"
+data-text="HA3 Duck hunting with reed barriers: The duck hunt depicted in this painting and its counterpart biologically belongs to the category of bird hunting, which has already been discussed in relation to the square paintings. However, the ducks are not shot with shotguns, as shown in the bird cycle (Q1), but caught on the water using traps and other tools. This is technically similar to fishing and probably justified its inclusion in the fishing cycle. 
+The duck hunt is depicted as a courtly event. On the shore stands a three-story stone house in the most modern Renaissance style. From a loggia on the top floor, a courtly society looks down on the pond at their feet. There, naked men wearing hats use sticks to drive an otter in front of them, which in turn drives a whole fleet of ducks in front of it. The goal is a specially constructed reed enclosure on the shore, where the ducks will end up in cages. In the foreground on the right-hand edge of the picture, a magnificently dressed couple with a dog watches the scene. They are probably Count Wolfgang and his wife Magdalena von Nassau-Katzenelnbogen. The countess in particular, with her portrait-like features, is very beautifully dressed."
+></button>
 
 
 </div>
 
 <!-- ================= POPUP ================= -->
 <div id="popup" class="popup" onclick="closePopup()">
-  <div class="popup-box" onclick="event.stopPropagation()">
-    <img id="popup-img" alt="Detail image">
-    <div class="popup-text">
-      <h2 id="popup-title"></h2>
-      <p id="popup-desc"></p>
-    </div>
-  </div>
+<div class="popup-box" onclick="event.stopPropagation()">
+<img id="popup-img" alt="Detail image">
+<div class="popup-text">
+<h2 id="popup-title"></h2>
+<p id="popup-desc"></p>
+</div>
+</div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() { BaroqueViz.initRittersaal(); });
 </script>
 
-</div><!-- /markdown=0 rittersaal -->
+</div><!-- /rittersaal-block -->
 
 ### From Orpheus to Authority 
  central ceiling painting of Orpheus forms the key to the overall program of the hall. In early modern tradition, Orpheus was regarded as a symbol of the good ruler who pacifies the world not through violence, but through order, reason, and moderation. In Weikersheim, this figure is deliberately associated with Count Wolfgang II: the placement above the fireplace, recurring portrait-like features in hunting scenes, and the orientation of the sculpted animals toward the fireplace symbolically link the count with Orpheus as an ordering authority.
@@ -955,153 +954,153 @@ The depictions are spread across all walls of the room and include battle scenes
      - adds metadata (artist, date, patron, technique, location)
 ========================= -->
 
-<div markdown="0">
+<div class="leutenberg-block">
 <div class="cbdd-grid-2x2">
 
-  <!-- SOUTH -->
-  <div class="cbdd-card">
-    <button class="cbdd-imgbtn"
-            data-full="sued.jpg"
-            data-caption="South wall — Large battle painting (“Das Schlachtfeld”), executed in glue paint (grisaille). Estimated size: 2.2 × 5.5 m."
-            aria-label="Open image larger">
-      <img src="sued.jpg" alt="Friedensburg — South wall">
-    </button>
-    <div class="cbdd-body">
-      <p class="cbdd-title">South wall</p>
+<!-- SOUTH -->
+<div class="cbdd-card">
+<button class="cbdd-imgbtn"
+data-full="sued.jpg"
+data-caption="South wall — Large battle painting (“Das Schlachtfeld”), executed in glue paint (grisaille). Estimated size: 2.2 × 5.5 m."
+aria-label="Open image larger">
+<img src="sued.jpg" alt="Friedensburg — South wall">
+</button>
+<div class="cbdd-body">
+<p class="cbdd-title">South wall</p>
 
-      <p class="cbdd-metaLine">
-        <strong>Artist:</strong> Seivert Lammers ·
-        <strong>Date:</strong> 1698 (inscribed) ·
-        <strong>Technique:</strong> glue paint, grisaille
-      </p>
-      <p class="cbdd-metaLine">
-        <strong>Site:</strong> Schloss Friedensburg, Battle Hall (3rd floor, north wing) ·
-        <strong>Status:</strong> destroyed by fire (1934)
-      </p>
+<p class="cbdd-metaLine">
+<strong>Artist:</strong> Seivert Lammers ·
+<strong>Date:</strong> 1698 (inscribed) ·
+<strong>Technique:</strong> glue paint, grisaille
+</p>
+<p class="cbdd-metaLine">
+<strong>Site:</strong> Schloss Friedensburg, Battle Hall (3rd floor, north wing) ·
+<strong>Status:</strong> destroyed by fire (1934)
+</p>
 
-      <p class="cbdd-desc">A large multi-figure battle panorama covers the entire wall above the socle zone (known in research as “Das Schlachtfeld”). The background includes a temple ruin and a tree. The center is emphasized by the rear view of a packhorse.</p>
+<p class="cbdd-desc">A large multi-figure battle panorama covers the entire wall above the socle zone (known in research as “Das Schlachtfeld”). The background includes a temple ruin and a tree. The center is emphasized by the rear view of a packhorse.</p>
 
-      <div class="cbdd-meta">
-        <a target="_blank" rel="noopener"
-           href="https://www.deckenmalerei.eu/d8ff05f9-cca7-4875-8f82-be4e1670678d">
-          Open on CbDD →
-        </a>
-      </div>
-    </div>
-  </div>
+<div class="cbdd-meta">
+<a target="_blank" rel="noopener"
+href="https://www.deckenmalerei.eu/d8ff05f9-cca7-4875-8f82-be4e1670678d">
+Open on CbDD →
+</a>
+</div>
+</div>
+</div>
 
-  <!-- EAST -->
-  <div class="cbdd-card">
-    <button class="cbdd-imgbtn"
-            data-full="ost.jpg"
-            data-caption="East wall — Two cavalry combats (“Das Gemetzel” / “Der Überfall”), documented by photographs (1925). Connected by a continuous heart-band frieze."
-            aria-label="Open image larger">
-      <img src="ost.jpg" alt="Friedensburg — East wall">
-    </button>
-    <div class="cbdd-body">
-      <p class="cbdd-title">East wall</p>
+<!-- EAST -->
+<div class="cbdd-card">
+<button class="cbdd-imgbtn"
+data-full="ost.jpg"
+data-caption="East wall — Two cavalry combats (“Das Gemetzel” / “Der Überfall”), documented by photographs (1925). Connected by a continuous heart-band frieze."
+aria-label="Open image larger">
+<img src="ost.jpg" alt="Friedensburg — East wall">
+</button>
+<div class="cbdd-body">
+<p class="cbdd-title">East wall</p>
 
-      <p class="cbdd-metaLine">
-        <strong>Artist:</strong> Seivert Lammers ·
-        <strong>Date:</strong> before/around 1698 ·
-        <strong>Evidence:</strong> photo documentation (1925)
-      </p>
-      <p class="cbdd-metaLine">
-        <strong>Technique:</strong> glue paint, grisaille ·
-        <strong>Status:</strong> destroyed by fire (1934)
-      </p>
+<p class="cbdd-metaLine">
+<strong>Artist:</strong> Seivert Lammers ·
+<strong>Date:</strong> before/around 1698 ·
+<strong>Evidence:</strong> photo documentation (1925)
+</p>
+<p class="cbdd-metaLine">
+<strong>Technique:</strong> glue paint, grisaille ·
+<strong>Status:</strong> destroyed by fire (1934)
+</p>
 
-      <p class="cbdd-desc">On either side of the central door, one cavalry combat is shown. Research refers to them as “Das Gemetzel” and “Der Überfall”. Both scenes were originally conceived as one composition connected by the frieze.</p>
+<p class="cbdd-desc">On either side of the central door, one cavalry combat is shown. Research refers to them as “Das Gemetzel” and “Der Überfall”. Both scenes were originally conceived as one composition connected by the frieze.</p>
 
-      <div class="cbdd-meta">
-        <a target="_blank" rel="noopener"
-           href="https://www.deckenmalerei.eu/cf9d56be-2913-4cbb-a9f5-e62c036ceac7">
-          Open on CbDD →
-        </a>
-      </div>
-    </div>
-  </div>
+<div class="cbdd-meta">
+<a target="_blank" rel="noopener"
+href="https://www.deckenmalerei.eu/cf9d56be-2913-4cbb-a9f5-e62c036ceac7">
+Open on CbDD →
+</a>
+</div>
+</div>
+</div>
 
-  <!-- WEST -->
-  <div class="cbdd-card">
-    <button class="cbdd-imgbtn"
-            data-full="west.jpg"
-            data-caption="West wall — Pack animals and canteen women (Marketenderinnen). Partial photographic survival; a tent weather-vane reportedly carried the date 1695."
-            aria-label="Open image larger">
-      <img src="west.jpg" alt="Friedensburg — West wall">
-    </button>
-    <div class="cbdd-body">
-      <p class="cbdd-title">West wall</p>
+<!-- WEST -->
+<div class="cbdd-card">
+<button class="cbdd-imgbtn"
+data-full="west.jpg"
+data-caption="West wall — Pack animals and canteen women (Marketenderinnen). Partial photographic survival; a tent weather-vane reportedly carried the date 1695."
+aria-label="Open image larger">
+<img src="west.jpg" alt="Friedensburg — West wall">
+</button>
+<div class="cbdd-body">
+<p class="cbdd-title">West wall</p>
 
-      <p class="cbdd-metaLine">
-        <strong>Artist:</strong> Seivert Lammers ·
-        <strong>Date:</strong> 1698 (room) / 1695 (reported detail) ·
-        <strong>Evidence:</strong> partial photos
-      </p>
-      <p class="cbdd-metaLine">
-        <strong>Motifs:</strong> pack donkey with rider; canteen scene ·
-        <strong>Status:</strong> destroyed by fire (1934)
-      </p>
+<p class="cbdd-metaLine">
+<strong>Artist:</strong> Seivert Lammers ·
+<strong>Date:</strong> 1698 (room) / 1695 (reported detail) ·
+<strong>Evidence:</strong> partial photos
+</p>
+<p class="cbdd-metaLine">
+<strong>Motifs:</strong> pack donkey with rider; canteen scene ·
+<strong>Status:</strong> destroyed by fire (1934)
+</p>
 
-      <p class="cbdd-desc">The surviving documentation shows a pack donkey with rider and canteen women. At the transition from the south to the west wall, riders continued across the corner of the room.</p>
+<p class="cbdd-desc">The surviving documentation shows a pack donkey with rider and canteen women. At the transition from the south to the west wall, riders continued across the corner of the room.</p>
 
-      <div class="cbdd-meta">
-        <a target="_blank" rel="noopener"
-           href="https://www.deckenmalerei.eu/6559a9c1-e9e7-4ef5-8be2-24c266714c4f">
-          Open on CbDD →
-        </a>
-      </div>
-    </div>
-  </div>
+<div class="cbdd-meta">
+<a target="_blank" rel="noopener"
+href="https://www.deckenmalerei.eu/6559a9c1-e9e7-4ef5-8be2-24c266714c4f">
+Open on CbDD →
+</a>
+</div>
+</div>
+</div>
 
-  <!-- NORTH -->
-  <div class="cbdd-card">
-    <button class="cbdd-imgbtn"
-            data-full="nord.jpg"
-            data-caption="North wall — Scenes between three windows: a wine-serving scene and a fight over a flag. Photographically documented."
-            aria-label="Open image larger">
-      <img src="nord.jpg" alt="Friedensburg — North wall">
-    </button>
-    <div class="cbdd-body">
-      <p class="cbdd-title">North wall</p>
+<!-- NORTH -->
+<div class="cbdd-card">
+<button class="cbdd-imgbtn"
+data-full="nord.jpg"
+data-caption="North wall — Scenes between three windows: a wine-serving scene and a fight over a flag. Photographically documented."
+aria-label="Open image larger">
+<img src="nord.jpg" alt="Friedensburg — North wall">
+</button>
+<div class="cbdd-body">
+<p class="cbdd-title">North wall</p>
 
-      <p class="cbdd-metaLine">
-        <strong>Artist:</strong> Seivert Lammers ·
-        <strong>Date:</strong> 1698 (inscribed) ·
-        <strong>Evidence:</strong> photos (scenes between windows)
-      </p>
-      <p class="cbdd-metaLine">
-        <strong>Technique:</strong> glue paint, grisaille ·
-        <strong>Status:</strong> destroyed by fire (1934)
-      </p>
+<p class="cbdd-metaLine">
+<strong>Artist:</strong> Seivert Lammers ·
+<strong>Date:</strong> 1698 (inscribed) ·
+<strong>Evidence:</strong> photos (scenes between windows)
+</p>
+<p class="cbdd-metaLine">
+<strong>Technique:</strong> glue paint, grisaille ·
+<strong>Status:</strong> destroyed by fire (1934)
+</p>
 
-      <p class="cbdd-desc">Between the windows, one scene shows a wine-serving situation (tapper, woman with bread, soldier).</p>
+<p class="cbdd-desc">Between the windows, one scene shows a wine-serving situation (tapper, woman with bread, soldier).</p>
 
-      <div class="cbdd-meta">
-        <a target="_blank" rel="noopener"
-           href="https://www.deckenmalerei.eu/96d3d340-bcd1-4d5c-ad4f-3be8bc4ddfba">
-          Open on CbDD →
-        </a>
-      </div>
-    </div>
-  </div>
+<div class="cbdd-meta">
+<a target="_blank" rel="noopener"
+href="https://www.deckenmalerei.eu/96d3d340-bcd1-4d5c-ad4f-3be8bc4ddfba">
+Open on CbDD →
+</a>
+</div>
+</div>
+</div>
 
 </div>
 
 <!-- Lightbox -->
 <div class="cbdd-lightbox" id="cbdd-lightbox" aria-hidden="true">
-  <div class="cbdd-lightbox__panel" role="dialog" aria-modal="true">
-    <button class="cbdd-lightbox__close" id="cbdd-lightbox-close" aria-label="Close">✕</button>
-    <img class="cbdd-lightbox__img" id="cbdd-lightbox-img" alt="">
-    <div class="cbdd-lightbox__cap" id="cbdd-lightbox-cap"></div>
-  </div>
+<div class="cbdd-lightbox__panel" role="dialog" aria-modal="true">
+<button class="cbdd-lightbox__close" id="cbdd-lightbox-close" aria-label="Close">✕</button>
+<img class="cbdd-lightbox__img" id="cbdd-lightbox-img" alt="">
+<div class="cbdd-lightbox__cap" id="cbdd-lightbox-cap"></div>
+</div>
 </div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() { BaroqueViz.initBattleHallLightbox(); });
 </script>
 
-</div><!-- /markdown=0 leutenberg -->
+</div><!-- /leutenberg-block -->
 
 
 While the Battle Hall in Leutenberg presents war without reference to a specific historical conflict, other Baroque interiors depict clearly identifiable military events. In several rooms, battles are no longer shown as generic combat scenes but are linked to concrete historical confrontations. In particular, the wars against the Ottoman Empire appear as a recurring theme. To illustrate this, we will examine two representative examples: a fresco in the Asamkirche in Munich and a cycle of siege paintings in Weikersheim.
