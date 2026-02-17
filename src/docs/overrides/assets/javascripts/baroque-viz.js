@@ -2968,6 +2968,424 @@ window.BaroqueViz = (function() {
         return container;
     }
 
+    /**
+     * Helper: Wait for BaroqueDB to be ready
+     */
+    async function _waitForDB() {
+        while (typeof BaroqueDB === 'undefined' || !BaroqueDB.isReady || !BaroqueDB.isReady()) {
+            await new Promise(r => setTimeout(r, 100));
+        }
+    }
+
+    /**
+     * Helper: HTML-escape a string
+     */
+    function _esc(s) {
+        return String(s ?? '').replace(/[&<>"']/g, (c) => ({
+            '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+        }[c]));
+    }
+
+    /**
+     * Render dataset statistics cards (DB init + overview counts)
+     * @param {string} container - CSS selector for the stats container
+     * @param {string} dbPath - Path to the DuckDB file
+     */
+    async function renderDatasetStats(container, dbPath) {
+        const el = _getElement(container);
+        try {
+            el.innerHTML = `
+                <div class="db-progress">
+                    <div class="db-progress-bar" style="width: 0%"></div>
+                </div>
+                <div class="db-progress-text">Initializing DuckDB WASM...</div>
+            `;
+
+            await BaroqueDB.init(dbPath, (progress) => {
+                el.querySelector('.db-progress-bar').style.width = progress.percent + '%';
+                el.querySelector('.db-progress-text').textContent = progress.message;
+            });
+
+            const stats = await BaroqueDB.query(`
+                SELECT
+                    (SELECT COUNT(*) FROM paintings) as paintings,
+                    (SELECT COUNT(*) FROM persons) as persons,
+                    (SELECT COUNT(*) FROM buildings) as buildings,
+                    (SELECT COUNT(*) FROM rooms) as rooms,
+                    (SELECT COUNT(*) FROM subjects) as subjects,
+                    (SELECT COUNT(*) FROM bi_items) as bildindex_items
+            `);
+
+            const s = stats[0];
+            const items = [
+                { value: s.paintings, label: 'Ceiling Paintings', color: '#3498db' },
+                { value: s.persons,   label: 'Artists & Architects', color: '#27ae60' },
+                { value: s.buildings, label: 'Buildings', color: '#9b59b6' },
+                { value: s.rooms,     label: 'Rooms', color: '#e67e22' },
+                { value: s.subjects,  label: 'Subject Classifications', color: '#e74c3c' },
+                { value: s.bildindex_items, label: 'Bildindex Photos', color: '#1abc9c' }
+            ];
+
+            el.innerHTML = `
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; text-align: center;">
+                    ${items.map(i => `
+                        <div style="padding: 20px; background: ${i.color}22; border-radius: 8px;">
+                            <div style="font-size: 2rem; font-weight: bold; color: ${i.color};">${i.value.toLocaleString()}</div>
+                            <div>${i.label}</div>
+                        </div>
+                    `).join('')}
+                </div>
+            `;
+        } catch (error) {
+            el.innerHTML = `<div class="error">Failed to load database: ${error.message}</div>`;
+        }
+    }
+
+    /**
+     * Initialize the custom SQL query explorer
+     * @param {string} textareaId - ID of the textarea element
+     * @param {string} buttonId - ID of the run button
+     * @param {string} resultContainer - CSS selector for the result container
+     */
+    function initQueryExplorer(textareaId, buttonId, resultContainer) {
+        const btn = document.getElementById(buttonId);
+        if (!btn) return;
+        btn.addEventListener('click', async () => {
+            const sql = document.getElementById(textareaId).value;
+            const resultEl = document.querySelector(resultContainer);
+            btn.disabled = true;
+            btn.textContent = 'Running...';
+            try {
+                await BaroqueViz.renderCustomQuery(resultContainer, sql, 'Query Results');
+            } catch (error) {
+                resultEl.innerHTML = `<div class="error">Query Error: ${error.message}</div>`;
+            }
+            btn.disabled = false;
+            btn.textContent = '▶ Run Query';
+        });
+    }
+
+    /**
+     * Initialize the topic selector (open/back navigation)
+     */
+    function initTopicSelector() {
+        window.openMicroTopic = function(id) {
+            document.getElementById('topic-selector').style.display = 'none';
+            document.querySelectorAll('.micro-topic').forEach(el => el.style.display = 'none');
+            const target = document.getElementById('topic-' + id);
+            if (target) {
+                target.style.display = 'block';
+                target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                setTimeout(() => window.dispatchEvent(new Event('resize')), 400);
+            }
+        };
+        window.backToTopics = function() {
+            document.querySelectorAll('.micro-topic').forEach(el => el.style.display = 'none');
+            const sel = document.getElementById('topic-selector');
+            sel.style.display = 'grid';
+            sel.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        };
+    }
+
+    /**
+     * Render the Religion micro-dashboard (ICONCLASS 10–14 tabs)
+     * @param {string} container - CSS selector for the dashboard wrapper (e.g. '.rel-wrap')
+     */
+    async function renderReligionDashboard(container) {
+        await _waitForDB();
+
+        const $ = (id) => document.getElementById(id);
+
+        const REL_LABELS = {
+            '10': '(symbolic) creation, cosmos, universe, life',
+            '11': 'Christian religion',
+            '12': 'non-Christian religions',
+            '13': 'magic, supernaturalism, occultism',
+            '14': 'astrology'
+        };
+
+        let currentPrefix = '11';
+
+        // Render tabs
+        const tabsEl = $('rel-tabs');
+        tabsEl.innerHTML = Object.keys(REL_LABELS).map(p => `
+            <div class="rel-tab ${p === currentPrefix ? 'is-active' : ''}" data-prefix="${p}">
+                ${p} · ${REL_LABELS[p]}
+            </div>
+        `).join('');
+
+        function setActiveTab() {
+            for (const el of tabsEl.querySelectorAll('.rel-tab')) {
+                el.classList.toggle('is-active', el.dataset.prefix === currentPrefix);
+            }
+            $('rel-title-main').textContent = REL_LABELS[currentPrefix] || 'ICONCLASS';
+            $('rel-prefix').textContent = currentPrefix;
+        }
+
+        function iconclassPrefixCTE() {
+            return `
+                WITH rel_paintings AS (
+                    SELECT DISTINCT ps.nfdi_uri
+                    FROM painting_subjects ps
+                    JOIN subjects s ON ps.subject_uri = s.subject_uri
+                    WHERE s.subject_source='ICONCLASS'
+                      AND s.subject_uri LIKE '%iconclass.org/${currentPrefix}%'
+                )
+            `;
+        }
+
+        async function refresh() {
+            setActiveTab();
+            const galleryN = parseInt($('rel-gallery-n').value, 10);
+
+            // 1) Core counts
+            const core = await BaroqueDB.query(`
+                ${iconclassPrefixCTE()}
+                SELECT
+                    (SELECT COUNT(*) FROM rel_paintings) AS paintings,
+                    (SELECT COUNT(DISTINCT pp.person_name)
+                       FROM painting_persons pp
+                       JOIN rel_paintings rp ON rp.nfdi_uri=pp.nfdi_uri
+                      WHERE pp.role='PAINTER' AND pp.person_name IS NOT NULL) AS painters,
+                    (SELECT COUNT(DISTINCT p.location_state)
+                       FROM paintings p
+                       JOIN rel_paintings rp ON rp.nfdi_uri=p.nfdi_uri
+                      WHERE p.location_state IS NOT NULL AND p.location_state <> '') AS states,
+                    (SELECT COUNT(DISTINCT p.building_name)
+                       FROM paintings p
+                       JOIN rel_paintings rp ON rp.nfdi_uri=p.nfdi_uri
+                      WHERE p.building_name IS NOT NULL AND p.building_name <> '') AS buildings
+            `);
+            const c = core?.[0] || { paintings: 0, painters: 0, states: 0, buildings: 0 };
+            $('rel-core-body').innerHTML = `
+                <tr><td>Paintings (ICONCLASS ${currentPrefix}…)</td><td style="text-align:right"><b>${c.paintings ?? 0}</b></td></tr>
+                <tr><td>Painters (role=PAINTER)</td><td style="text-align:right"><b>${c.painters ?? 0}</b></td></tr>
+                <tr><td>States</td><td style="text-align:right"><b>${c.states ?? 0}</b></td></tr>
+                <tr><td>Buildings</td><td style="text-align:right"><b>${c.buildings ?? 0}</b></td></tr>
+            `;
+
+            // 2) State distribution (top 12)
+            const byState = await BaroqueDB.query(`
+                ${iconclassPrefixCTE()}
+                SELECT
+                    p.location_state AS state,
+                    COUNT(DISTINCT p.nfdi_uri) AS painting_count
+                FROM paintings p
+                JOIN rel_paintings rp ON rp.nfdi_uri = p.nfdi_uri
+                WHERE p.location_state IS NOT NULL AND p.location_state <> ''
+                GROUP BY p.location_state
+                ORDER BY painting_count DESC
+                LIMIT 12
+            `);
+
+            Plotly.newPlot($('rel-state-chart'), [{
+                x: byState.map(d => d.painting_count),
+                y: byState.map(d => d.state),
+                type: 'bar',
+                orientation: 'h',
+                hovertemplate: '%{y}<br>%{x} paintings<extra></extra>'
+            }], {
+                margin: { l: 140, r: 20, t: 20, b: 40 },
+                height: 360,
+                xaxis: { title: 'Paintings' },
+                yaxis: { automargin: true }
+            }, { responsive: true });
+
+            // 3) Timeline by decade (1600–1800)
+            const byDecade = await BaroqueDB.query(`
+                ${iconclassPrefixCTE()}
+                SELECT
+                    CAST(FLOOR(p.year_start/10)*10 AS INTEGER) AS decade,
+                    COUNT(DISTINCT p.nfdi_uri) AS painting_count
+                FROM paintings p
+                JOIN rel_paintings rp ON rp.nfdi_uri = p.nfdi_uri
+                WHERE p.year_start IS NOT NULL AND p.year_start BETWEEN 1600 AND 1800
+                GROUP BY FLOOR(p.year_start/10)*10
+                ORDER BY decade
+            `);
+
+            Plotly.newPlot($('rel-timeline-chart'), [{
+                x: byDecade.map(d => d.decade),
+                y: byDecade.map(d => d.painting_count),
+                type: 'bar',
+                hovertemplate: '%{x}s<br>%{y} paintings<extra></extra>'
+            }], {
+                margin: { l: 60, r: 20, t: 20, b: 60 },
+                height: 360,
+                xaxis: { title: 'Decade', tickangle: -45 },
+                yaxis: { title: 'Paintings' }
+            }, { responsive: true });
+
+            // 4) Gallery
+            const gallery = await BaroqueDB.query(`
+                ${iconclassPrefixCTE()}
+                SELECT DISTINCT
+                    p.nfdi_uri,
+                    p.label,
+                    p.painters,
+                    p.year_start,
+                    p.building_name,
+                    p.imageUrl
+                FROM paintings p
+                JOIN rel_paintings rp ON rp.nfdi_uri = p.nfdi_uri
+                WHERE p.imageUrl IS NOT NULL AND p.imageUrl <> ''
+                ORDER BY p.year_start
+                LIMIT ${galleryN}
+            `);
+
+            $('rel-gallery').innerHTML = `
+                <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 14px;">
+                    ${gallery.map(g => `
+                        <figure style="margin:0; border: 1px solid rgba(0,0,0,.12); border-radius: 12px; overflow:hidden; background: white;">
+                            <a href="${g.nfdi_uri}" target="_blank" rel="noopener">
+                                <img src="${g.imageUrl}" alt="${_esc(g.label)}" style="width:100%; height: 160px; object-fit: cover;">
+                            </a>
+                            <figcaption style="padding:10px; font-size:.85em; line-height:1.35;">
+                                <strong style="display:block; margin-bottom:4px;">${_esc(g.label)}</strong>
+                                <span style="opacity:.75">${_esc(g.painters || 'Unknown')} · ${g.year_start || '?'}<br>${_esc(g.building_name || '')}</span>
+                            </figcaption>
+                        </figure>
+                    `).join('')}
+                </div>
+            `;
+
+            // 5) Representative painter (most frequent)
+            const topPainter = await BaroqueDB.query(`
+                ${iconclassPrefixCTE()}
+                SELECT
+                    pp.person_name AS painter,
+                    COUNT(DISTINCT pp.nfdi_uri) AS painting_count
+                FROM painting_persons pp
+                JOIN rel_paintings rp ON rp.nfdi_uri = pp.nfdi_uri
+                WHERE pp.role='PAINTER' AND pp.person_name IS NOT NULL AND pp.person_name <> ''
+                GROUP BY pp.person_name
+                ORDER BY painting_count DESC
+                LIMIT 1
+            `);
+
+            const painterName = topPainter?.[0]?.painter;
+            if (!painterName) {
+                $('rel-painter-card').innerHTML = '<div class="ic-empty">No painter found for this subtheme.</div>';
+            } else {
+                await BaroqueViz.renderPainterBiography('#rel-painter-card', painterName);
+            }
+        }
+
+        // Events
+        tabsEl.addEventListener('click', (e) => {
+            const t = e.target.closest('.rel-tab');
+            if (!t) return;
+            currentPrefix = t.dataset.prefix;
+            refresh();
+        });
+        $('rel-gallery-n').addEventListener('change', refresh);
+
+        refresh();
+    }
+
+    /**
+     * Initialize the Rittersaal interactive viewer (hotspot popups + image navigation)
+     */
+    function initRittersaal() {
+        // Popup handlers
+        document.querySelectorAll('.hotspot').forEach(el => {
+            el.addEventListener('click', e => {
+                e.stopPropagation();
+                document.getElementById('popup').style.display = 'flex';
+                document.getElementById('popup-img').src = el.dataset.img;
+                document.getElementById('popup-title').innerText = el.dataset.title;
+                document.getElementById('popup-desc').innerHTML = el.dataset.text;
+            });
+        });
+
+        window.closePopup = function() {
+            document.getElementById('popup').style.display = 'none';
+        };
+
+        // Image navigation
+        const images = [
+            "Rittersaal1.jpg",  // West / fireplace side
+            "Rittersaal2.jpg",  // central section
+            "Rittersaal3.jpg"   // East / towards Tafelstube
+        ];
+
+        let current = 0;
+
+        function updateHotspots() {
+            document.querySelectorAll('.hotspot').forEach(h => {
+                h.style.display = (h.dataset.room == current) ? "block" : "none";
+            });
+        }
+
+        function showImg() {
+            document.getElementById("ceilingImg").src = images[current];
+            updateHotspots();
+        }
+
+        window.nextImg = function() {
+            current = (current + 1) % images.length;
+            showImg();
+        };
+
+        window.prevImg = function() {
+            current = (current - 1 + images.length) % images.length;
+            showImg();
+        };
+
+        window.jumpToRoom = function(idx) {
+            current = idx;
+            showImg();
+            const target = document.getElementById("rittersaalInteractive");
+            if (target) {
+                target.scrollIntoView({ behavior: "smooth", block: "start" });
+            }
+        };
+
+        // Initial state
+        updateHotspots();
+    }
+
+    /**
+     * Initialize the Battle Hall lightbox for Leutenberg cards
+     */
+    function initBattleHallLightbox() {
+        const lb = document.getElementById('cbdd-lightbox');
+        const lbImg = document.getElementById('cbdd-lightbox-img');
+        const lbCap = document.getElementById('cbdd-lightbox-cap');
+        const lbClose = document.getElementById('cbdd-lightbox-close');
+
+        if (!lb || !lbImg || !lbCap || !lbClose) return;
+
+        function openLightbox(src, caption, alt) {
+            lbImg.src = src;
+            lbImg.alt = alt || '';
+            lbCap.textContent = caption || '';
+            lb.classList.add('is-open');
+            lb.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lb.classList.remove('is-open');
+            lb.setAttribute('aria-hidden', 'true');
+            lbImg.src = '';
+            document.body.style.overflow = '';
+        }
+
+        document.querySelectorAll('.cbdd-imgbtn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                openLightbox(btn.dataset.full, btn.dataset.caption, btn.querySelector('img')?.alt);
+            });
+        });
+
+        lb.addEventListener('click', (e) => { if (e.target === lb) closeLightbox(); });
+        lbClose.addEventListener('click', closeLightbox);
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lb.classList.contains('is-open')) closeLightbox();
+        });
+    }
+
     // Public API
     return {
         renderStateDistribution,
@@ -2988,6 +3406,12 @@ window.BaroqueViz = (function() {
         renderMythologyIntroGallery,
         renderMythFigureGallery,
         renderPainterExplorer,
+        renderDatasetStats,
+        renderReligionDashboard,
+        initQueryExplorer,
+        initTopicSelector,
+        initRittersaal,
+        initBattleHallLightbox,
         QUERIES,
         COLORS,
         ICONCLASS_LABELS
