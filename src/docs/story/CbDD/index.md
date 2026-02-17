@@ -501,29 +501,132 @@ LIMIT 20
 
 ## Micro perspective
 
+Pick one of the 3 "lenses" below to dive deep into a thematic perspective on Baroque ceiling painting. Each topic opens a full, richly illustrated exploration — click to enter, and use the back button to return here.
 
-This section provides an overview of the ICONCLASS categories represented across the corpus of Baroque ceiling paintings.
+<!-- ═══════════════════════════════════════════════════════════════════════
+     TOPIC SELECTOR — CSS + HTML + JS
+     ═══════════════════════════════════════════════════════════════════ -->
 
-The dashboard below allows you to explore basic statistics for each category, including the number of paintings, artists, locations, and key actors such as commissioners. By switching between categories, you can quickly compare thematic emphases within the dataset.
+<style>
+/* ── Topic Selector Grid ─────────────────────────────────────────────── */
+.topic-selector{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;margin:2.5rem 0 1rem}
+@media(max-width:840px){.topic-selector{grid-template-columns:1fr}}
 
-The level of detail can be adjusted using the Top N selector, enabling a closer look at the most frequent painters, states, buildings, or commissioners for each ICONCLASS category.
+.topic-card{
+    position:relative;overflow:hidden;border-radius:14px;
+    padding:2.2rem 1.8rem 1.8rem;cursor:pointer;
+    transition:transform .25s,box-shadow .25s;
+    display:flex;flex-direction:column;align-items:center;text-align:center;
+    border:2px solid transparent;min-height:220px;
+}
+.topic-card:hover{transform:translateY(-6px);box-shadow:0 12px 32px rgba(0,0,0,.18)}
 
-Have fun while exploring the data! 
+.topic-card .topic-icon{font-size:3rem;margin-bottom:.6rem;filter:drop-shadow(0 2px 4px rgba(0,0,0,.2))}
+.topic-card .topic-title{font-family:'Nantes-Bold',serif;font-size:1.35rem;margin-bottom:.55rem;letter-spacing:.02em}
+.topic-card .topic-desc{font-size:.88rem;line-height:1.45;opacity:.92}
+.topic-card .topic-enter{
+    margin-top:auto;padding:.45rem 1.4rem;border-radius:20px;
+    font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;
+    border:2px solid currentColor;background:transparent;cursor:pointer;
+    transition:background .2s,color .2s;margin-top:1rem;
+}
+.topic-card:hover .topic-enter{background:rgba(255,255,255,.25)}
 
+/* Card colour themes */
+.topic-card--church{
+    background:linear-gradient(135deg,#b8860b 0%,#daa520 50%,#c9920e 100%);
+    color:#fff;border-color:#a07610;
+}
+.topic-card--society{
+    background:linear-gradient(135deg,#1a6b52 0%,#2e9e7a 50%,#1e8265 100%);
+    color:#fff;border-color:#14503e;
+}
+.topic-card--mythology{
+    background:linear-gradient(135deg,#4a2d7a 0%,#6c3fad 50%,#5a3595 100%);
+    color:#fff;border-color:#3d2466;
+}
 
----
+/* ── Deep-dive wrapper (hidden by default) ───────────────────────────── */
+.micro-topic{display:none;animation:topicFadeIn .45s ease}
+@keyframes topicFadeIn{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
 
-<a id="analysis-society"></a>
-## Politics and Military Affairs in Baroque Ceiling Paintings
+/* Back-to-topics banner */
+.topic-back-bar{
+    position:sticky;top:0;z-index:100;
+    display:flex;align-items:center;gap:.7rem;
+    padding:.65rem 1.2rem;border-radius:0 0 10px 10px;
+    font-weight:700;font-size:.88rem;cursor:pointer;
+    transition:opacity .2s;margin-bottom:1.5rem;
+    border:none;width:100%;text-align:left;
+}
+.topic-back-bar:hover{opacity:.85}
+.topic-back-bar .back-arrow{font-size:1.1rem}
 
-This section provides an overview of how themes of social order, political life, and cultural practices are represented across the corpus of Baroque ceiling paintings.
+.topic-back-bar--church{background:#daa520;color:#fff}
+.topic-back-bar--society{background:#2e9e7a;color:#fff}
+.topic-back-bar--mythology{background:#6c3fad;color:#fff}
 
----
+/* Colour accent bar at top of each deep-dive */
+.micro-topic--church{border-top:5px solid #daa520}
+.micro-topic--society{border-top:5px solid #2e9e7a}
+.micro-topic--mythology{border-top:5px solid #6c3fad}
+</style>
 
-<a id="analysis-mythology"></a>
-## Mythology in Baroque Ceiling Paintings
+<div id="topic-selector" class="topic-selector">
 
----
+  <div class="topic-card topic-card--church" onclick="openMicroTopic('church')">
+    <div class="topic-icon">⛪</div>
+    <div class="topic-title">Church &amp; Religion</div>
+    <div class="topic-desc">Explore how faith, divine order, and the supernatural shaped Baroque ceiling iconography across Germany.</div>
+    <button class="topic-enter">Enter ➜</button>
+  </div>
+
+  <div class="topic-card topic-card--society" onclick="openMicroTopic('society')">
+    <div class="topic-icon">🏰</div>
+    <div class="topic-title">Society &amp; Culture</div>
+    <div class="topic-desc">Discover how aristocratic rituals, courtly life, and social hierarchies were depicted on Baroque ceilings.</div>
+    <button class="topic-enter">Enter ➜</button>
+  </div>
+
+  <div class="topic-card topic-card--mythology" onclick="openMicroTopic('mythology')">
+    <div class="topic-icon">🏛️</div>
+    <div class="topic-title">Classical Mythology</div>
+    <div class="topic-desc">Uncover how ancient myths legitimised rulers and celebrated the arts in grand palace frescoes.</div>
+    <button class="topic-enter">Enter ➜</button>
+  </div>
+
+</div>
+
+<script>
+/* ── Topic selector logic ──────────────────────────────────────────── */
+function openMicroTopic(id){
+    document.getElementById('topic-selector').style.display='none';
+    document.querySelectorAll('.micro-topic').forEach(el=>el.style.display='none');
+    const target=document.getElementById('topic-'+id);
+    if(target){
+        target.style.display='block';
+        target.scrollIntoView({behavior:'smooth',block:'start'});
+        /* re-trigger any Plotly / Leaflet charts that need a resize */
+        setTimeout(()=>window.dispatchEvent(new Event('resize')),400);
+    }
+}
+function backToTopics(){
+    document.querySelectorAll('.micro-topic').forEach(el=>el.style.display='none');
+    const sel=document.getElementById('topic-selector');
+    sel.style.display='grid';
+    sel.scrollIntoView({behavior:'smooth',block:'start'});
+}
+</script>
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     TOPIC 1 — CHURCH & RELIGION
+     ═══════════════════════════════════════════════════════════════════ -->
+<div id="topic-church" class="micro-topic micro-topic--church" markdown="1">
+
+<button class="topic-back-bar topic-back-bar--church" onclick="backToTopics()">
+  <span class="back-arrow">←</span> Back to Topic Selector
+</button>
+
 <a id="analysis-church"></a>
 
 ## Church and Religion in Baroque Ceiling Paintings
@@ -952,7 +1055,17 @@ Baroque religious imagery was:
 
 Together, these works formed a coordinated visual language that expressed how early modern society understood religion, the universe, and the relationship between the earthly and the divine.
 
----
+</div><!-- /topic-church -->
+
+<!-- ═══════════════════════════════════════════════════════════════════════
+     TOPIC 2 — SOCIETY & CULTURE
+     ═══════════════════════════════════════════════════════════════════ -->
+<div id="topic-society" class="micro-topic micro-topic--society" markdown="1">
+
+<button class="topic-back-bar topic-back-bar--society" onclick="backToTopics()">
+  <span class="back-arrow">←</span> Back to Topic Selector
+</button>
+
 <a id="analysis-society"></a>
 
 ## Society & Culture
@@ -964,24 +1077,124 @@ Diese Ins
 
 
 
+</div><!-- /topic-society -->
 
+<!-- ═══════════════════════════════════════════════════════════════════════
+     TOPIC 3 — CLASSICAL MYTHOLOGY
+     ═══════════════════════════════════════════════════════════════════ -->
+<div id="topic-mythology" class="micro-topic micro-topic--mythology" markdown="1">
 
----
+<button class="topic-back-bar topic-back-bar--mythology" onclick="backToTopics()">
+  <span class="back-arrow">←</span> Back to Topic Selector
+</button>
+
 <a id="analysis-mythology"></a>
 
 ## Classical Mythology
 
 The Baroque era in German-speaking lands produced a dazzling array of ceiling and wall paintings filled with scenes from classical mythology. These grand frescoes and allegorical programs served not merely as decoration, but as visual sermons of princely virtue, power, and Enlightenment ideals. Commissioned for palaces and grand halls, they wove ancient myths into the narrative of contemporary rulers – celebrating peace after war, exalting dynastic glory, and extolling the arts and sciences. In this data-driven exploration, we trace a red thread through several emblematic Baroque interiors in Germany, uncovering how mythology was employed to transform architecture into theatre of statecraft. From the Olympian gods on the ceilings of Munich’s Nymphenburg Palace to Ovid’s metamorphic tales in a Thuringian castle, these case studies reveal a common language of allegory that early modern patrons used to legitimize and immortalize their reigns. We also examine how the tempo of artistic commissions rose and fell with historical tides – ravaging wars followed by renewed prosperity – and briefly highlight two Italian masters behind these works. The result is a panoramic story of Baroque mythological imagery, presented in academic depth yet accessible and engaging.
 
-<div id="mythology-intro-gallery" class="baroque-gallery"></div>
+<style>
+/* ── Mythology Intro Gallery ──────────────────────────────────────────── */
+.myth-intro__toolbar{
+    display:flex;justify-content:flex-end;margin-bottom:.6rem;
+}
+.myth-intro__refresh{
+    display:inline-flex;align-items:center;gap:6px;
+    padding:6px 16px;border-radius:20px;
+    border:2px solid #6c3fad;background:transparent;color:#6c3fad;
+    font-weight:700;font-size:.82rem;cursor:pointer;
+    transition:background .2s,color .2s;
+}
+.myth-intro__refresh:hover{background:#6c3fad;color:#fff}
+@keyframes mythSpin{to{transform:rotate(360deg)}}
+.myth-intro__refresh-icon{font-size:1.1rem;display:inline-block}
+
+.myth-intro__grid{
+    display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;
+}
+@media(max-width:840px){.myth-intro__grid{grid-template-columns:1fr}}
+
+.myth-intro__card{
+    border-radius:12px;overflow:hidden;cursor:pointer;
+    border:2px solid rgba(108,63,173,.25);
+    transition:transform .2s,box-shadow .2s;
+    background:#faf8ff;
+}
+.myth-intro__card:hover{
+    transform:translateY(-4px);
+    box-shadow:0 8px 24px rgba(108,63,173,.18);
+    border-color:rgba(108,63,173,.5);
+}
+.myth-intro__img-wrap{
+    position:relative;overflow:hidden;height:210px;
+}
+.myth-intro__img-wrap img{
+    width:100%;height:100%;object-fit:cover;
+    transition:transform .35s;
+}
+.myth-intro__card:hover .myth-intro__img-wrap img{
+    transform:scale(1.05);
+}
+.myth-intro__overlay{
+    position:absolute;inset:0;
+    display:flex;align-items:center;justify-content:center;
+    background:rgba(74,45,122,.55);color:#fff;
+    font-weight:700;font-size:.85rem;opacity:0;
+    transition:opacity .25s;
+}
+.myth-intro__card:hover .myth-intro__overlay{opacity:1}
+.myth-intro__caption{
+    padding:10px 12px;font-size:.85rem;line-height:1.4;
+}
+.myth-intro__meta{color:#666;font-size:.82rem}
+
+/* Detail card */
+.myth-intro__detail{
+    margin-top:1rem;animation:topicFadeIn .35s ease;
+}
+.myth-intro__detail-card{
+    position:relative;margin:0;border:2px solid #6c3fad;
+    border-radius:12px;overflow:hidden;background:#faf8ff;
+    box-shadow:0 6px 24px rgba(108,63,173,.12);
+}
+.myth-intro__detail-close{
+    position:absolute;top:10px;right:12px;z-index:2;
+    width:30px;height:30px;border-radius:50%;
+    border:none;background:rgba(0,0,0,.55);color:#fff;
+    font-size:1rem;cursor:pointer;display:flex;
+    align-items:center;justify-content:center;
+    transition:background .2s;
+}
+.myth-intro__detail-close:hover{background:rgba(0,0,0,.8)}
+.myth-intro__detail-body{
+    display:grid;grid-template-columns:1fr 1fr;min-height:260px;
+}
+@media(max-width:700px){.myth-intro__detail-body{grid-template-columns:1fr}}
+.myth-intro__detail-img img{
+    width:100%;height:100%;object-fit:cover;
+}
+.myth-intro__detail-info{
+    padding:18px 20px;font-size:.9rem;line-height:1.6;color:#444;
+}
+.myth-intro__detail-meta div{margin-bottom:4px}
+.myth-intro__detail-link{
+    display:inline-block;margin-top:12px;padding:6px 16px;
+    border-radius:20px;border:2px solid #6c3fad;
+    color:#6c3fad;font-weight:700;font-size:.82rem;
+    text-decoration:none;transition:background .2s,color .2s;
+}
+.myth-intro__detail-link:hover{background:#6c3fad;color:#fff}
+</style>
+
+<div id="mythology-intro-gallery"></div>
 
 <script type="module">
 (async function() {
     while (!BaroqueDB.isReady()) {
         await new Promise(r => setTimeout(r, 100));
     }
-    // Show a selection of mythology paintings as an introductory gallery
-    await BaroqueViz.renderMythologyGallery('#mythology-intro-gallery', { limit: 6 });
+    await BaroqueViz.renderMythologyIntroGallery('#mythology-intro-gallery', { count: 3 });
 })();
 </script>
 
@@ -1111,15 +1324,13 @@ If one Baroque fresco cycle epitomizes personal dynastic glorification, it is th
 })();
 </script>
 
-Roli’s composition unfolds across a pseudo-circular opening in a painted sky, where the gods of Olympus welcome the ascendant Hercules. At the zenith sits Jupiter, thundering king of gods, with eagle by his side (in some interpretations, Jupiter’s eagle was represented indirectly – more on that below). On the right half of the fresco, the muscular Hercules is shown rising from the earthly realm up to the heavens. He is draped in a blue cloak, brandishes his trademark club, and wears a laurel wreath as sign of his virtue. Notably, Hercules does not gaze upward at Jupiter, but instead looks downward – significantly, toward the walls of the hall where Ludwig Wilhelm’s ancestral portraits hung in a gallery around the cornice. This clever detail made Hercules a stand-in for the margrave: the hero acknowledges his mortal lineage (the ancestors on the walls) even as he is elevated to godhood. Hercules is flanked by allegorical figures: one of his companions on the cloud bank is a personification of Virtue, who in Baroque iconography often guides Hercules. At Hercules’ feet, putti remove his lion-skin and arms – symbols that his labors are complete and peace has been won.
+Roli stages the apotheosis of Hercules within a circular opening of painted sky where the Olympian gods receive him. Jupiter presides at the top with his eagle (sometimes implied rather than shown). Hercules rises on the right, muscular, in a blue cloak with club and laurel wreath. He looks downward, not up to Jupiter, toward the ancestral portrait gallery around the cornice, turning Hercules into a surrogate for Margrave Ludwig Wilhelm, acknowledging lineage while ascending to divine status. Virtue accompanies him, and putti remove the lion-skin and weapons, signaling his labors are finished and peace achieved.
 
-On the opposite side, Venus (the goddess of love) is depicted reclining semi-nude with her cherubs, but she is shown in an act of rejection and despair: her arm raised, she shields her face with a red drapery as she realizes Hercules has chosen immortal virtue over her temptations. One Cupid breaks his bow in frustration, while another tumbles downward, spilling a quiver of arrows – a clear sign that lust and sin have been vanquished by heroic virtue. This scene of Venus en déroute is a direct moral allegory: the Margrave, like Hercules, has spurned idleness and vice (represented by Venus) in favor of glory and duty.
+Opposite, Venus reclines with cherubs but recoils in rejection, shielding her face with red drapery as Hercules chooses immortal virtue over temptation. A Cupid breaks his bow and another spills arrows, showing lust and sin defeated. Above, Minerva (wisdom and strategic war), Mars (war), and especially Justitia appear: Justice sits near Jupiter within a zodiac ring (touching Libra) and raises a sword that forms the composition’s highest point, framing righteous rule as the crowning virtue. A flying Fama blows a trumpet and brings a laurel wreath to proclaim Hercules’ eternal fame.
 
-Above, on a bank of clouds, other gods observe the apotheosis. We see Minerva (Athena) with helmet and spear, a symbol of strategic warfare and wisdom – appropriate for Ludwig Wilhelm as a general. Mars is present as well, representing war, but notably Justitia (Justice) also appears prominently: she sits by Jupiter, and her figure is fitted into a ring of the zodiac (she touches the scales of Libra) while holding aloft a great sword whose point pierces the sky. This dramatic inclusion of Lady Justice – her upraised sword forming the highest pinnacle of the composition – signified that righteous rule was the supreme virtue crowning the hero. In other words, the margrave is not only a successful warrior (a new Hercules) but a just sovereign who wields the sword of justice. The entire Olympian gathering is linked by a flying Fama (Fame) who blows a trumpet and carries a laurel wreath toward Hercules, announcing his eternal renown across the world.
+At the fresco’s lower edge, Roli adds a large eagle’s nest with a mother and eaglets, painted as if on the architectural rim. In a surviving preparatory drawing in Karlsruhe, he labels it with Horace’s motto “Non generant aquilae columbas” (eagles do not beget doves), linking the House of Baden-Baden to power, imperial favor, and dynastic continuity. Placed between earth and Olympus, the nest implies the margrave’s heirs will inherit and continue his virtues, reinforced by Jupiter’s gaze toward it.
 
-Perhaps the most personal touch in Roli’s design is found at the lower edge of the fresco. There, painted as if perched on the architectural rim, is a large eagle’s nest with a mother eagle and her eaglets. The mother eagle rears back, wings spread protectively, while the fledgling eaglets gaze upward. In the preparatory drawing for this fresco (which survives in Karlsruhe), Roli annotated this motif with a Latin motto from Horace: “Non generant aquilae columbas” – eagles do not beget doves. The meaning was clear: great parents produce great offspring. The eagle, a long-standing symbol of power and a device of Jupiter (and by extension imperial power), here alluded to the House of Baden-Baden itself. Margrave Ludwig Wilhelm had married into the Imperial Habsburg family and had high hopes for his descendants. The eagle nest in the fresco is positioned as if on the threshold between the mortal realm and Olympus, implying that the margrave’s young heirs (the eaglets) will carry on his heroic virtues and one day soar among the gods as well. Jupiter himself casts his gaze down toward the nest, linking the divine favor to the princely lineage on earth.
 
-In its totality, the Ahnensaal ceiling at Rastatt is a masterful piece of Baroque political theatre. It takes the classical myth of Hercules – long a favorite allegory for rulers (the so-called Herculean Virtue theme) – and customizes it to Ludwig Wilhelm’s narrative. The margrave was nicknamed “Türkenlouis” for his victories against the Ottoman Turks, and indeed four corner sculptures in the hall depict captured Turks in chains, literally supporting the cornice as caryatids. This ties directly to Hercules’ story: just as Hercules vanquished monstrous threats in his Labors, Türkenlouis subdued the “infidel” enemies of Austria. A contemporary description of the hall noted that “the ceiling fresco showing the reception of Hercules into Olympus clearly refers to the victorious margrave; even the statues of the fettered Ottomans speak volumes”. The Apotheosis of Hercules thus operates on multiple levels – celebrating military success, moral virtue, dynastic continuity, and the just governance of the prince. It is propaganda in pigment and plaster, executed with Italian Baroque skill. Notably, Giuseppe Roli’s fresco in Rastatt remains very well preserved (having fortunately escaped war damage). Art historians regard it as one of the finest Italian frescoes north of the Alps, and its iconography of ruler-as-Hercules influenced many later works (for instance, it likely inspired a similar Hercules apotheosis painted by Carlo Carlone in the Würzburg Residenz in the 1740s).
 
 <div id="hercules-rastatt-card" class="painting-card-container"></div>
 
@@ -1131,6 +1342,8 @@ In its totality, the Ahnensaal ceiling at Rastatt is a masterful piece of Baroqu
     await BaroqueViz.renderPaintingCard('#hercules-rastatt-card', '32229efd-3f75-4a6a-80c4-470b40e7e79d');
 })();
 </script>
+
+Overall, the Rastatt Ahnensaal ceiling is Baroque political theatre: the ruler-as-Hercules theme is tailored to Ludwig Wilhelm (“Türkenlouis”) and his victories against the Ottomans, echoed by corner sculptures of chained Turks supporting the cornice. The program celebrates military success, moral virtue, just sovereignty, and lineage. The fresco remains well preserved and is often cited as a major Italian Baroque work north of the Alps, with an iconography that later influenced comparable Hercules apotheosis cycles, including Würzburg in the 1740s.
 
 #### Excursus: Hercules in Baroque Art
 
@@ -1150,19 +1363,20 @@ Hercules (German: Herkules) was among the most popular mythological figures in B
 
 ### Commissions Over Time: War, Peace, and the Rhythm of Baroque Art
 
-The ebbs and flows of these ambitious art projects were closely tied to historical events. The timeline of ceiling painting commissions in German Baroque courts reflects periods of war-induced stagnation followed by bursts of building activity in peacetime. A chart of major ceiling fresco commissions from 1650 to 1750 would show several notable peaks and troughs corresponding to conflicts and recoveries:
+Ceiling-painting commissions in German Baroque courts rose and fell with war and peace. From 1650 to 1750, you’d see peaks during stable periods and troughs when conflicts drained money and attention.
 
-Post-1648 Rebound: After the Thirty Years’ War ended in 1648, decades of impoverishment gave way to a gradual revival. In the 1650s–1670s, commissions resumed, initially in ecclesiastical contexts and then in palaces. For instance, the first phase of Nymphenburg Palace (including a modest painted hall) began in the 1660s once Bavaria’s economy stabilized. Rulers like the Prince-Bishop of Würzburg or the Electors of Mainz also started refurbishing their residences in this period, though on a smaller scale.
+**Post-1648 rebound:** After the Thirty Years’ War ended (1648), recovery in the 1650s–1670s restarted commissions, first in churches and then palaces. Early palace work included the first phase of Nymphenburg in the 1660s once Bavaria stabilized. Prince-bishops and electors (e.g., Würzburg, Mainz) also began smaller refurbishments.
 
-1680s–1690s Boom: The late 17th century saw a building boom. Many princes who had come of age after the war – often educated in Italy or France – poured resources into new palaces and their decoration. This was the age of expansion for Versailles-inspired complexes across Germany. Ceiling painters from Italy were in high demand. However, this boom was partly curtailed by new conflicts: the Nine Years’ War (1688–1697) and the War of the Spanish Succession (1701–1714). These wars directly affected German territories. In 1689 French armies devastated the Palatinate, burning Mannheim and Heidelberg – a major setback for artistic endeavors there. Conversely, some rulers decided to relocate and rebuild: Ludwig Wilhelm moved his capital from war-torn Baden-Baden to Rastatt and started his palace in 1698 as a fresh start. We see in Nymphenburg’s timeline a microcosm of this: by 1704, due to the War of Spanish Succession, construction stopped and parts of the palace were cannibalized for other uses. Skilled artists found themselves without work as courts redirected funds to the war effort.
+**1680s–1690s boom, then setbacks:** Late 17th-century rulers, often Italy/France-trained and inspired by Versailles, launched major palace programs and hired many Italian painters. The boom was checked by the Nine Years’ War (1688–1697) and the War of the Spanish Succession (1701–1714). In 1689, French devastation of the Palatinate (Mannheim, Heidelberg) stalled projects. Some courts rebuilt elsewhere, Ludwig Wilhelm shifted from Baden-Baden to Rastatt and began his palace in 1698. Nymphenburg shows the pattern: by 1704 construction halted, parts were repurposed, and artists lost work as funds went to war.
 
-1715–1730 High Baroque Flourishing: After the Treaty of Rastatt in 1714 ended the Spanish Succession War, a spectacular flowering of art occurred. Many exiled or cash-strapped princes returned to their lands and resumed projects. The period from about 1715 to 1730 was one of feverish commissioning of frescoes. In these fifteen years, numerous great cycles were completed: the stairhall and chapel in Mannheim by Cosmas Damian Asam (1720s), the grand halls of Würzburg and Bruchsal (though some of those would extend into the 1740s), the Ahnensaal in Rastatt by Roli (1704–05), the garden halls of smaller palaces like Arolsen by Castelli (1721–22), and the Riesensaal in Sondershausen (finished by 1703) as we saw. Importantly, peace and prosperity in the 1720s meant patrons could afford to import Italian painters or send locals for training. The result was a pan-German golden age of Baroque art. Visitors to German courts in these years marveled at the newly painted heavens filled with Olympian gods, reflecting the confidence of a post-war generation.
+**1715–1730 High Baroque flourishing:** After the Treaty of Rastatt ended the Spanish Succession War (1714), commissions surged. Many princes returned and resumed building, with intense fresco patronage roughly 1715–1730. Major cycles include Mannheim stairhall/chapel by Cosmas Damian Asam (1720s), grand halls at Würzburg and Bruchsal (some extending into the 1740s), Rastatt’s Ahnensaal by Roli (1704–05), Arolsen garden halls by Castelli (1721–22), and Sondershausen’s Riesensaal (finished 1703). Peace and 1720s prosperity enabled importing Italian artists and training locals, producing a pan-German “painted heavens” moment that impressed visitors.
 
-Mid-Century Adjustments: The mid-18th century brought new disruptions. The War of the Austrian Succession (1740–1748) and the Seven Years’ War (1756–1763) once again embroiled German states in conflict. These wars did not wreak the same universal destruction as 1618–48, but they did strain treasuries and sometimes put cultural projects on hold. For example, work on some late Baroque churches and palaces slowed during the early 1750s due to the uncertainty of war. Bavaria, while neutral in the Seven Years’ War, still felt economic pressure; yet intriguingly, it was precisely in the 1750s that Max III. Joseph invested in Nymphenburg’s Steinener Saal fresco by Zimmermann – perhaps as a statement of optimism amid continental strife. Other princes, like Prince-Bishop Adam Friedrich von Seinsheim in Würzburg, continued to patronize the arts through the Seven Years’ War (the famed Würzburg Residenz fresco by Tiepolo was completed in 1753, just before the war broke out). Nonetheless, the mid-century conflicts mark a last hurrah for high Baroque fresco. After the Seven Years’ War, the political climate and aesthetic tastes began to shift significantly.
+**Mid-century adjustments:** New wars strained budgets again, the War of the Austrian Succession (1740–1748) and Seven Years’ War (1756–1763). Projects slowed in the early 1750s, though some rulers kept commissioning: Bavaria’s Max III Joseph backed Nymphenburg’s Steinener Saal fresco by Zimmermann in the 1750s, and Würzburg’s Prince-Bishop Adam Friedrich von Seinsheim continued patronage, with Tiepolo finishing the Würzburg Residenz fresco in 1753, just before the Seven Years’ War. Still, these conflicts were close to the last peak for high Baroque fresco.
 
-1760s–1770s Transition to Neoclassicism: By the 1760s, the elaborate Baroque and Rococo ceiling paintings were gradually falling out of favor. The next generation of rulers, influenced by Enlightenment ideals, often preferred cleaner, neoclassical styles and viewed the old mythological allegories as outdated. In Bavaria, for instance, the new Elector Max III. Joseph (after 1745) and later Elector Karl Theodor (after 1777) curtailed Rococo extravagance. In 1766, a final Rococo refurbishment of a room at Nymphenburg was done in a markedly simpler ornament, heralding the end of the Baroque era. Just three years later, in 1769, Elector Karl Theodor issued a mandate effectively ending Rococo decoration in Bavaria and ushering in Neoclassicism. Similar patterns occurred elsewhere: courts like Prussia’s or Saxony’s embraced classical restraint by the 1770s. Consequently, large-scale mythological ceiling commissions dwindled. Some planned projects were even left incomplete or executed on canvas rather than fresco. The age of Napoleon at the turn of the 19th century, with its political upheavals, finally extinguished the Baroque tradition of princely allegorical ceilings.
+**1760s–1770s shift to Neoclassicism:** By the 1760s, Baroque/Rococo ceilings lost favor as Enlightenment tastes preferred cleaner neoclassicism and treated mythological allegory as dated. In Bavaria, Max III Joseph and later Karl Theodor curtailed Rococo; Nymphenburg’s 1766 refurbishment already looked simpler, and in 1769 Karl Theodor effectively ended Rococo decoration in Bavaria, accelerating neoclassicism. Prussia and Saxony moved similarly by the 1770s. Large mythological ceiling commissions dwindled, some remained incomplete or moved to canvas instead of fresco. Napoleonic-era upheavals finally extinguished the tradition.
 
-In reflecting on this trajectory, we see that Baroque ceiling painting in Germany was highly sensitive to the winds of history. Periods of peace and relative economic strength – roughly 1660s, 1720s, mid-1740s to mid-1750s – coincide with spikes in artistic production and the hiring of artists to create these mythic tableaux. Conversely, major wars or fiscal crises correlate with gaps or conservatism in commissions. This rhythm underscores that these artworks were luxury propaganda: the first expenses to be cut in hard times, yet among the most prominent expenditures in good times to display a ruler’s magnificence. They were, in a sense, barometers of a state’s health and a prince’s confidence.
+Overall: peace and economic strength (roughly the 1660s, 1720s, mid-1740s to mid-1750s) align with bursts of commissions, while wars and fiscal crises create gaps. These ceilings functioned as luxury propaganda, cut first in hard times and showcased most in good times, a practical indicator of a state’s confidence and resources.
+
 
 
 <div id="commissions-timeline" class="baroque-chart"></div>
@@ -1225,9 +1439,7 @@ Historically, Alessandro Paduano is recorded in the Bavarian court accounts and 
 
 In conclusion, the mythological ceiling and wall paintings of the German Baroque were far more than opulent ornament; they were visual manifestos of an age. Through the examples of Nymphenburg, Mannheim, Arolsen, Sondershausen, and Rastatt, we have seen how ancient myths were ingeniously repurposed to celebrate contemporary themes – peace after war, the heroism and legitimacy of rulers, the flourishing of arts, the transformation and continuity of dynasties, and the ultimate aspiration for eternal fame. These grand compositions required a convergence of talents (patron, painter, stucco sculptor, architect) and could only thrive under favorable historical conditions. When those conditions waned – under the strain of war or changing taste – the commissions slowed and finally ceased, giving way to new artistic paradigms.
 
----
-
-
+</div><!-- /topic-mythology -->
 
 ---
 ## Summary

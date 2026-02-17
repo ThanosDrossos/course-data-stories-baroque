@@ -1504,8 +1504,9 @@ window.BaroqueViz = (function() {
         const names = Array.isArray(painterNames) ? painterNames : [painterNames];
 
         try {
-            const nameConditions = names.map(n => `p.painters LIKE '%${n.replace(/'/g, "''")}%'`).join(' OR ');
-            
+            // Use painting_persons table for accurate matching instead of the display string
+            const nameConditions = names.map(n => `pp.person_name = '${n.replace(/'/g, "''")}'`).join(' OR ');
+
             let sql = `
                 SELECT DISTINCT
                     p.nfdi_uri,
@@ -1517,49 +1518,139 @@ window.BaroqueViz = (function() {
                     p.building_name,
                     p.room_name,
                     p.location_state,
-                    p.imageUrl
+                    p.imageUrl,
+                    p.method
                 FROM paintings p
+                JOIN painting_persons pp ON p.nfdi_uri = pp.nfdi_uri
                 ${showMythologyOnly ? `
                     JOIN painting_subjects ps ON p.nfdi_uri = ps.nfdi_uri
                     JOIN subjects s ON ps.subject_uri = s.subject_uri
                 ` : ''}
-                WHERE (${nameConditions})
-                AND p.imageUrl IS NOT NULL AND p.imageUrl != ''
+                WHERE pp.role = 'PAINTER'
+                  AND (${nameConditions})
+                  AND p.imageUrl IS NOT NULL AND p.imageUrl != ''
                 ${showMythologyOnly ? `AND s.subject_source = 'ICONCLASS' AND s.subject_uri LIKE '%iconclass.org/9%'` : ''}
                 ORDER BY p.year_start
                 LIMIT ${limit}
             `;
-            
+
             const data = await BaroqueDB.query(sql);
-            
+
             if (data.length === 0) {
                 el.innerHTML = '<div class="no-data">No paintings found for this painter.</div>';
                 return [];
             }
 
-            const galleryHtml = `
-                <div class="painter-gallery" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px;">
-                    ${data.map(painting => {
-                        const yearStr = painting.year_start === painting.year_end 
-                            ? painting.year_start 
-                            : `${painting.year_start}–${painting.year_end}`;
-                        return `
-                            <figure style="margin: 0; border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: #fafafa;">
-                                <a href="${painting.nfdi_uri}" target="_blank">
-                                    <img src="${painting.imageUrl}" alt="${painting.label}" 
-                                         style="width: 100%; height: 180px; object-fit: cover;">
-                                </a>
-                                <figcaption style="padding: 10px; font-size: 0.85em;">
-                                    <strong style="display: block; margin-bottom: 5px;">${painting.label}</strong>
-                                    <span style="color: #666;">${yearStr || '?'} · ${painting.building_name || 'Unknown'}</span>
-                                </figcaption>
-                            </figure>
-                        `;
-                    }).join('')}
+            // ── Fetch detailed person roles for a painting ──────────────────
+            async function fetchPersons(nfdiUri) {
+                const pSql = `
+                    SELECT person_name, role
+                    FROM painting_persons
+                    WHERE nfdi_uri = '${nfdiUri}'
+                    ORDER BY role
+                `;
+                return await BaroqueDB.query(pSql);
+            }
+
+            el.innerHTML = `
+                <div class="pg-gallery">
+                    <div class="pg-gallery__grid">
+                        ${data.map((painting, i) => {
+                            const yearStr = painting.year_start === painting.year_end
+                                ? painting.year_start
+                                : `${painting.year_start || '?'}–${painting.year_end || '?'}`;
+                            return `
+                                <div class="pg-gallery__card" data-idx="${i}">
+                                    <div class="pg-gallery__img-wrap">
+                                        <img src="${painting.imageUrl}" alt="${painting.label}" loading="lazy">
+                                        <div class="pg-gallery__overlay"><span>Click for details</span></div>
+                                    </div>
+                                    <div class="pg-gallery__caption">
+                                        <strong>${painting.label}</strong><br>
+                                        <span class="pg-gallery__meta">${yearStr} · ${painting.building_name || 'Unknown'}</span>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    <div class="pg-gallery__detail" style="display:none"></div>
                 </div>
             `;
 
-            el.innerHTML = galleryHtml;
+            // ── Click-to-detail ─────────────────────────────────────────────
+            el.querySelectorAll('.pg-gallery__card').forEach((card, idx) => {
+                card.addEventListener('click', async (e) => {
+                    if (e.target.closest('.painter-jump-link')) return;
+
+                    const painting = data[idx];
+                    const detailEl = el.querySelector('.pg-gallery__detail');
+
+                    // toggle off if same card clicked again
+                    if (detailEl.style.display !== 'none' && detailEl.dataset.activeIdx === String(idx)) {
+                        detailEl.style.display = 'none';
+                        detailEl.innerHTML = '';
+                        detailEl.dataset.activeIdx = '';
+                        return;
+                    }
+
+                    detailEl.style.display = 'block';
+                    detailEl.dataset.activeIdx = String(idx);
+                    detailEl.innerHTML = '<div class="loading">Loading painting details…</div>';
+                    detailEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                    try {
+                        const persons = await fetchPersons(painting.nfdi_uri);
+                        const byRole = {};
+                        for (const p of persons) {
+                            if (!byRole[p.role]) byRole[p.role] = [];
+                            byRole[p.role].push(p.person_name);
+                        }
+
+                        const yrStr = painting.year_start === painting.year_end
+                            ? painting.year_start
+                            : `${painting.year_start || '?'}–${painting.year_end || '?'}`;
+
+                        detailEl.innerHTML = `
+                            <figure class="pg-gallery__detail-card">
+                                <button class="pg-gallery__detail-close" title="Close">✕</button>
+                                <div class="pg-gallery__detail-body">
+                                    <div class="pg-gallery__detail-img">
+                                        <a href="${painting.nfdi_uri}" target="_blank" rel="noopener">
+                                            <img src="${painting.imageUrl}" alt="${painting.label}">
+                                        </a>
+                                    </div>
+                                    <figcaption class="pg-gallery__detail-info">
+                                        <h4 style="margin:0 0 10px">
+                                            <a href="${painting.nfdi_uri}" target="_blank" style="color:inherit;text-decoration:none">
+                                                ${painting.label}
+                                            </a>
+                                        </h4>
+                                        <div class="pg-gallery__detail-meta">
+                                            <div><strong>📅 Year:</strong> ${yrStr || 'Unknown'}</div>
+                                            <div><strong>📍 Location:</strong> ${painting.building_name || ''}${painting.room_name ? `, ${painting.room_name}` : ''}</div>
+                                            <div><strong>🗺️ Region:</strong> ${painting.location_state || 'Unknown'}</div>
+                                            ${byRole['PAINTER'] ? `<div><strong>🎨 Painter(s):</strong> ${_makeClickablePainterNames(byRole['PAINTER'])}</div>` : ''}
+                                            ${painting.commissioners ? `<div><strong>👑 Commissioner:</strong> ${painting.commissioners}</div>` : ''}
+                                            ${painting.method ? `<div><strong>🖌️ Technique:</strong> ${painting.method}</div>` : ''}
+                                        </div>
+                                        <a href="${painting.nfdi_uri}" target="_blank" rel="noopener"
+                                           class="pg-gallery__detail-link">View in CbDD ↗</a>
+                                    </figcaption>
+                                </div>
+                            </figure>
+                        `;
+
+                        detailEl.querySelector('.pg-gallery__detail-close').addEventListener('click', () => {
+                            detailEl.style.display = 'none';
+                            detailEl.innerHTML = '';
+                            detailEl.dataset.activeIdx = '';
+                        });
+                    } catch (err) {
+                        detailEl.innerHTML = `<div class="error">Error loading details: ${err.message}</div>`;
+                    }
+                });
+            });
+
             return data;
         } catch (error) {
             el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
@@ -1638,6 +1729,189 @@ window.BaroqueViz = (function() {
 
             Plotly.newPlot(el, [trace], layout, { responsive: true });
             return data;
+        } catch (error) {
+            el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+            throw error;
+        }
+    }
+
+    /**
+     * Render mythology intro gallery: 3 random mythology paintings with refresh & click-to-detail
+     */
+    async function renderMythologyIntroGallery(container, options = {}) {
+        const el = _getElement(container);
+        el.innerHTML = '<div class="loading">Loading mythology paintings...</div>';
+
+        const { count = 3 } = options;
+
+        // ── Fetch random paintings ──────────────────────────────────────────
+        async function fetchRandom() {
+            const sql = `
+                SELECT DISTINCT
+                    p.nfdi_uri,
+                    p.label,
+                    p.painters,
+                    p.commissioners,
+                    p.year_start,
+                    p.year_end,
+                    p.building_name,
+                    p.room_name,
+                    p.location_state,
+                    p.imageUrl,
+                    p.method
+                FROM paintings p
+                JOIN painting_subjects ps ON p.nfdi_uri = ps.nfdi_uri
+                JOIN subjects s ON ps.subject_uri = s.subject_uri
+                WHERE s.subject_source = 'ICONCLASS'
+                  AND s.subject_uri LIKE '%iconclass.org/9%'
+                  AND p.imageUrl IS NOT NULL AND p.imageUrl != ''
+                ORDER BY RANDOM()
+                LIMIT ${count}
+            `;
+            return await BaroqueDB.query(sql);
+        }
+
+        // ── Fetch detailed person roles for a painting ──────────────────────
+        async function fetchPersons(nfdiUri) {
+            const sql = `
+                SELECT person_name, role
+                FROM painting_persons
+                WHERE nfdi_uri = '${nfdiUri}'
+                ORDER BY role
+            `;
+            return await BaroqueDB.query(sql);
+        }
+
+        // ── Render the gallery grid ─────────────────────────────────────────
+        async function render() {
+            const data = await fetchRandom();
+            if (data.length === 0) {
+                el.innerHTML = '<div class="no-data">No mythology paintings found.</div>';
+                return;
+            }
+
+            el.innerHTML = `
+                <div class="myth-intro">
+                    <div class="myth-intro__toolbar">
+                        <button class="myth-intro__refresh" title="Show different paintings">
+                            <span class="myth-intro__refresh-icon">⟳</span> Shuffle
+                        </button>
+                    </div>
+                    <div class="myth-intro__grid">
+                        ${data.map((p, i) => {
+                            const year = p.year_start || '?';
+                            return `
+                                <div class="myth-intro__card" data-idx="${i}">
+                                    <div class="myth-intro__img-wrap">
+                                        <img src="${p.imageUrl}" alt="${p.label}" loading="lazy">
+                                        <div class="myth-intro__overlay">
+                                            <span>Click for details</span>
+                                        </div>
+                                    </div>
+                                    <div class="myth-intro__caption">
+                                        <strong>${p.label}</strong><br>
+                                        <span class="myth-intro__meta">
+                                            ${p.painters ? _makeClickablePainterNames(p.painters) : 'Unknown'} · ${year}
+                                        </span>
+                                    </div>
+                                </div>
+                            `;
+                        }).join('')}
+                    </div>
+                    <div class="myth-intro__detail" style="display:none"></div>
+                </div>
+            `;
+
+            // ── Refresh button ──────────────────────────────────────────────
+            el.querySelector('.myth-intro__refresh').addEventListener('click', async (e) => {
+                const btn = e.currentTarget;
+                btn.disabled = true;
+                btn.querySelector('.myth-intro__refresh-icon').style.animation = 'mythSpin .5s ease';
+                // collapse any open detail
+                const detailEl = el.querySelector('.myth-intro__detail');
+                detailEl.style.display = 'none';
+                detailEl.innerHTML = '';
+                await render();
+            });
+
+            // ── Click-to-detail ─────────────────────────────────────────────
+            el.querySelectorAll('.myth-intro__card').forEach((card, idx) => {
+                card.addEventListener('click', async (e) => {
+                    // don't trigger if clicking a painter link inside caption
+                    if (e.target.closest('.painter-jump-link')) return;
+
+                    const painting = data[idx];
+                    const detailEl = el.querySelector('.myth-intro__detail');
+
+                    // toggle off if same card clicked again
+                    if (detailEl.style.display !== 'none' && detailEl.dataset.activeIdx === String(idx)) {
+                        detailEl.style.display = 'none';
+                        detailEl.innerHTML = '';
+                        detailEl.dataset.activeIdx = '';
+                        return;
+                    }
+
+                    detailEl.style.display = 'block';
+                    detailEl.dataset.activeIdx = String(idx);
+                    detailEl.innerHTML = '<div class="loading">Loading painting details…</div>';
+                    detailEl.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+                    try {
+                        const persons = await fetchPersons(painting.nfdi_uri);
+                        const byRole = {};
+                        for (const p of persons) {
+                            if (!byRole[p.role]) byRole[p.role] = [];
+                            byRole[p.role].push(p.person_name);
+                        }
+
+                        const yearStr = painting.year_start === painting.year_end
+                            ? painting.year_start
+                            : `${painting.year_start || '?'}–${painting.year_end || '?'}`;
+
+                        detailEl.innerHTML = `
+                            <figure class="myth-intro__detail-card">
+                                <button class="myth-intro__detail-close" title="Close">✕</button>
+                                <div class="myth-intro__detail-body">
+                                    <div class="myth-intro__detail-img">
+                                        <a href="${painting.nfdi_uri}" target="_blank" rel="noopener">
+                                            <img src="${painting.imageUrl}" alt="${painting.label}">
+                                        </a>
+                                    </div>
+                                    <figcaption class="myth-intro__detail-info">
+                                        <h4 style="margin:0 0 10px">
+                                            <a href="${painting.nfdi_uri}" target="_blank" style="color:inherit;text-decoration:none">
+                                                ${painting.label}
+                                            </a>
+                                        </h4>
+                                        <div class="myth-intro__detail-meta">
+                                            <div><strong>📅 Year:</strong> ${yearStr || 'Unknown'}</div>
+                                            <div><strong>📍 Location:</strong> ${painting.building_name || ''}${painting.room_name ? `, ${painting.room_name}` : ''}</div>
+                                            <div><strong>🗺️ Region:</strong> ${painting.location_state || 'Unknown'}</div>
+                                            ${byRole['PAINTER'] ? `<div><strong>🎨 Painter(s):</strong> ${_makeClickablePainterNames(byRole['PAINTER'])}</div>` : ''}
+                                            ${painting.commissioners ? `<div><strong>👑 Commissioner:</strong> ${painting.commissioners}</div>` : ''}
+                                            ${painting.method ? `<div><strong>🖌️ Technique:</strong> ${painting.method}</div>` : ''}
+                                        </div>
+                                        <a href="${painting.nfdi_uri}" target="_blank" rel="noopener"
+                                           class="myth-intro__detail-link">View in CbDD ↗</a>
+                                    </figcaption>
+                                </div>
+                            </figure>
+                        `;
+
+                        detailEl.querySelector('.myth-intro__detail-close').addEventListener('click', () => {
+                            detailEl.style.display = 'none';
+                            detailEl.innerHTML = '';
+                            detailEl.dataset.activeIdx = '';
+                        });
+                    } catch (err) {
+                        detailEl.innerHTML = `<div class="error">Error loading details: ${err.message}</div>`;
+                    }
+                });
+            });
+        }
+
+        try {
+            await render();
         } catch (error) {
             el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
             throw error;
@@ -2711,6 +2985,7 @@ window.BaroqueViz = (function() {
         renderPainterGallery,
         renderCommissionsTimeline,
         renderMythologyGallery,
+        renderMythologyIntroGallery,
         renderMythFigureGallery,
         renderPainterExplorer,
         QUERIES,
