@@ -595,7 +595,7 @@ This phase reflects a period of intensive investment in monumental interior deco
 
   <!-- Gallery -->
   <section class="rel-card" style="margin-top:14px;">
-    <div class="rel-card-title">Sample paintings (click to open in CbDD)</div>
+    <div class="rel-card-title">Sample paintings (click a card to explore details)</div>
     <div id="rel-gallery" class="baroque-gallery"></div>
   </section>
 
@@ -663,6 +663,7 @@ The palace complex of Weikersheim provides a particularly comprehensive example 
   </div>
 </div>
 
+
 Weikersheim had been owned by the Lords of Hohenlohe since 1178, who divided into several different lines on several occasions. In 1586, it fell to Count Wolfgang II of Hohenlohe in a division of land by lot, who had the medieval moated castle converted into a contemporary Renaissance count's residence. During the Baroque period, a Baroque pleasure garden was added to the south of the complex [1,2].
 The castle complex comprises several buildings. The oldest building still standing today is the hall, which was begun in 1595. On the first floor of this building is the Great Hall, which extends over two floors and features ceiling paintings by Balthasar Katzenberger.
 
@@ -670,9 +671,20 @@ The castle complex comprises several buildings. The oldest building still standi
 <div class="cbdd-figure">
   <img src="Rittersaal_Overview.jpg" alt="Schloss Weikersheim Rittersaal">
   <div class="cbdd-figure__caption">
-    Schloss Weikersheim; Rittersaal; Bildarchiv Foto Marburg; Bunz, Achim; https://www.deckenmalerei.eu/42d06165-58e7-4653-bfe4-3d5f7091fc33#top
+    Schloss Weikersheim; Rittersaal; Bildarchiv Foto Marburg; Bunz, Achim
   </div>
 </div>
+
+<div id="rittersaal-saal-card" class="room-card-container"></div>
+
+<script type="module">
+(async function() {
+    while (!BaroqueDB.isReady()) {
+        await new Promise(r => setTimeout(r, 100));
+    }
+    await BaroqueViz.renderRoomCard('#rittersaal-saal-card', '15685f4a-3727-4110-8967-1d8287431997');
+})();
+</script>
 
 
 This Great Hall, today known as the "Rittersaal" measures 36.4 × 11.7 meters and rises to a height of 8.25 meters [3] and was furnished between 1601 and 1605. The ceiling paintings were created by Balthasar Katzenberger, who completed the entire cycle roughly thirteen months after signing the contract, around 1602 [2,4]. Only in the early eighteenth century was the room adapted to Baroque taste and reinterpreted as "Rittersaal" [5]. 
@@ -763,6 +775,7 @@ data-title="A1 – Orpheus"
 data-img="A1_Orpheus.jpg"
 data-text="A1 Orpheus: The cycle of mammal hunting does not begin with a hunting scene but with Orpheus, who gathers animals around him through his “his song and the lyre of Apollo”. He sits before a densely wooded area, while in the distance to the left a view opens toward a city by a lake. Numerous animals assemble around Orpheus in peaceful unity — including elephant, elk, stag, roe deer, wolf, fox, hedgehog, and wildcat. Further species appear distributed across the scene (among them wild boar, bear, leopard, lion, badger, and rabbit). Two monkeys sit in the tree - one accompanies Orpheus, imitating a human, on a self-made violin. The only creature not affected by the spell is a hunting dog: it grooms itself, looks directly at the viewer, and reappears as the exact same dog later in the ox hunt. The dog and the physiognomy of Orpheus thus function as “connecting elements” linking the following hunting cycle to the viewer."
 ></button>
+
 
 
 <!-- Bild 2 (Rittersaal1 / West) — A5 HIRSCHJAGD (mammal) -->
@@ -889,37 +902,42 @@ document.addEventListener('DOMContentLoaded', function() { BaroqueViz.initRitter
 </div><!-- /rittersaal-block -->
 
 ### From Orpheus to Authority 
- central ceiling painting of Orpheus forms the key to the overall program of the hall. In early modern tradition, Orpheus was regarded as a symbol of the good ruler who pacifies the world not through violence, but through order, reason, and moderation. In Weikersheim, this figure is deliberately associated with Count Wolfgang II: the placement above the fireplace, recurring portrait-like features in hunting scenes, and the orientation of the sculpted animals toward the fireplace symbolically link the count with Orpheus as an ordering authority.
+ The central ceiling painting of Orpheus forms the key to the overall program of the hall. In early modern tradition, Orpheus was regarded as a symbol of the good ruler who pacifies the world not through violence, but through order, reason, and moderation. In Weikersheim, this figure is deliberately associated with Count Wolfgang II: the placement above the fireplace, recurring portrait-like features in hunting scenes, and the orientation of the sculpted animals toward the fireplace symbolically link the count with Orpheus as an ordering authority.
 
 Against this background, the hunting scenes gain their meaning. Hunting appears not merely as an activity, but as an expression of princely responsibility: the mastery of dangerous animals stands for protection and care toward the subjects. The depicted landscapes therefore present an ordered and peaceful world — an image of legitimate rule.
 
 
-### Sources:
-The art-historical descriptions and contextual interpretations presented here are primarily based on the research interpretations documented in the CBDDD (https://www.deckenmalerei.eu/42d06165-58e7-4653-bfe4-3d5f7091fc33#6e73f774-4b7f-4e37-937b-e11cc35c5bc8) and the primary sources referenced therein. The specific sources used are listed in the references below:
+### Sources
 
-[1] Die Quellen hierzu und insgesamt zum Oeuvre von Georg Robin bei Freeden, Georg Robin, 1943/44. Speziell zu Weikersheim im Jahr 1586: ebd., S. 38. Die aktuellen Signaturen der von Freeden herangezogenen Archivalien bei Weyer, Georg Stegle, 2017.
-[2] Freeden, Georg Robin, 1943/44, S. 38. Hingegen bewertet Weyer, Georg Stegle, 2017, S. 50 den Anteil Stegles deutlich höher als Freeden. Zudem schreibt er Stegle Walther-Gerd Flecks zwischenzeitlich kritisch bewertete Rekonstruktion einer regelmäßigen Dreiflügelanlage in Weikersheim zu. Zur Kritik an Flecks Idealrekonstruktion (Fleck, Weikersheim, 1954): Großmann, Beobachtungen, 2019 und Ziegler, Idealplan, 2019. Zur weiteren Erforschung der Planungs- und Baugeschichte des Weikersheimer Renaissanceschlosses außerdem: https://www.hofkulturblog.de/das-dreiecksschloss-des-grafen-wolfgang-in-weikersheim-revision-einer-alten-kunsthistorischen-hypothese-mit-hilfe-digitaler-methoden/ sowie ausführlich mit zahlreichen Visualisierungen der Beitrag von Jan Lutteroth und Frieder Leipold: https://books.ub.uni-heidelberg.de/arthistoricum/reader/download/774/774-17-91786-1-10-20201211.pdf
-[3] Der Raum des Treppenhauses gehört zumindest in seinem äußeren Mauerwerk der Renaissancezeit an, wenngleich der Langenburger Bau in seinen aufgehenden Geschossen erst um 1680 hinzukam (Ziegler, Idealplan, 2019, S. 140–142).
-[4] Freeden, Georg Robin, 1943/44, S. 39. Ausführlich zur Baugeschichte und ihren Quellen jetzt: Ziegler, Idealplan, 2019.
-[5] Ziegler, Idealplan, 2019, S. 140.
-[6](University of Konstanz: symbolic means for representing concepts of order – https://kops.uni-konstanz.de/server/api/core/bitstreams/a191c70e-e145-45e2-83eb-ddb302cee269/content
-[7] Joachim Hamberger: Eine kurzer Abriss der Jagdgeschichte. Von Hirschen und Menschen.... In: LWF aktuell. Nr. 44, 2004, S. 28 (bayern.de [PDF; abgerufen am 13. Dezember 2018]).
-[8] Peter Blickle: Die Revolution von 1525. 2. Auflage. Oldenbourg Verlag, München 1983, ISBN 3-486-44652-5, S. 58.
-[9] Bernd Ergert: Die Jagd in Bayern - von der Vorzeit bis zur Gegenwart. Rosenheimer Verlagshaus, Rosenheim 1984, S. 123–127.
-[10]barockjagd.de: Jagen vor 250 Jahren
-[11] Poser, Deckenbilder, 1980, S. 160.
-[12] Poser, Deckenbilder, 1980, S. 160
-[13] Poser, Deckenbilder, 1980, S. 161.
-[14] Poser, Deckenbilder, 1980, S. 160, dort ohne das Wort „alleins“. Die genaue Transkription: Drös, Inschriften Mergentheim, 2002, Nr. 353.
-[15]  Abschlussbericht der Restaurierung vom 05.03.1998. Den Bericht stellte der Autorin Herr Dipl. Ing. Erik Reinhold vom Staatlichen Hochbauamt Heilbronn zur Verfügung. Bindemittel waren Glutinleim und Stärkekleister
-[16] Poser, Deckenbilder, 1980; Kniep, Glück, 2005; Käpplinger, Jagd, 2011, Käpplinger, Auf’s Schönste, 2019, S. 197. Auch Großmann, Beobachtungen, 2019, S. 133 vermutet die Wegeführung von der Tafelstube kommend in den Saal.
-[17] Diese Beobachtung auch bei Käpplinger, Jagd, 2011, S. 76, obwohl er eine Leserichtung von Ost nach West annimmt.
-[18] Käpplinger, Jagd, 2011.
-[19] Käpplinger, Jagd, 2011, der die Entwicklung jedoch aufsteigend von der niederen zur hohen Jagd beurteilte, obwohl bei dieser Betrachtungsweise alle Bilder auf dem Kopf stehen.
-[20] Poser, Deckenbilder, 1980, S. 161. Ebenso Käpplinger, Jagd, 2011, S. 74–75.
-[21] Käpplinger, Jagd, 2011, S. 81–85.
-[22] Allerdings benennt Käpplinger bereits das Cosimo I. gewidmete Stichwerk als „Venationes“, da ihm das nachfolgende Stichwerk der „Venationes“ offenbar nicht bekannt war.
-[23] Die übersichtliche Darstellung der Zyklen ist Käpplinger, Jagd, 2011 zu verdanken.
+The art-historical descriptions and contextual interpretations presented here are primarily based on the research interpretations documented in the [CbDD](https://www.deckenmalerei.eu/42d06165-58e7-4653-bfe4-3d5f7091fc33#6e73f774-4b7f-4e37-937b-e11cc35c5bc8) and the primary sources referenced therein. The specific sources used are listed in the references below.
+
+<div class="cbdd-references" markdown="0">
+<ol>
+<li>Die Quellen hierzu und insgesamt zum Oeuvre von Georg Robin bei Freeden, Georg Robin, 1943/44. Speziell zu Weikersheim im Jahr 1586: ebd., S.&nbsp;38. Die aktuellen Signaturen der von Freeden herangezogenen Archivalien bei Weyer, Georg Stegle, 2017.</li>
+<li>Freeden, Georg Robin, 1943/44, S.&nbsp;38. Hingegen bewertet Weyer, Georg Stegle, 2017, S.&nbsp;50 den Anteil Stegles deutlich höher als Freeden. Zudem schreibt er Stegle Walther-Gerd Flecks zwischenzeitlich kritisch bewertete Rekonstruktion einer regelmäßigen Dreiflügelanlage in Weikersheim zu. Zur Kritik an Flecks Idealrekonstruktion (Fleck, Weikersheim, 1954): Großmann, Beobachtungen, 2019 und Ziegler, Idealplan, 2019. Zur weiteren Erforschung der Planungs- und Baugeschichte des Weikersheimer Renaissanceschlosses außerdem: <a href="https://www.hofkulturblog.de/das-dreiecksschloss-des-grafen-wolfgang-in-weikersheim-revision-einer-alten-kunsthistorischen-hypothese-mit-hilfe-digitaler-methoden/" target="_blank" rel="noopener">Hofkulturblog</a> sowie ausführlich mit zahlreichen Visualisierungen der Beitrag von Jan Lutteroth und Frieder Leipold: <a href="https://books.ub.uni-heidelberg.de/arthistoricum/reader/download/774/774-17-91786-1-10-20201211.pdf" target="_blank" rel="noopener">arthistoricum.net</a>.</li>
+<li>Der Raum des Treppenhauses gehört zumindest in seinem äußeren Mauerwerk der Renaissancezeit an, wenngleich der Langenburger Bau in seinen aufgehenden Geschossen erst um 1680 hinzukam (Ziegler, Idealplan, 2019, S.&nbsp;140–142).</li>
+<li>Freeden, Georg Robin, 1943/44, S.&nbsp;39. Ausführlich zur Baugeschichte und ihren Quellen jetzt: Ziegler, Idealplan, 2019.</li>
+<li>Ziegler, Idealplan, 2019, S.&nbsp;140.</li>
+<li>University of Konstanz: symbolic means for representing concepts of order. <a href="https://kops.uni-konstanz.de/server/api/core/bitstreams/a191c70e-e145-45e2-83eb-ddb302cee269/content" target="_blank" rel="noopener">KOPS</a>.</li>
+<li>Joachim Hamberger: Eine kurzer Abriss der Jagdgeschichte. Von Hirschen und Menschen…. In: <em>LWF aktuell</em>, Nr.&nbsp;44, 2004, S.&nbsp;28 (<a href="https://www.lwf.bayern.de" target="_blank" rel="noopener">bayern.de</a> [PDF; abgerufen am 13.&nbsp;Dezember 2018]).</li>
+<li>Peter Blickle: <em>Die Revolution von 1525</em>. 2.&nbsp;Auflage. Oldenbourg Verlag, München 1983, ISBN&nbsp;3-486-44652-5, S.&nbsp;58.</li>
+<li>Bernd Ergert: <em>Die Jagd in Bayern – von der Vorzeit bis zur Gegenwart</em>. Rosenheimer Verlagshaus, Rosenheim 1984, S.&nbsp;123–127.</li>
+<li>barockjagd.de: Jagen vor 250 Jahren.</li>
+<li>Poser, Deckenbilder, 1980, S.&nbsp;160.</li>
+<li>Poser, Deckenbilder, 1980, S.&nbsp;160.</li>
+<li>Poser, Deckenbilder, 1980, S.&nbsp;161.</li>
+<li>Poser, Deckenbilder, 1980, S.&nbsp;160, dort ohne das Wort „alleins". Die genaue Transkription: Drös, Inschriften Mergentheim, 2002, Nr.&nbsp;353.</li>
+<li>Abschlussbericht der Restaurierung vom 05.03.1998. Den Bericht stellte der Autorin Herr Dipl.&nbsp;Ing. Erik Reinhold vom Staatlichen Hochbauamt Heilbronn zur Verfügung. Bindemittel waren Glutinleim und Stärkekleister.</li>
+<li>Poser, Deckenbilder, 1980; Kniep, Glück, 2005; Käpplinger, Jagd, 2011; Käpplinger, Auf's Schönste, 2019, S.&nbsp;197. Auch Großmann, Beobachtungen, 2019, S.&nbsp;133 vermutet die Wegeführung von der Tafelstube kommend in den Saal.</li>
+<li>Diese Beobachtung auch bei Käpplinger, Jagd, 2011, S.&nbsp;76, obwohl er eine Leserichtung von Ost nach West annimmt.</li>
+<li>Käpplinger, Jagd, 2011.</li>
+<li>Käpplinger, Jagd, 2011, der die Entwicklung jedoch aufsteigend von der niederen zur hohen Jagd beurteilte, obwohl bei dieser Betrachtungsweise alle Bilder auf dem Kopf stehen.</li>
+<li>Poser, Deckenbilder, 1980, S.&nbsp;161. Ebenso Käpplinger, Jagd, 2011, S.&nbsp;74–75.</li>
+<li>Käpplinger, Jagd, 2011, S.&nbsp;81–85.</li>
+<li>Allerdings benennt Käpplinger bereits das Cosimo&nbsp;I. gewidmete Stichwerk als „Venationes", da ihm das nachfolgende Stichwerk der „Venationes" offenbar nicht bekannt war.</li>
+<li>Die übersichtliche Darstellung der Zyklen ist Käpplinger, Jagd, 2011 zu verdanken.</li>
+</ol>
+</div>
 
 
 
@@ -1229,28 +1247,22 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 
+### Sources
 
-
-
-
-
-
-
-
-
-
-### Sources:
-
-[1] Merten, Weikersheim, o. J., S. 40. Trentin-Meyer, Georg Friedrich von Hohenlohe, 2019, S. 90 spricht versehentlich von 13 Gemälden.
-[2] Freeden, Kamin, 1950, S. 142.
-[3] Die Maße bei Drös, Inschriften Mergentheim, 2002, S. 248. Ebd., S. 249 die bislang ausführlichste Auseinandersetzung mit den Gemälden.
-[4] Zum Langen Türkenkrieg: Niederkorn, Langer Türkenkrieg, 1993.
-[5] Diese wichtige Vorlage bereits bei Fandrey, Weikersheim, 2010, S. 60.
-[6] Ortelius, Chronologia, 1602.
-[7] Ebd. Außerdem Ortelius, Chronologia, 1602, „Ad Lectorem“.
-[8] Drös, Inschriften Mergentheim, 2002, S. 248–249.
-[9] Drös, Inschriften Mergentheim, 2002, S. 248–250.
-[10] Drös, Inschriften Mergentheim, 2002, Nr. 366. 
+<div class="cbdd-references" markdown="0">
+<ol>
+<li>Merten, Weikersheim, o.&nbsp;J., S.&nbsp;40. Trentin-Meyer, Georg Friedrich von Hohenlohe, 2019, S.&nbsp;90 spricht versehentlich von 13 Gemälden.</li>
+<li>Freeden, Kamin, 1950, S.&nbsp;142.</li>
+<li>Die Maße bei Drös, Inschriften Mergentheim, 2002, S.&nbsp;248. Ebd., S.&nbsp;249 die bislang ausführlichste Auseinandersetzung mit den Gemälden.</li>
+<li>Zum Langen Türkenkrieg: Niederkorn, Langer Türkenkrieg, 1993.</li>
+<li>Diese wichtige Vorlage bereits bei Fandrey, Weikersheim, 2010, S.&nbsp;60.</li>
+<li>Ortelius, Chronologia, 1602.</li>
+<li>Ebd. Außerdem Ortelius, Chronologia, 1602, „Ad Lectorem".</li>
+<li>Drös, Inschriften Mergentheim, 2002, S.&nbsp;248–249.</li>
+<li>Drös, Inschriften Mergentheim, 2002, S.&nbsp;248–250.</li>
+<li>Drös, Inschriften Mergentheim, 2002, Nr.&nbsp;366.</li>
+</ol>
+</div>
 
 
 </div><!-- /topic-society -->
@@ -1372,7 +1384,7 @@ One of the most extensive mythological programs of German Baroque adorns the Rie
 
 The Riesensaal’s ceiling is a marvel of quadratura stuccowork and narrative painting. The surface is divided by ornate plaster frames into a grid of oval and rectangular compartments (coffers), each containing a vividly rendered mythological episode. The broad cove (vault springing) of the ceiling also carries larger fresco scenes in monochrome (grisaille) that act as visual transitions between the main panels. All the chosen stories come from Ovid’s Metamorphoses, a classical poem that recounts hundreds of tales of gods and mortals undergoing transformations. The selection in Sondershausen emphasizes heroic quests, divine justice, and love’s consequences – fitting themes for a Baroque princely hall. For instance, one oval shows Apollo slaying the Python, affirming the triumph of light over darkness; another depicts Apollo and Daphne, the nymph transforming into a laurel tree to escape the god’s pursuit. We find scenes of youthful hubris punished, such as Phaeton crashing the sun-chariot and Marsyas being flayed by Apollo, as well as tales of piety rewarded, like Philemon and Baucis (noted in other sources, likely included). Hunting scenes feature prominently – Meleager and Atalanta defeating the Calydonian boar, for example – as do episodes from the Trojan cycle, such as Achilles killing the Amazon Penthesilea, or Aeneas’s adventures (the program included images of Thetis imploring Vulcan to forge Achilles’ armor and Juno’s wrath against Troy, aligning with the broader Trojan theme we saw in Mannheim).
 
-This Ovidian gallery of gods and heroes in action created a rich allegorical environment. A contemporary description notes that the Sondershausen ceiling “shows hunting, battle, and love scenes from the Metamorphoses of Ovid” in a lively, dramatic style. The paintings are executed in a warm color palette – lots of earthy reds, greens, and blues, with bright highlights – and the figures are rendered with the energetic, somewhat provincial Baroque manner of central Germany around 1700. (Art historians cannot definitively identify the painter; candidates include court painters like Johann W. Richter or itinerant Italians, but documentation is scarce.) The stucco framing was provided by the Italian Carlo Domenico and Antonio Carcani, whose workshop of Ticinese stuccoists was active across Thuringia at the time. They sculpted life-sized Atlas figures (giants) at the corners to “support” the vault and added trophy reliefs of weapons and armor in the coves – an allusion to martial prowess appropriate for a knightly hall.
+This Ovidian gallery of gods and heroes in action created a rich allegorical environment. A contemporary description notes that the Sondershausen ceiling “shows hunting, battle, and love scenes from the Metamorphoses of Ovid” in a lively, dramatic style. The paintings are executed in a warm color palette – lots of earthy reds, greens, and blues, with bright highlights – and the figures are rendered with the energetic, somewhat provincial Baroque manner of central Germany around 1700. The stucco framing was provided by the Italian Carlo Domenico and Antonio Carcani, whose workshop of Ticinese stuccoists was active across Thuringia at the time. They sculpted life-sized Atlas figures (giants) at the corners to “support” the vault and added trophy reliefs of weapons and armor in the coves – an allusion to martial prowess appropriate for a knightly hall.
 
 Importantly, the choice of Metamorphoses as the unifying theme carried symbolic resonance for the patron. Christian Wilhelm’s elevation to Reichsfürst (Imperial Prince) was a dramatic social transformation – a metamorphosis of rank – and the ceiling’s parade of transformations could be read as an elaborate metaphor for that change. While no written “program” survives to explicate the intent, scholars surmise that the prince wished to associate his regime with the cycle of renewal and change depicted by Ovid. Just as the characters in the frescoes are elevated, chastised, or transfigured by divine forces, so too had the House of Schwarzburg been transformed by imperial grace. One can imagine the prince’s contemporaries, gathered in this hall for ceremonies or balls, glancing up at Jupiter’s eagle or Diana’s hounds and drawing parallels to the fortunes of their own realm. The very abundance of mythological exempla was a statement: this small principality knew the great stories of the classical world and saw its own story as part of that continuum.
 
@@ -1518,23 +1530,9 @@ Historically, Alessandro Paduano is recorded in the Bavarian court accounts and 
 </script>
 
 
-
-
 In conclusion, the mythological ceiling and wall paintings of the German Baroque were far more than opulent ornament; they were visual manifestos of an age. Through the examples of Nymphenburg, Mannheim, Arolsen, Sondershausen, and Rastatt, we have seen how ancient myths were ingeniously repurposed to celebrate contemporary themes – peace after war, the heroism and legitimacy of rulers, the flourishing of arts, the transformation and continuity of dynasties, and the ultimate aspiration for eternal fame. These grand compositions required a convergence of talents (patron, painter, stucco sculptor, architect) and could only thrive under favorable historical conditions. When those conditions waned – under the strain of war or changing taste – the commissions slowed and finally ceased, giving way to new artistic paradigms.
 
 </div><!-- /topic-mythology -->
-
----
-## Summary
-
-This data story demonstrates how DuckDB WASM enables interactive, client-side data exploration for cultural heritage research. Key findings include:
-
-1. **Geographic concentration** in Bavaria and Baden-Württemberg reflects Catholic patronage patterns
-2. **Temporal peak** between 1700-1760 aligns with the height of Baroque and Rococo architectural styles
-3. **Biblical themes** (ICONCLASS category 7) dominate ceiling iconography
-4. **Cross-dataset linking** via GND identifiers connects primary documentation with historical photography
-
-The combination of structured analytical data with interactive visualizations enables researchers to explore hypotheses and patterns that would be difficult to perceive in tabular data alone.
 
 ---
 
@@ -1580,14 +1578,14 @@ Try exploring these notable Baroque ceiling painters:
     <button class="painter-grid__btn" onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Asam, Cosmas Damian');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}">
         🎨 Cosmas Damian Asam
     </button>
-    <button class="painter-grid__btn painter-grid__btn--rose" onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Seivert, Lammers');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}">
+    <button class="painter-grid__btn painter-grid__btn--rose" onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Lammers, Seivert');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}">
         🎨 Lammers Seivert
     </button>
     <button class="painter-grid__btn painter-grid__btn--cyan" onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Castelli, Carlo Ludovico');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}">
         🎨 Carlo Ludovico Castelli
     </button>
-    <button class="painter-grid__btn painter-grid__btn--pastel" onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Holzer, Johann Evangelist');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}">
-        🎨 Johann Evangelist Holzer
+    <button class="painter-grid__btn painter-grid__btn--pastel" onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Katzenberger, Balthasar');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}">
+        🎨 Balthasar Katzenberger
     </button>
 </div>
 
