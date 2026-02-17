@@ -1221,7 +1221,7 @@ window.BaroqueViz = (function() {
                         r.function as room_function,
                         COUNT(DISTINCT p.nfdi_uri) as painting_count
                     FROM rooms r
-                    LEFT JOIN paintings p ON p.room_name = r.name AND p.building_name = '${building.building_name.replace(/'/g, "''")}'
+                    LEFT JOIN paintings p ON p.room_name = r.name AND p.building_id = '${buildingId}'
                     WHERE r.building_id = '${buildingId}'
                     GROUP BY r.room_id, r.name, r.function
                     ORDER BY painting_count DESC
@@ -1352,8 +1352,8 @@ window.BaroqueViz = (function() {
                                         p.imageUrl
                                     FROM paintings p
                                     WHERE p.room_name = '${roomName.replace(/'/g, "''")}'
-                                    AND p.building_name = '${building.building_name.replace(/'/g, "''")}'
-                                    LIMIT 12
+                                    AND p.building_id = '${buildingId}'
+                                    ORDER BY p.year_start, p.label
                                 `;
                                 const paintings = await BaroqueDB.query(paintingsSql);
                                 
