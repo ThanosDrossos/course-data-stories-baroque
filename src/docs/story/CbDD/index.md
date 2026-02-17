@@ -886,6 +886,7 @@ On this basis, the ceiling paintings can now be explored from the intended viewi
 <script>
 document.addEventListener('DOMContentLoaded', function() { BaroqueViz.initRittersaal(); });
 </script>
+
 </div><!-- /markdown=0 rittersaal -->
 
 ### From Orpheus to Authority 
@@ -954,6 +955,7 @@ The depictions are spread across all walls of the room and include battle scenes
      - adds metadata (artist, date, patron, technique, location)
 ========================= -->
 
+<div markdown="0">
 <div class="cbdd-grid-2x2">
 
   <!-- SOUTH -->
@@ -1098,6 +1100,7 @@ The depictions are spread across all walls of the room and include battle scenes
 <script>
 document.addEventListener('DOMContentLoaded', function() { BaroqueViz.initBattleHallLightbox(); });
 </script>
+
 </div><!-- /markdown=0 leutenberg -->
 
 
