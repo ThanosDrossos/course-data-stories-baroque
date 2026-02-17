@@ -656,9 +656,9 @@ Across Baroque residences, painted interiors did more than decorate walls and ce
 The palace complex of Weikersheim provides a particularly comprehensive example of how hunting was integrated into a broader program of rule. 
 
 
-<div style="text-align:center; margin:30px 0;">
-  <img src="Schloss_Weikersheim.jpg" style="max-width:900px; width:100%; border-radius:10px;">
-  <div style="font-size:14px; opacity:0.7; margin-top:8px;">
+<div class="cbdd-figure">
+  <img src="Schloss_Weikersheim.jpg" alt="Schloss Weikersheim">
+  <div class="cbdd-figure__caption">
     Schloss Weikersheim; Bildarchiv Foto Marburg; Bunz, Achim; https://www.deckenmalerei.eu/42d06165-58e7-4653-bfe4-3d5f7091fc33#top
   </div>
 </div>
@@ -667,9 +667,9 @@ Weikersheim had been owned by the Lords of Hohenlohe since 1178, who divided int
 The castle complex comprises several buildings. The oldest building still standing today is the hall, which was begun in 1595. On the first floor of this building is the Great Hall, which extends over two floors and features ceiling paintings by Balthasar Katzenberger.
 
 
-<div style="text-align:center; margin:30px 0;">
-  <img src="Rittersaal_Overview.jpg" style="max-width:900px; width:100%; border-radius:10px;">
-  <div style="font-size:14px; opacity:0.7; margin-top:8px;">
+<div class="cbdd-figure">
+  <img src="Rittersaal_Overview.jpg" alt="Schloss Weikersheim Rittersaal">
+  <div class="cbdd-figure__caption">
     Schloss Weikersheim; Rittersaal; Bildarchiv Foto Marburg; Bunz, Achim; https://www.deckenmalerei.eu/42d06165-58e7-4653-bfe4-3d5f7091fc33#top
   </div>
 </div>
@@ -931,10 +931,10 @@ While hunting imagery presented an ordered and controlled world, depictions of w
 
 In the 17th century, Count Albert Anton von Schwarzburg-Rudolstadt had Friedensburg Castle decorated with room-filling murals by the court painter Seivert Lammers in two campaigns (1688 and 1698). The paintings remained intact for a long time and were only destroyed by a fire in 1934.
 
-<div style="text-align:center; margin:30px 0;">
-  <img src="Postkarte_SchlossFriedensburg_Leuterberg.jpg" style="max-width:900px; width:100%; border-radius:10px;">
-  <div style="font-size:14px; opacity:0.7; margin-top:8px;">
-    Leutenberg, Schloss Friedensburg; Psotkarte; Corpus der barocken Deckenmalerei; https://www.deckenmalerei.eu/de638dcc-a435-4778-8a28-e9c3276e1843 
+<div class="cbdd-figure">
+  <img src="Postkarte_SchlossFriedensburg_Leuterberg.jpg" alt="Leutenberg, Schloss Friedensburg">
+  <div class="cbdd-figure__caption">
+    Leutenberg, Schloss Friedensburg; Postkarte; Corpus der barocken Deckenmalerei; https://www.deckenmalerei.eu/de638dcc-a435-4778-8a28-e9c3276e1843 
   </div>
 </div>
 
@@ -953,127 +953,6 @@ The depictions are spread across all walls of the room and include battle scenes
      - separate link opens CbDD anchor
      - adds metadata (artist, date, patron, technique, location)
 ========================= -->
-
-<style>
-  .cbdd-grid-2x2{
-    display:grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap:26px;
-    margin:22px 0 34px;
-  }
-  @media (max-width: 900px){
-    .cbdd-grid-2x2{ grid-template-columns: 1fr; }
-  }
-
-  .cbdd-card{
-    background:#fffdf6;
-    border:1px solid #e6d8a8;
-    border-radius:14px;
-    overflow:hidden;
-    transition:transform .18s ease, box-shadow .18s ease;
-  }
-  .cbdd-card:hover{
-    transform:translateY(-4px);
-    box-shadow:0 10px 24px rgba(0,0,0,.12);
-  }
-
-  .cbdd-imgbtn{
-    padding:0;
-    border:0;
-    background:transparent;
-    width:100%;
-    cursor:pointer;
-    display:block;
-  }
-  .cbdd-imgbtn img{
-    width:100%;
-    height:260px;
-    object-fit:cover;
-    display:block;
-  }
-
-  .cbdd-body{ padding:14px 16px 18px; }
-  .cbdd-title{
-    font-weight:650;
-    font-size:16px;
-    margin:0 0 8px;
-  }
-
-  /* NEW: metadata lines */
-  .cbdd-metaLine{
-    font-size:13px;
-    line-height:1.35;
-    opacity:.85;
-    margin:0 0 10px;
-  }
-  .cbdd-metaLine strong{ font-weight:650; opacity:.95; }
-  .cbdd-metaLine + .cbdd-metaLine{ margin-top:-6px; } /* tighten if two lines */
-
-  .cbdd-desc{
-    font-size:14px;
-    line-height:1.45;
-    opacity:.92;
-    margin:0;
-  }
-
-  .cbdd-meta{
-    margin-top:10px;
-    font-size:13px;
-    opacity:.85;
-  }
-  .cbdd-meta a{
-    text-decoration:underline;
-    color:inherit;
-  }
-
-  /* ================= Lightbox ================= */
-  .cbdd-lightbox{
-    position:fixed;
-    inset:0;
-    background:rgba(0,0,0,.72);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    z-index:9999;
-    padding:22px;
-  }
-  .cbdd-lightbox.is-open{ display:flex; }
-
-  .cbdd-lightbox__panel{
-    position:relative;
-    max-width:min(1100px, 96vw);
-    max-height:92vh;
-  }
-  .cbdd-lightbox__img{
-    display:block;
-    max-width:100%;
-    max-height:92vh;
-    border-radius:12px;
-    box-shadow:0 18px 50px rgba(0,0,0,.35);
-    background:#111;
-  }
-  .cbdd-lightbox__cap{
-    margin-top:10px;
-    color:#fff;
-    font-size:14px;
-    line-height:1.35;
-    opacity:.92;
-  }
-  .cbdd-lightbox__close{
-    position:absolute;
-    top:-10px;
-    right:-10px;
-    width:40px;
-    height:40px;
-    border-radius:999px;
-    border:0;
-    cursor:pointer;
-    background:#fff;
-    box-shadow:0 10px 25px rgba(0,0,0,.25);
-    font-size:18px;
-  }
-</style>
-
 
 <div class="cbdd-grid-2x2">
 
@@ -1227,9 +1106,9 @@ While the Battle Hall in Leutenberg presents war without reference to a specific
 
 ### Wars against the Ottoman Empire - Asamkirche
 
-<div style="text-align:center; margin:30px 0;">
-  <img src="Asamkirche.jpg" style="max-width:900px; width:100%; border-radius:10px;">
-  <div style="font-size:14px; opacity:0.7; margin-top:8px;">
+<div class="cbdd-figure">
+  <img src="Asamkirche.jpg" alt="Asamkirche in Munich">
+  <div class="cbdd-figure__caption">
     Asamkirche in Munich; Bildarchiv Foto Marburg; Schmidt-Glassner, Helga; https://www.deckenmalerei.eu/ee55b797-2950-49b8-9204-1c0fcf6b671b
   </div>
 </div>
@@ -1240,55 +1119,6 @@ The Asam Church (St. Johann Nepomuk) in Munich was built by Egid Quirin Asam as 
 <!-- =========================
      Image Detail Viewer 
 ========================= -->
-
-<style>
-.turk-carousel{
-  max-width:900px;
-  margin:40px auto;
-  text-align:center;
-}
-
-.turk-frame{
-  position:relative;
-  border-radius:14px;
-  overflow:hidden;
-  box-shadow:0 12px 28px rgba(0,0,0,.18);
-}
-
-.turk-frame img{
-  width:100%;
-  display:block;
-}
-
-.turk-btn{
-  position:absolute;
-  top:50%;
-  transform:translateY(-50%);
-  background:rgba(0,0,0,.55);
-  color:white;
-  border:none;
-  width:46px;
-  height:46px;
-  border-radius:50%;
-  cursor:pointer;
-  font-size:20px;
-  transition:.2s;
-}
-
-.turk-btn:hover{
-  background:rgba(0,0,0,.8);
-}
-
-.turk-prev{ left:14px; }
-.turk-next{ right:14px; }
-
-.turk-meta{
-  margin-top:14px;
-  font-size:14px;
-  opacity:.8;
-  line-height:1.5;
-}
-</style>
 
 <div class="turk-carousel">
 
@@ -1307,19 +1137,11 @@ The Asam Church (St. Johann Nepomuk) in Munich was built by Egid Quirin Asam as 
 </div>
 
 <script>
-const turkImages = [
-  "asam1.jpg",
-  "asam2.jpg",
-  "asam3.jpg",
-  "asam4.jpg"
-];
-
-let turkIndex = 0;
-
-function turkChange(step){
-  turkIndex = (turkIndex + step + turkImages.length) % turkImages.length;
-  document.getElementById("turk-image").src = turkImages[turkIndex];
-}
+document.addEventListener('DOMContentLoaded', function() {
+  BaroqueViz.initAsamCarousel('.turk-carousel', [
+    'asam1.jpg', 'asam2.jpg', 'asam3.jpg', 'asam4.jpg'
+  ]);
+});
 </script>
 
 The archangel Michael, armed with sword and shield, charges from the right into a battlefield. Riders marked by crescent banners and curved sabres identify the opponents as Ottoman soldiers. The inscription on Michael’s shield “DeXtra rebeLLes DeLLo VlnDeX IgnaVos” describes him as a defender of the Christian faith. Among the defeated figures is also a heretic in Calvinist dress falling into the abyss. Behind Michael, a procession of allied rulers leads toward the main altar scene.
@@ -1347,182 +1169,6 @@ Thus, the paintings do not depict generic battle scenes but a sequence of identi
      - click image opens CbDD page/anchor in new tab
      - includes: prev/next, dots, keyboard arrows, swipe
 ========================= -->
-
-<style>
-  .wk-gallery{
-    background:#fffdf6;
-    border:1px solid #e6d8a8;
-    border-radius:16px;
-    padding:18px;
-    margin:18px 0 30px;
-  }
-
-  .wk-top{
-    display:flex;
-    gap:14px;
-    align-items:flex-start;
-    justify-content:space-between;
-    flex-wrap:wrap;
-    margin-bottom:12px;
-  }
-
-  .wk-title{
-    margin:0;
-    font-size:18px;
-    font-weight:700;
-  }
-
-  .wk-sub{
-    margin:6px 0 0;
-    font-size:13.5px;
-    opacity:.85;
-    line-height:1.35;
-    max-width:80ch;
-  }
-
-  .wk-stage{
-    position:relative;
-    border-radius:14px;
-    overflow:hidden;
-    background:#f5f1e3;
-    border:1px solid rgba(0,0,0,.06);
-  }
-
-  .wk-stage a{
-    display:block;
-    line-height:0;
-  }
-
-  .wk-img{
-    width:100%;
-    height:min(520px, 62vh);
-    object-fit:contain;
-    display:block;
-    background:#f5f1e3;
-  }
-
-  .wk-navBtn{
-    position:absolute;
-    top:50%;
-    transform:translateY(-50%);
-    border:none;
-    width:44px;
-    height:44px;
-    border-radius:999px;
-    background:rgba(0,0,0,.55);
-    color:#fff;
-    cursor:pointer;
-    display:grid;
-    place-items:center;
-    font-size:22px;
-    transition:background .15s ease, transform .15s ease;
-    z-index:2;
-  }
-  .wk-navBtn:hover{ background:rgba(0,0,0,.70); }
-  .wk-navBtn:active{ transform:translateY(-50%) scale(.98); }
-  .wk-prev{ left:12px; }
-  .wk-next{ right:12px; }
-
-  .wk-counter{
-    position:absolute;
-    bottom:10px;
-    right:12px;
-    font-size:12.5px;
-    background:rgba(0,0,0,.55);
-    color:#fff;
-    padding:6px 10px;
-    border-radius:999px;
-    z-index:2;
-  }
-
-  .wk-caption{
-    margin-top:12px;
-    display:grid;
-    grid-template-columns: 1fr;
-    gap:8px;
-  }
-
-  .wk-capTitle{
-    margin:0;
-    font-weight:700;
-    font-size:15.5px;
-  }
-
-  .wk-capMeta{
-    margin:0;
-    font-size:13.5px;
-    opacity:.85;
-    line-height:1.35;
-  }
-
-  .wk-capText{
-    margin:0;
-    font-size:14px;
-    line-height:1.5;
-  }
-
-  .wk-dots{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-    margin-top:14px;
-  }
-
-  .wk-dot{
-    width:10px;
-    height:10px;
-    border-radius:999px;
-    border:1px solid rgba(0,0,0,.25);
-    background:rgba(0,0,0,.10);
-    cursor:pointer;
-    padding:0;
-  }
-  .wk-dot[aria-current="true"]{
-    background:rgba(0,0,0,.55);
-    border-color:rgba(0,0,0,.55);
-  }
-
-  .wk-thumbrow{
-    display:grid;
-    grid-template-columns: repeat(6, minmax(0,1fr));
-    gap:10px;
-    margin-top:16px;
-  }
-  @media (max-width: 900px){
-    .wk-thumbrow{ grid-template-columns: repeat(4, minmax(0,1fr)); }
-  }
-  @media (max-width: 520px){
-    .wk-thumbrow{ grid-template-columns: repeat(3, minmax(0,1fr)); }
-  }
-
-  .wk-thumb{
-    border:1px solid rgba(0,0,0,.12);
-    border-radius:10px;
-    overflow:hidden;
-    background:#f5f1e3;
-    cursor:pointer;
-    transition:transform .12s ease, box-shadow .12s ease;
-  }
-  .wk-thumb:hover{
-    transform:translateY(-2px);
-    box-shadow:0 8px 18px rgba(0,0,0,.10);
-  }
-  .wk-thumb img{
-    width:100%;
-    height:82px;
-    object-fit:cover;
-    display:block;
-  }
-  .wk-thumb[aria-current="true"]{
-    outline:2px solid rgba(0,0,0,.55);
-  }
-
-  .wk-hint{
-    margin:10px 0 0;
-    font-size:12.5px;
-    opacity:.75;
-  }
-</style>
 
 <div class="wk-gallery" id="wk-gallery-12">
   <div class="wk-top">
@@ -1561,213 +1207,25 @@ Thus, the paintings do not depict generic battle scenes but a sequence of identi
   <p class="wk-hint">Tip: If a thumbnail doesn’t load, the URL is probably not a direct image file. Make sure it opens as an image in a browser tab.</p>
 </div>
 
+
 <script>
-(function(){
-  const slides = [
-    {
-      key: "I",
-      title: "Siege I — Vestung Tottis (night capture) — 1590",
-      img: "https://previous.bildindex.de/bilder/fmd10005851a.jpg",
-      href: "https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#42d6f0a1-179a-4193-9904-7386e0dc61da",
-      meta: "Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War",
-      text: "Wide format: riders with large flags enter from the front right. In the background is the Hungarian fortress Totis (Tata) after Sibmacher’s copper engraving. The very dark scene is sparsely lit by two lanterns. The date 1590 may be “an error,” since Totis was captured in 1597/1598."
-    },
-    {
-      key: "II",
-      title: "Siege II — Vestung Gran (besieged by Christians) — 1594",
-      img: "https://previous.bildindex.de/bilder/fmd10005841a.jpg",
-      href: "https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#aa3bf686-14d2-4d2e-b5d8-abf9200e3867",
-      meta: "Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War",
-      text: "Narrow format: a halberdier and an assistant handling black cannonballs appear in the foreground, while a rider in a red cloak enters dynamically from the right and can “presumably” be identified as Count Georg Friedrich (eldest son of Count Wolfgang II.). In the middle ground the imperial camp is shown and the water town of Gran is shelled; above it lies the fortress with the cathedral façade and several minarets."
-    },
-    {
-      key: "III",
-      title: "Siege III — Vestung Raab (besieged by the Turks) — 1594",
-      img: "https://previous.bildindex.de/bilder/fmd10005843a.jpg",
-      href: "https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#29c6c293-693f-4d34-b6ee-c36a90fe6d8e",
-      meta: "Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War",
-      text: "Wide format: Turkish riders enter from the right; across the Danube the square fortress of Raab (Győr) is visible with cannon-occupied bastions and is heavily bombarded. In the foreground, close combat between Christians and Turks unfolds near two transport wagons; fortress and fighting follow the model in Ortelius “faithfully.”"
-    },
-    {
-      key: "IV",
-      title: "Siege IV — Vestung Comorna (besieged by the Turks) — 1594",
-      img: "https://previous.bildindex.de/bilder/fmd10005850a.jpg",
-      href: "https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#d3bb7616-fecf-4589-8763-4a03df87a8d5",
-      meta: "Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War",
-      text: "Wide format: Turkish riders enter from the left, including a blue-clad figure thrusting a lance with a blue flag diagonally into the image. At the lower right two dromedaries kneel in front of Turkish tents. The Danube divides the scene, and opposite lies the Christian-held fortress of Komorn (Komárom), which survived the siege while the adjoining town burns."
-    },
-    {
-      key: "V",
-      title: "Siege V — Vestung Gran (recaptured by Christians)",
-      img: "https://previous.bildindex.de/bilder/fmd10005848a.jpg",
-      href: "https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#43223295-fe64-4973-9722-6a29c8a4b649",
-      meta: "Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War",
-      text: "Wide format: at the left a figure bends forward as a back view; at the lower right stands the half-figure of a courtly man with a musket and a brown horse, whose face suggests “one of Count Wolfgang’s sons.” In the background the fortress of Gran, the water town and the Ratzenstadt are clearly visible. The flags indicate the stage of conquest as explained by Ortelius (including the Turkish flag above the fortress and imperial flags over other positions)."
-    },
-    {
-      key: "VI",
-      title: "Siege VI — Vestung Vizzegrad (besieged by Christians)",
-      img: "https://previous.bildindex.de/bilder/fmd10005840a.jpg",
-      href: "https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#1a5f9651-0bc5-4052-82c2-931af07e304b",
-      meta: "Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War",
-      text: "Wide format: two richly dressed officers dominate the left foreground (one as a back view in armour with a plume, one in a grey shimmering garment with a striking helmet), while men work at cannons on the right. In the background, the citadel of Visegrád rises on a conical hill by the Danube and commands a large natural harbour with many transport ships."
-    },
-    {
-      key: "VII",
-      title: "Siege VII — Statt Waitzen (besieged by the Turks) — 1597",
-      img: "https://previous.bildindex.de/bilder/fmd10005842a.jpg",
-      href: "https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#eec605b1-e1e4-4ecc-83f6-808bb11130a6",
-      meta: "Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War",
-      text: "Narrow format: in the right foreground a Turk with turban and mace rides frontally toward the viewer. A Turkish tent stands to the left beneath him. In the background Waitzen (Vác) lies on the Danube as a fortified town with a fortified monastery; several houses burn, and town and monastery are shown “mirror-reversed” compared to Ortelius."
-    },
-    {
-      key: "VIII",
-      title: "Siege VIII — Vestung Raab (night recapture by Christians)",
-      img: "https://previous.bildindex.de/bilder/fmd10005846a.jpg",
-      href: "https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#f4327f2f-39e6-4656-bd63-976685a535ed",
-      meta: "Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War",
-      text: "Narrow format: the siege is presented as a night scene. At the front right two sentries stand with armour and clothing catching the lantern light. In the background the fortress of Raab (Győr) is shown with two large explosions at its bastions, which Katzenberger copied “exactly” from Sibmacher."
-    },
-    {
-      key: "IX",
-      title: "Siege IX — Hauptstatt Offen (besieged by Christians) — 1598",
-      img: "https://previous.bildindex.de/bilder/fmd10005847a.jpg",
-      href: "https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#a175d3bc-d51a-41ce-adc3-dc879519b644",
-      meta: "Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War",
-      text: "Wide format: in the foreground a large cannon is pulled left by horses. The driver sits on the cannon and swings a long whip, while a hunting dog runs behind. In the background Offen (Óbuda/Buda) appears as a splendid walled city with castle, churches and minarets. The pleasure garden and the Turkish cemetery are taken from Sibmacher."
-    },
-    {
-      key: "X",
-      title: "Siege X — Hauptstatt Offen (besieged by Christians)",
-      img: "https://previous.bildindex.de/bilder/fmd10005844a.jpg",
-      href: "https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#038123be-6142-456c-a90e-ff6e1366e272",
-      meta: "Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War",
-      text: "Wide format: at the front right an armoured imperial commander on a grey horse rides into the picture with a white plume and, by facial features and blond beard, appears to be “a son of Count Wolfgang.” A page in a red cloak runs ahead to guide him toward the camp. Troops stand in formation beyond a Danube tributary and cannons are fired from an entrenchment, while the city of Offen is cropped at the left edge and recognizable via the Danube islands and bridges."
-    },
-    {
-      key: "XI",
-      title: "Siege XI — Hauptstatt Offen (besieged by Christians)",
-      img: "https://previous.bildindex.de/bilder/fmd10005845a.jpg",
-      href: "https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#3b70965e-4f71-4793-b841-5de99378db4e",
-      meta: "Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War",
-      text: "Wide format: in the foreground a brown horse is shown in profile with a rider in a white doublet and a voluminous red sash; “the figure depicted is Count Ludwig Kasimir,” who died during the siege of Gran (Eszergom) in 1604. At the bottom edge, on a smaller scale, a courtly dressed woman is shown being guided by a soldier. She holds a goldfinch that “was regarded as a symbol of Christ’s sacrificial death”."
-    },
-    {
-      key: "XII",
-      title: "Siege XII — Vestung Gran (besieged by the Turks) — 1604",
-      img: "https://previous.bildindex.de/bilder/fmd10005849a.jpg",
-      href: "https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#c6bc65b4-9705-4a71-a121-1d3531542230",
-      meta: "Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War",
-      text: "Narrow format: two horses seen from behind carry cannon barrels, wagon wheels and kettledrums; beside them walks a man dressed in black with a grey floppy hat. In the background, the Danube near Offen (Óbuda) and Pest is rendered in steep bird’s-eye view like a map. A small skirmish takes place on open ground in front of tents and a hill with cannons, and the broad fortified city of Offen appears at the upper left."
-    },
-  ];
-
-  const root = document.getElementById("wk-gallery-12");
-  const imgEl = document.getElementById("wk-img");
-  const linkEl = document.getElementById("wk-link");
-  const counterEl = document.getElementById("wk-counter");
-  const capTitle = document.getElementById("wk-capTitle");
-  const capMeta  = document.getElementById("wk-capMeta");
-  const capText  = document.getElementById("wk-capText");
-  const dotsWrap = document.getElementById("wk-dots");
-  const thumbsWrap = document.getElementById("wk-thumbs");
-
-  let idx = 0;
-
-  function render(){
-    const s = slides[idx];
-
-    imgEl.src = s.img;
-    imgEl.alt = s.title;
-
-    linkEl.href = s.href;
-
-    capTitle.textContent = s.title;
-    capMeta.textContent  = s.meta;
-    capText.textContent  = s.text;
-
-    counterEl.textContent = `${idx+1} / ${slides.length}`;
-
-    // dots
-    [...dotsWrap.children].forEach((b,i)=>{
-      b.setAttribute("aria-current", i===idx ? "true":"false");
-    });
-
-    // thumbs
-    [...thumbsWrap.children].forEach((t,i)=>{
-      t.setAttribute("aria-current", i===idx ? "true":"false");
-    });
-  }
-
-  function go(n){
-    idx = (n + slides.length) % slides.length;
-    render();
-  }
-
-  // build dots
-  slides.forEach((s,i)=>{
-    const b = document.createElement("button");
-    b.className = "wk-dot";
-    b.type = "button";
-    b.setAttribute("aria-label", `Go to ${i+1}`);
-    b.addEventListener("click", ()=>go(i));
-    dotsWrap.appendChild(b);
-  });
-
-  // build thumbnails
-  slides.forEach((s,i)=>{
-    const t = document.createElement("button");
-    t.className = "wk-thumb";
-    t.type = "button";
-    t.setAttribute("aria-label", `Open ${i+1}`);
-    t.addEventListener("click", ()=>go(i));
-
-    const im = document.createElement("img");
-    im.src = s.img;
-    im.alt = s.title;
-    im.loading = "lazy";
-    im.referrerPolicy = "no-referrer";
-
-    t.appendChild(im);
-    thumbsWrap.appendChild(t);
-  });
-
-  // buttons
-  document.getElementById("wk-prev").addEventListener("click", ()=>go(idx-1));
-  document.getElementById("wk-next").addEventListener("click", ()=>go(idx+1));
-
-  // keyboard navigation
-  root.addEventListener("keydown", (e)=>{
-    if(e.key === "ArrowLeft") go(idx-1);
-    if(e.key === "ArrowRight") go(idx+1);
-  });
-  // make root focusable for keyboard
-  root.tabIndex = 0;
-
-  // swipe support
-  const stage = document.getElementById("wk-stage");
-  let x0 = null;
-
-  stage.addEventListener("touchstart", (e)=>{
-    x0 = e.touches[0].clientX;
-  }, {passive:true});
-
-  stage.addEventListener("touchend", (e)=>{
-    if(x0 === null) return;
-    const x1 = e.changedTouches[0].clientX;
-    const dx = x1 - x0;
-    if(Math.abs(dx) > 45){
-      if(dx > 0) go(idx-1);
-      else go(idx+1);
-    }
-    x0 = null;
-  }, {passive:true});
-
-  // initial render
-  render();
-})();
+document.addEventListener('DOMContentLoaded', function() {
+  BaroqueViz.initSiegeGallery('wk-gallery-12', [
+    { key:'I', title:'Siege I — Vestung Tottis (night capture) — 1590', img:'https://previous.bildindex.de/bilder/fmd10005851a.jpg', href:'https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#42d6f0a1-179a-4193-9904-7386e0dc61da', meta:'Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War', text:'Wide format: riders with large flags enter from the front right. In the background is the Hungarian fortress Totis (Tata) after Sibmacher’s copper engraving. The very dark scene is sparsely lit by two lanterns. The date 1590 may be “an error,” since Totis was captured in 1597/1598.' },
+    { key:'II', title:'Siege II — Vestung Gran (besieged by Christians) — 1594', img:'https://previous.bildindex.de/bilder/fmd10005841a.jpg', href:'https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#aa3bf686-14d2-4d2e-b5d8-abf9200e3867', meta:'Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War', text:'Narrow format: a halberdier and an assistant handling black cannonballs appear in the foreground, while a rider in a red cloak enters dynamically from the right and can “presumably” be identified as Count Georg Friedrich (eldest son of Count Wolfgang II.). In the middle ground the imperial camp is shown and the water town of Gran is shelled; above it lies the fortress with the cathedral façade and several minarets.' },
+    { key:'III', title:'Siege III — Vestung Raab (besieged by the Turks) — 1594', img:'https://previous.bildindex.de/bilder/fmd10005843a.jpg', href:'https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#29c6c293-693f-4d34-b6ee-c36a90fe6d8e', meta:'Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War', text:'Wide format: Turkish riders enter from the right; across the Danube the square fortress of Raab (Győr) is visible with cannon-occupied bastions and is heavily bombarded. In the foreground, close combat between Christians and Turks unfolds near two transport wagons; fortress and fighting follow the model in Ortelius “faithfully.”' },
+    { key:'IV', title:'Siege IV — Vestung Comorna (besieged by the Turks) — 1594', img:'https://previous.bildindex.de/bilder/fmd10005850a.jpg', href:'https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#d3bb7616-fecf-4589-8763-4a03df87a8d5', meta:'Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War', text:'Wide format: Turkish riders enter from the left, including a blue-clad figure thrusting a lance with a blue flag diagonally into the image. At the lower right two dromedaries kneel in front of Turkish tents. The Danube divides the scene, and opposite lies the Christian-held fortress of Komorn (Komárom), which survived the siege while the adjoining town burns.' },
+    { key:'V', title:'Siege V — Vestung Gran (recaptured by Christians)', img:'https://previous.bildindex.de/bilder/fmd10005848a.jpg', href:'https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#43223295-fe64-4973-9722-6a29c8a4b649', meta:'Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War', text:'Wide format: at the left a figure bends forward as a back view; at the lower right stands the half-figure of a courtly man with a musket and a brown horse, whose face suggests “one of Count Wolfgang’s sons.” In the background the fortress of Gran, the water town and the Ratzenstadt are clearly visible. The flags indicate the stage of conquest as explained by Ortelius (including the Turkish flag above the fortress and imperial flags over other positions).' },
+    { key:'VI', title:'Siege VI — Vestung Vizzegrad (besieged by Christians)', img:'https://previous.bildindex.de/bilder/fmd10005840a.jpg', href:'https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#1a5f9651-0bc5-4052-82c2-931af07e304b', meta:'Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War', text:'Wide format: two richly dressed officers dominate the left foreground (one as a back view in armour with a plume, one in a grey shimmering garment with a striking helmet), while men work at cannons on the right. In the background, the citadel of Visegrád rises on a conical hill by the Danube and commands a large natural harbour with many transport ships.' },
+    { key:'VII', title:'Siege VII — Statt Waitzen (besieged by the Turks) — 1597', img:'https://previous.bildindex.de/bilder/fmd10005842a.jpg', href:'https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#eec605b1-e1e4-4ecc-83f6-808bb11130a6', meta:'Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War', text:'Narrow format: in the right foreground a Turk with turban and mace rides frontally toward the viewer. A Turkish tent stands to the left beneath him. In the background Waitzen (Vác) lies on the Danube as a fortified town with a fortified monastery; several houses burn, and town and monastery are shown “mirror-reversed” compared to Ortelius.' },
+    { key:'VIII', title:'Siege VIII — Vestung Raab (night recapture by Christians)', img:'https://previous.bildindex.de/bilder/fmd10005846a.jpg', href:'https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#f4327f2f-39e6-4656-bd63-976685a535ed', meta:'Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War', text:'Narrow format: the siege is presented as a night scene. At the front right two sentries stand with armour and clothing catching the lantern light. In the background the fortress of Raab (Győr) is shown with two large explosions at its bastions, which Katzenberger copied “exactly” from Sibmacher.' },
+    { key:'IX', title:'Siege IX — Hauptstatt Offen (besieged by Christians) — 1598', img:'https://previous.bildindex.de/bilder/fmd10005847a.jpg', href:'https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#a175d3bc-d51a-41ce-adc3-dc879519b644', meta:'Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War', text:'Wide format: in the foreground a large cannon is pulled left by horses. The driver sits on the cannon and swings a long whip, while a hunting dog runs behind. In the background Offen (Óbuda/Buda) appears as a splendid walled city with castle, churches and minarets. The pleasure garden and the Turkish cemetery are taken from Sibmacher.' },
+    { key:'X', title:'Siege X — Hauptstatt Offen (besieged by Christians)', img:'https://previous.bildindex.de/bilder/fmd10005844a.jpg', href:'https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#038123be-6142-456c-a90e-ff6e1366e272', meta:'Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War', text:'Wide format: at the front right an armoured imperial commander on a grey horse rides into the picture with a white plume and, by facial features and blond beard, appears to be “a son of Count Wolfgang.” A page in a red cloak runs ahead to guide him toward the camp. Troops stand in formation beyond a Danube tributary and cannons are fired from an entrenchment, while the city of Offen is cropped at the left edge and recognizable via the Danube islands and bridges.' },
+    { key:'XI', title:'Siege XI — Hauptstatt Offen (besieged by Christians)', img:'https://previous.bildindex.de/bilder/fmd10005845a.jpg', href:'https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#3b70965e-4f71-4793-b841-5de99378db4e', meta:'Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War', text:'Wide format: in the foreground a brown horse is shown in profile with a rider in a white doublet and a voluminous red sash; “the figure depicted is Count Ludwig Kasimir,” who died during the siege of Gran (Eszergom) in 1604. At the bottom edge, on a smaller scale, a courtly dressed woman is shown being guided by a soldier. She holds a goldfinch that “was regarded as a symbol of Christ’s sacrificial death”.' },
+    { key:'XII', title:'Siege XII — Vestung Gran (besieged by the Turks) — 1604', img:'https://previous.bildindex.de/bilder/fmd10005849a.jpg', href:'https://www.deckenmalerei.eu/74e85492-8198-4a28-bd77-17d107f9b9a0#c6bc65b4-9705-4a71-a121-1d3531542230', meta:'Schloss Weikersheim · former dining room ceiling (Tafelstube) · Long Turkish War', text:'Narrow format: two horses seen from behind carry cannon barrels, wagon wheels and kettledrums; beside them walks a man dressed in black with a grey floppy hat. In the background, the Danube near Offen (Óbuda) and Pest is rendered in steep bird’s-eye view like a map. A small skirmish takes place on open ground in front of tents and a hill with cannons, and the broad fortified city of Offen appears at the upper left.' }
+  ]);
+});
 </script>
-
 
 
 
@@ -2116,21 +1574,17 @@ Explore the life and works of individual Baroque ceiling painters through an int
 
 Try exploring these notable Baroque ceiling painters:
 
-<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 10px; margin: 20px 0;">
-    <button onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Asam, Cosmas Damian');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}" 
-            style="padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95em;">
+<div class="painter-grid">
+    <button class="painter-grid__btn" onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Asam, Cosmas Damian');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}">
         🎨 Cosmas Damian Asam
     </button>
-    <button onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Seivert, Lammers');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}" 
-            style="padding: 12px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95em;">
+    <button class="painter-grid__btn painter-grid__btn--rose" onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Seivert, Lammers');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}">
         🎨 Lammers Seivert
     </button>
-    <button onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Castelli, Carlo Ludovico');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}" 
-            style="padding: 12px; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95em;">
+    <button class="painter-grid__btn painter-grid__btn--cyan" onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Castelli, Carlo Ludovico');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}">
         🎨 Carlo Ludovico Castelli
     </button>
-    <button onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Holzer, Johann Evangelist');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}" 
-            style="padding: 12px; background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color: #333; border: none; border-radius: 8px; cursor: pointer; font-size: 0.95em;">
+    <button class="painter-grid__btn painter-grid__btn--pastel" onclick="if(window.loadPainterInExplorer){window.loadPainterInExplorer('Holzer, Johann Evangelist');document.getElementById('painter-explorer-container').scrollIntoView({behavior:'smooth'});}">
         🎨 Johann Evangelist Holzer
     </button>
 </div>

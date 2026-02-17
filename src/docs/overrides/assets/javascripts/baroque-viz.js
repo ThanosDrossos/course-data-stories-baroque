@@ -3386,6 +3386,129 @@ window.BaroqueViz = (function() {
         });
     }
 
+    /* =========================================================================
+       initAsamCarousel — simple image carousel for Turkish War frescoes
+       ========================================================================= */
+    function initAsamCarousel(containerId, images) {
+        const container = _getElement(containerId);
+        if (!container) return;
+
+        let idx = 0;
+        const imgEl = container.querySelector('#turk-image');
+        if (!imgEl) return;
+
+        function turkChange(step) {
+            idx = (idx + step + images.length) % images.length;
+            imgEl.src = images[idx];
+        }
+
+        // Expose for onclick attributes
+        window.turkChange = turkChange;
+    }
+
+    /* =========================================================================
+       initSiegeGallery — Weikersheim 12 siege scenes click-through gallery
+       ========================================================================= */
+    function initSiegeGallery(rootId, slides) {
+        const root = document.getElementById(rootId);
+        if (!root) return;
+
+        const imgEl   = document.getElementById('wk-img');
+        const linkEl  = document.getElementById('wk-link');
+        const counterEl = document.getElementById('wk-counter');
+        const capTitle  = document.getElementById('wk-capTitle');
+        const capMeta   = document.getElementById('wk-capMeta');
+        const capText   = document.getElementById('wk-capText');
+        const dotsWrap  = document.getElementById('wk-dots');
+        const thumbsWrap = document.getElementById('wk-thumbs');
+
+        let idx = 0;
+
+        function render() {
+            const s = slides[idx];
+            imgEl.src = s.img;
+            imgEl.alt = s.title;
+            linkEl.href = s.href;
+            capTitle.textContent = s.title;
+            capMeta.textContent  = s.meta;
+            capText.textContent  = s.text;
+            counterEl.textContent = `${idx + 1} / ${slides.length}`;
+
+            [...dotsWrap.children].forEach((b, i) => {
+                b.setAttribute('aria-current', i === idx ? 'true' : 'false');
+            });
+            [...thumbsWrap.children].forEach((t, i) => {
+                t.setAttribute('aria-current', i === idx ? 'true' : 'false');
+            });
+        }
+
+        function go(n) {
+            idx = (n + slides.length) % slides.length;
+            render();
+        }
+
+        // Build dots
+        slides.forEach((s, i) => {
+            const b = document.createElement('button');
+            b.className = 'wk-dot';
+            b.type = 'button';
+            b.setAttribute('aria-label', `Go to ${i + 1}`);
+            b.addEventListener('click', () => go(i));
+            dotsWrap.appendChild(b);
+        });
+
+        // Build thumbnails
+        slides.forEach((s, i) => {
+            const t = document.createElement('button');
+            t.className = 'wk-thumb';
+            t.type = 'button';
+            t.setAttribute('aria-label', `Open ${i + 1}`);
+            t.addEventListener('click', () => go(i));
+
+            const im = document.createElement('img');
+            im.src = s.img;
+            im.alt = s.title;
+            im.loading = 'lazy';
+            im.referrerPolicy = 'no-referrer';
+
+            t.appendChild(im);
+            thumbsWrap.appendChild(t);
+        });
+
+        // Prev / Next buttons
+        document.getElementById('wk-prev').addEventListener('click', () => go(idx - 1));
+        document.getElementById('wk-next').addEventListener('click', () => go(idx + 1));
+
+        // Keyboard navigation
+        root.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft')  go(idx - 1);
+            if (e.key === 'ArrowRight') go(idx + 1);
+        });
+        root.tabIndex = 0;
+
+        // Swipe support
+        const stage = document.getElementById('wk-stage');
+        let x0 = null;
+
+        stage.addEventListener('touchstart', (e) => {
+            x0 = e.touches[0].clientX;
+        }, { passive: true });
+
+        stage.addEventListener('touchend', (e) => {
+            if (x0 === null) return;
+            const x1 = e.changedTouches[0].clientX;
+            const dx = x1 - x0;
+            if (Math.abs(dx) > 45) {
+                if (dx > 0) go(idx - 1);
+                else go(idx + 1);
+            }
+            x0 = null;
+        }, { passive: true });
+
+        // Initial render
+        render();
+    }
+
     // Public API
     return {
         renderStateDistribution,
@@ -3412,6 +3535,8 @@ window.BaroqueViz = (function() {
         initTopicSelector,
         initRittersaal,
         initBattleHallLightbox,
+        initAsamCarousel,
+        initSiegeGallery,
         QUERIES,
         COLORS,
         ICONCLASS_LABELS
