@@ -76,19 +76,19 @@ This data story addresses the following research questions:
 
 ## User experience 
 
-This data story invites users to explore Baroque ceiling painting between **1500 and 1750** through two complementary perspectives: a **macro perspective** and a **micro perspective**.
+This data story invites users to explore Baroque ceiling painting between **1500 and 1750** through two complementary perspectives: a **distant reading** and a **close reading**.
 
-**Macro perspective:**
+**Distant reading:**
 This perspective provides an overview of the period by presenting temporal, spatial, and historical information. It visualizes how ceiling paintings are distributed over time, highlights their geographical occurrence across regions and building types, and situates the artworks within broader political and historical settings of the era. This perspective is intended to support orientation and to offer contextual reference points.
 
-**Micro perspective:**
+**Close reading:**
 This perspective shifts the focus to an individual level. Users can explore the period through the life and work of a representative artist associated with a selected thematic block. Biographical information, artistic output, and geographical movement are presented to allow users to experience Baroque ceiling painting from a personal viewpoint and to observe how artistic activity unfolds across time and space.
 
 By combining aggregated views with individual trajectories, this data story enables users to navigate between overview and detail, encouraging independent exploration and reflection on Baroque ceiling painting within its historical context.
 
 ---
 
-## Macro perspective
+## Distant reading
 ### Analysis 01: Geographic Distribution
 
 Where are Baroque ceiling paintings concentrated across Germany?
@@ -424,7 +424,7 @@ LIMIT 20
 
 ---
 
-## Micro perspective
+## Close reading
 
 Pick one of the 3 "lenses" below to dive deep into a thematic perspective on Baroque ceiling painting. Each topic opens a full, richly illustrated exploration — click to enter, and use the back button to return here.
 
@@ -483,7 +483,7 @@ Beyond institutional religion, Baroque imagery also reflects a broader early mod
 - beliefs in miracles, magic, and supernatural forces,
 - and interest in astrology and cosmic influence.
 
-This micro perspective explores **ICONCLASS 1 (Religion & Magic)** and its five major sub-branches:
+This close reading perspective explores **ICONCLASS 1 (Religion & Magic)** and its five major sub-branches:
 
 - **10** · creation, cosmos, universe, life (symbolic representations)  
 - **11** · Christian religion  
