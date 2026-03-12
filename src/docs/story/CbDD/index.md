@@ -40,7 +40,7 @@ We followed a multi-step data pipeline to gather and analyze the information:
 
 While our data story provides a comprehensive overview of Baroque ceiling paintings in Germany, there are several limitations to consider:
 
-1. **Data Completeness**: The CbDD corpus, while extensive, may not capture every existing Baroque ceiling painting in Germany. Since it CbDD is still considered a work in progress, there may be gaps in the dataset and the dataset has a bias towards weel-documented artworks in Bavaria. Hence, it may not fully represent the diversity of ceiling paintings across all regions and the biographical details of lesser-known artists may be incomplete.
+1. **Data Completeness**: The CbDD corpus, while extensive, may not capture every existing Baroque ceiling painting in Germany. Since it CbDD is still considered a work in progress, there may be gaps in the dataset and the dataset has a bias towards well-documented artworks in Bavaria. Hence, it may not fully represent the diversity of ceiling paintings across all regions and the biographical details of lesser-known artists may be incomplete.
 
 2. **Data Quality and Consistency**: The data retrieved from different sources (CbDD, Bildindex, etc.) may have inconsistencies in naming conventions, metadata formats, and completeness. For example, painter names may be spelled differently across sources, and some paintings may lack precise dating or location information. This can lead to challenges in data integration and may affect the accuracy of our analyses. We have found discrepancies between NFDI and the original CbDD dataset, which we had to resolve manually. Changes in the CbDD dataset were often not reflected in the NFDI endpoint, leading to further mismatches and missing data.
 
