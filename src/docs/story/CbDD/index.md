@@ -71,6 +71,7 @@ This data story addresses the following research questions:
 3. **Artistic Networks**: Who were the most prolific painters, and where did they work?
 4. **Thematic Analysis**: What iconographic subjects dominate Baroque ceiling paintings?
 5. **Cross-Dataset Links**: How do CbDD records connect to historical photographs in Bildindex?
+6. **Specialized Perspectives**: How do specific themes (e.g. religious, mythological, societal) manifest in terms of geography, time, and artistic production?
 
 ---
 
@@ -1596,7 +1597,13 @@ Try exploring these notable Baroque ceiling painters:
 
 ## Sources
 
-Baroque:
+### Chruch and Religion
+
+
+### Society and Culture
+
+
+### Mythology
 
 Art and the thirty years’ war. Die Welt Der Habsburger. Abgerufen 5. Februar 2026, von https://www.habsburger.net/en/chapter/art-and-thirty-years-war
 
@@ -1606,8 +1613,12 @@ Corpus der barocken Deckenmalerei in Deutschland (Cbdd). Abgerufen 5. Februar 20
 
 Mannheim, kurfürstliches residenzschloss, haupttreppenhaus, ausschnitt aus dem deckengemälde von cosmas damian asam, „urteil des paris“. Google Arts & Culture. Abgerufen 5. Februar 2026, von https://artsandculture.google.com/asset/mannheim-kurfürstliches-residenzschloss-haupttreppenhaus-ausschnitt-aus-dem-deckengemälde-von-cosmas-damian-asam-„urteil-des-paris“/RwHZdS1VCPSpzw
 
-network,  romoe conservators.. Residenzschloss, riesensaal, deckengemälde. Romoe Netzwerk. Abgerufen 5. Februar 2026, von https://www.romoe.com/de/artikel/residenzschloss-riesensaal-deckengemaelde_ef5kcvlt.html
+Romoe conservators network. Residenzschloss, riesensaal, deckengemälde. Romoe Netzwerk. Abgerufen 5. Februar 2026, von https://www.romoe.com/de/artikel/residenzschloss-riesensaal-deckengemaelde_ef5kcvlt.html
 
-Residenzschloss mannheim. Abgerufen 5. Februar 2026, von https://www.zum.de/Faecher/G/BW/Landeskunde/rhein/ma/schloss/treppenhaus.htm
+Residenzschloss Mannheim. Abgerufen 5. Februar 2026, von https://www.zum.de/Faecher/G/BW/Landeskunde/rhein/ma/schloss/treppenhaus.htm
 
 Pietro, Carlo. Die Stuckateure und Baumeister Castelli aus Melide und Bissone. Abgerufen 5. Februar 2026, von https://www.sueddeutscher-barock.ch/PDF-Bio_M/Castelli_Melide.pdf
+
+
+
+

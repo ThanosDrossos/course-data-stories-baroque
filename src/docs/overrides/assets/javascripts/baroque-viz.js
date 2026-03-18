@@ -195,7 +195,7 @@ window.BaroqueViz = (function() {
                 height: 500
             };
 
-            Plotly.newPlot(el, [trace], layout, { responsive: true });
+            await _renderPlot(el, [trace], layout, { responsive: true });
             return data;
         } catch (error) {
             el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
@@ -234,7 +234,7 @@ window.BaroqueViz = (function() {
                 height: 400
             };
 
-            Plotly.newPlot(el, [trace], layout, { responsive: true });
+            await _renderPlot(el, [trace], layout, { responsive: true });
             return data;
         } catch (error) {
             el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
@@ -270,7 +270,7 @@ window.BaroqueViz = (function() {
                 height: 600
             };
 
-            Plotly.newPlot(el, [trace], layout, { responsive: true });
+            await _renderPlot(el, [trace], layout, { responsive: true });
             return data;
         } catch (error) {
             el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
@@ -478,7 +478,7 @@ window.BaroqueViz = (function() {
                 }]
             };
 
-            await Plotly.newPlot(el, [edgeHoverTrace, nodeTrace], layout, {
+            await _renderPlot(el, [edgeHoverTrace, nodeTrace], layout, {
                 responsive: true,
                 displayModeBar: false
             });
@@ -525,7 +525,7 @@ window.BaroqueViz = (function() {
                 legend: { orientation: 'h', y: -0.1 }
             };
 
-            Plotly.newPlot(el, [trace], layout, { responsive: true });
+            await _renderPlot(el, [trace], layout, { responsive: true });
             return labeled;
         } catch (error) {
             el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
@@ -688,7 +688,7 @@ window.BaroqueViz = (function() {
                 height: 400
             };
 
-            Plotly.newPlot(el, [trace], layout, { responsive: true });
+            await _renderPlot(el, [trace], layout, { responsive: true });
             return data;
         } catch (error) {
             el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
@@ -1729,7 +1729,7 @@ window.BaroqueViz = (function() {
                 annotations: annotations
             };
 
-            Plotly.newPlot(el, [trace], layout, { responsive: true });
+            await _renderPlot(el, [trace], layout, { responsive: true });
             return data;
         } catch (error) {
             el.innerHTML = `<div class="error">Error: ${error.message}</div>`;
@@ -2968,6 +2968,19 @@ window.BaroqueViz = (function() {
             return document.querySelector(container);
         }
         return container;
+    }
+
+    /**
+     * Helper: render Plotly chart and ensure loading placeholders are removed
+     */
+    async function _renderPlot(el, traces, layout, config = { responsive: true }) {
+        Plotly.purge(el);
+        el.replaceChildren();
+
+        const result = await Plotly.newPlot(el, traces, layout, config);
+
+        el.querySelectorAll('.loading').forEach((node) => node.remove());
+        return result;
     }
 
     /**
