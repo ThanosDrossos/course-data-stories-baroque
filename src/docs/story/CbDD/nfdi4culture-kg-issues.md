@@ -8,9 +8,9 @@
 
 ## NFDI Spaqrl Endpoint and Query
 
-- Endpoint: `https://kg.nfdi4culture.de/sparql`
+- Endpoint: `https://nfdi4culture.de/sparql`
 
-Query used for search:
+Query used for KG search:
 
 ```sparql
 PREFIX fabio: <http://purl.org/spar/fabio/>
