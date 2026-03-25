@@ -21,11 +21,7 @@
   - ID: `423f84cc-0f21-4f8f-8e7f-c108009b95ea`
   - Type: `Malereiteil`
   - Is part of group: https://www.deckenmalerei.eu/df063af8-3fd4-4300-a9e5-82e61e5f5cb3 (the larger painting entity, also missing in KG)
-<<<<<<< HEAD
   - Is part of painting: https://www.deckenmalerei.eu/c13dde7c-8891-430a-aed7-99fb87e73117 (exists in KG, but subentities are missing)
-=======
-  - Is part of painting: https://www.deckenmalerei.eu/c13dde7c-8891-430a-aed7-99fb87e73117 (exists in KG, but no subentities)
->>>>>>> 469c6c955080ad1d223326ca712f18cbeef8928e
 
 ## 2. Missing Work-Level Metadata on Painting Nodes
 
