@@ -6,6 +6,29 @@
 - Target system: NFDI4Culture Knowledge Graph records used for SPARQL-based integration
 - Focus: missing entities, missing metadata, stale provider resolution
 
+## NFDI Spaqrl Endpoint and Query
+
+- Endpoint: `https://kg.nfdi4culture.de/sparql`
+
+Query used for search:
+
+```sparql
+PREFIX fabio: <http://purl.org/spar/fabio/>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
+PREFIX nfdicore: <https://nfdi.fiz-karlsruhe.de/ontology/>
+PREFIX schema:  <http://schema.org/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX dcat:    <http://www.w3.org/ns/dcat#>
+PREFIX n4c:     <https://nfdi4culture.de/id/>
+PREFIX cto:     <https://nfdi4culture.de/ontology/>
+    SELECT ?property ?value
+    WHERE {{
+      <{INSERT URI}> ?property ?value .
+    }}
+    ORDER BY ?property
+```
+
 ## 1. Missing Entity Coverage: `Malereiteil`
 
 - Problem: `Malereiteil` records (painting parts / sub-works) are not represented in the NFDI4Culture Knowledge Graph.
