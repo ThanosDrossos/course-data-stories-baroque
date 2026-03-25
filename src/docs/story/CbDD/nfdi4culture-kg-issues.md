@@ -20,7 +20,8 @@
   - Source record: [A1 Orpheus](https://www.deckenmalerei.eu/423f84cc-0f21-4f8f-8e7f-c108009b95ea)
   - ID: `423f84cc-0f21-4f8f-8e7f-c108009b95ea`
   - Type: `Malereiteil`
-  - Source-only context: `Iconclass 94O51`, `Technique Mischtechnik`, `Material Leinwand`, `Dating 1601-1602`, patron `Wolfgang II., Hohenlohe-Weikersheim, Graf`, painter `Katzenberger, Balthasar`, `is documented in A1 Orpheus [Textteil]`, `is part of Säugetiere [Malereiteil]`
+  - Is part of group: https://www.deckenmalerei.eu/df063af8-3fd4-4300-a9e5-82e61e5f5cb3 (the larger painting entity, also missing in KG)
+  - Is part of painting: https://www.deckenmalerei.eu/c13dde7c-8891-430a-aed7-99fb87e73117 (exists in KG, but subentities are missing)
 
 ## 2. Missing Work-Level Metadata on Painting Nodes
 
