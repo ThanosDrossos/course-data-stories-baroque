@@ -40,13 +40,19 @@ We followed a multi-step data pipeline to gather, integrate, and analyze the mat
 
 While this data story provides a broad overview of Baroque ceiling paintings in Germany, several limitations should be kept in mind:
 
-1. **Data Completeness**: Although the CbDD corpus is extensive, it may not capture every surviving Baroque ceiling painting in Germany. As CbDD is still a work in progress, the dataset contains gaps and shows a bias toward well-documented works in Bavaria. It may therefore not fully represent the diversity of ceiling paintings across all regions, and biographical details for lesser-known artists may remain incomplete.
+1. **Data Completeness**: Although the CbDD corpus is extensive, it may not capture every surviving Baroque ceiling painting in Germany. As CbDD is still a work in progress, the dataset contains gaps and shows a bias toward well-documented works in Bavaria. It may therefore not fully represent the diversity of ceiling paintings across all regions, and biographical details for lesser-known artists may remain incomplete. As CbDD is still a work in progress, the dataset contains gaps and shows a bias toward well-documented works in Bavaria. Moreover, as a long-term research project, the corpus is continuously expanded and revised, meaning that classifications and metadata may change over time. For more detailed information on the project background and development of the CbDD, please refer to the following website: https://deckenmalerei.badw.de/projektgeschichte.html.
 
 2. **Data Quality and Consistency**: The data retrieved from different sources such as CbDD and Bildindex may contain inconsistencies in naming conventions, metadata formats, and levels of completeness. Painter names may be spelled differently across sources, and some paintings lack precise dating or location information. This creates challenges for data integration and may affect the accuracy of our analyses. We also identified discrepancies between the NFDI endpoint and the original CbDD dataset, which had to be resolved manually. Updates in the CbDD dataset were often not reflected in the NFDI endpoint, leading to further mismatches and missing data.
 
 3. **Analytical Scope**: Our analyses are limited to the attributes available in the dataset and therefore cannot capture every relevant aspect of Baroque ceiling painting. We focus on quantifiable features such as the number of paintings per artist and their geographic distribution, but we do not examine stylistic features, iconography, or artistic techniques in depth. In addition, the temporal analysis depends on the dating information available for each painting, which may be imprecise or missing in some cases.
 
 4. **Interpretation of Results**: The patterns and trends identified here are shaped not only by the historical record, but also by the biases and limitations of the dataset and by our own analytical choices. The prominence of certain artists or regions, for example, may reflect documentation practices rather than actual production patterns. The results should therefore be interpreted with caution and in dialogue with existing art-historical research.
+
+5. **dfg**:
+
+
+
+
 
 ### Dataset Overview
 
@@ -697,7 +703,7 @@ This broader historical function of hunting provides the context for the decorat
 
 The furnishing of the hall was not conceived as a purely artistic creation, but followed precise specifications. A surviving contract between Count Wolfgang II and Katzenberger stipulates that the ceiling was to be executed on canvas in water- or glue-based paint and was to depict scenes of hunting and venery. Themes and motifs were determined by the patron and could be supplemented continuously [11]. The paintings were produced in the workshop and installed afterwards. As payment, the painter received 195 guilders as well as daily meals of bread and soup; execution in oil would have increased the remuneration [12]. Katzenberger worked without a partner, assisted only by helpers, exclusively in daylight, and required thirteen months for the entire cycle, which he completed on 22 November 1602 [13]. This corresponds to an average of roughly five working days per painting [14]. Only a reworking of 1710/11 intensified the colors and gave the room its more strongly Baroque appearance of today [15].
 
-The spatial arrangement likewise followed a fixed concept. The ceiling was designed to be viewed from the fireplace side; access, viewing direction, and the positioning of the figures all refer to this standpoint [16,17]. From there, a sequence unfolds from west to east [18], beginning with Orpheus, followed by scenes of exotic big-game hunting, then red and black game, and finally small game [19]. In the western half of the hall, richly dressed courtly hunters on horseback predominate, whereas farther east peasants and servants without horses increasingly enter the scenes [19]. Many images are also based on printed models. Numerous depictions follow the engraving series by Johannes Stradanus from 1578, while others show parallels to Netherlandish emblematic traditions [20,21]. In Weikersheim, both this series and the "Venationes" published from 1596 were available, and Katzenberger adopted several plates from them [22]. In total, the ceiling comprises 69 paintings structured into three pictorial groups: mammal hunting in large octagonal fields, bird hunting in rectangular fields, and fishing in half-octagons [23].
+The spatial arrangement likewise followed a fixed concept. The ceiling was designed to be viewed from the fireplace side; access, viewing direction, and the positioning of the figures all refer to this standpoint [16,17]. From there, a sequence unfolds from west to east [18], beginning with Orpheus, followed by scenes of exotic big-game hunting, then red and black game, and finally small game [19]. In the western half of the hall, richly dressed courtly hunters on horseback predominate, whereas farther east peasants and servants without horses increasingly enter the scenes [19]. Many images are also based on printed models. Numerous depictions follow the engraving series by Johannes Stradanus from 1578, while others show parallels to Netherlandish emblematic traditions. In Weikersheim, both this series and the "Venationes" published from 1596 were available, and Katzenberger adopted several plates from them. In total, the ceiling comprises 69 paintings structured into three pictorial groups: mammal hunting in large octagonal fields, bird hunting in rectangular fields, and fishing in half-octagons [20,21].
 
 On this basis, the ceiling paintings can now be explored from their intended viewing point at the fireplace, following the sequence from west to east. Selected works from each section of the cycle are presented as examples. In the visualization, mammal hunting is marked in orange, bird hunting in white, and fishing in blue in order to indicate the three thematic zones of the ceiling. Clicking on the highlighted areas reveals more detailed information about each scene.
 
@@ -900,39 +906,6 @@ document.addEventListener('DOMContentLoaded', function() { BaroqueViz.initRitter
 The central ceiling painting of Orpheus forms the key to the hall's overall program. In early modern tradition, Orpheus was regarded as a symbol of the good ruler who pacifies the world not through violence, but through order, reason, and moderation. In Weikersheim, this figure is deliberately associated with Count Wolfgang II: the placement above the fireplace, recurring portrait-like features in the hunting scenes, and the orientation of the sculpted animals toward the fireplace all symbolically link the count with Orpheus as a figure of ordering authority.
 
 Against this background, the hunting scenes acquire their full meaning. Hunting appears not merely as an activity, but as an expression of princely responsibility: the mastery of dangerous animals stands for protection and care toward the subjects. The landscapes depicted therefore present an ordered and peaceful world, an image of legitimate rule.
-
-
-### Sources
-
-The art-historical descriptions and contextual interpretations presented here are primarily based on the research interpretations documented in the [CbDD](https://www.deckenmalerei.eu/42d06165-58e7-4653-bfe4-3d5f7091fc33#6e73f774-4b7f-4e37-937b-e11cc35c5bc8) and the primary sources referenced therein. The specific sources used are listed in the references below.
-
-<div class="cbdd-references" markdown="0">
-<ol>
-<li>Die Quellen hierzu und insgesamt zum Oeuvre von Georg Robin bei Freeden, Georg Robin, 1943/44. Speziell zu Weikersheim im Jahr 1586: ebd., S.&nbsp;38. Die aktuellen Signaturen der von Freeden herangezogenen Archivalien bei Weyer, Georg Stegle, 2017.</li>
-<li>Freeden, Georg Robin, 1943/44, S.&nbsp;38. Hingegen bewertet Weyer, Georg Stegle, 2017, S.&nbsp;50 den Anteil Stegles deutlich höher als Freeden. Zudem schreibt er Stegle Walther-Gerd Flecks zwischenzeitlich kritisch bewertete Rekonstruktion einer regelmäßigen Dreiflügelanlage in Weikersheim zu. Zur Kritik an Flecks Idealrekonstruktion (Fleck, Weikersheim, 1954): Großmann, Beobachtungen, 2019 und Ziegler, Idealplan, 2019. Zur weiteren Erforschung der Planungs- und Baugeschichte des Weikersheimer Renaissanceschlosses außerdem: <a href="https://www.hofkulturblog.de/das-dreiecksschloss-des-grafen-wolfgang-in-weikersheim-revision-einer-alten-kunsthistorischen-hypothese-mit-hilfe-digitaler-methoden/" target="_blank" rel="noopener">Hofkulturblog</a> sowie ausführlich mit zahlreichen Visualisierungen der Beitrag von Jan Lutteroth und Frieder Leipold: <a href="https://books.ub.uni-heidelberg.de/arthistoricum/reader/download/774/774-17-91786-1-10-20201211.pdf" target="_blank" rel="noopener">arthistoricum.net</a>.</li>
-<li>Der Raum des Treppenhauses gehört zumindest in seinem äußeren Mauerwerk der Renaissancezeit an, wenngleich der Langenburger Bau in seinen aufgehenden Geschossen erst um 1680 hinzukam (Ziegler, Idealplan, 2019, S.&nbsp;140–142).</li>
-<li>Freeden, Georg Robin, 1943/44, S.&nbsp;39. Ausführlich zur Baugeschichte und ihren Quellen jetzt: Ziegler, Idealplan, 2019.</li>
-<li>Ziegler, Idealplan, 2019, S.&nbsp;140.</li>
-<li>University of Konstanz: symbolic means for representing concepts of order. <a href="https://kops.uni-konstanz.de/server/api/core/bitstreams/a191c70e-e145-45e2-83eb-ddb302cee269/content" target="_blank" rel="noopener">KOPS</a>.</li>
-<li>Joachim Hamberger: Eine kurzer Abriss der Jagdgeschichte. Von Hirschen und Menschen…. In: <em>LWF aktuell</em>, Nr.&nbsp;44, 2004, S.&nbsp;28 (<a href="https://www.lwf.bayern.de" target="_blank" rel="noopener">bayern.de</a> [PDF; abgerufen am 13.&nbsp;Dezember 2018]).</li>
-<li>Peter Blickle: <em>Die Revolution von 1525</em>. 2.&nbsp;Auflage. Oldenbourg Verlag, München 1983, ISBN&nbsp;3-486-44652-5, S.&nbsp;58.</li>
-<li>Bernd Ergert: <em>Die Jagd in Bayern – von der Vorzeit bis zur Gegenwart</em>. Rosenheimer Verlagshaus, Rosenheim 1984, S.&nbsp;123–127.</li>
-<li>barockjagd.de: Jagen vor 250 Jahren.</li>
-<li>Poser, Deckenbilder, 1980, S.&nbsp;160.</li>
-<li>Poser, Deckenbilder, 1980, S.&nbsp;160.</li>
-<li>Poser, Deckenbilder, 1980, S.&nbsp;161.</li>
-<li>Poser, Deckenbilder, 1980, S.&nbsp;160, dort ohne das Wort „alleins". Die genaue Transkription: Drös, Inschriften Mergentheim, 2002, Nr.&nbsp;353.</li>
-<li>Abschlussbericht der Restaurierung vom 05.03.1998. Den Bericht stellte der Autorin Herr Dipl.&nbsp;Ing. Erik Reinhold vom Staatlichen Hochbauamt Heilbronn zur Verfügung. Bindemittel waren Glutinleim und Stärkekleister.</li>
-<li>Poser, Deckenbilder, 1980; Kniep, Glück, 2005; Käpplinger, Jagd, 2011; Käpplinger, Auf's Schönste, 2019, S.&nbsp;197. Auch Großmann, Beobachtungen, 2019, S.&nbsp;133 vermutet die Wegeführung von der Tafelstube kommend in den Saal.</li>
-<li>Diese Beobachtung auch bei Käpplinger, Jagd, 2011, S.&nbsp;76, obwohl er eine Leserichtung von Ost nach West annimmt.</li>
-<li>Käpplinger, Jagd, 2011.</li>
-<li>Käpplinger, Jagd, 2011, der die Entwicklung jedoch aufsteigend von der niederen zur hohen Jagd beurteilte, obwohl bei dieser Betrachtungsweise alle Bilder auf dem Kopf stehen.</li>
-<li>Poser, Deckenbilder, 1980, S.&nbsp;161. Ebenso Käpplinger, Jagd, 2011, S.&nbsp;74–75.</li>
-<li>Käpplinger, Jagd, 2011, S.&nbsp;81–85.</li>
-<li>Allerdings benennt Käpplinger bereits das Cosimo&nbsp;I. gewidmete Stichwerk als „Venationes", da ihm das nachfolgende Stichwerk der „Venationes" offenbar nicht bekannt war.</li>
-<li>Die übersichtliche Darstellung der Zyklen ist Käpplinger, Jagd, 2011 zu verdanken.</li>
-</ol>
-</div>
 
 
 
@@ -1177,15 +1150,16 @@ The archangel Michael, armed with sword and shield, charges into the battlefield
 
 Another example of this mode of representation can be found at Schloss Weikersheim, already introduced earlier in this story.
 
-The twelve large-format siege scenes originally belonged to the ceiling of the former dining room of Weikersheim Palace. They were removed when the room was subdivided in 1837 and reappeared in the palace in 1946. Today, some of them are displayed in the hallway in front of Count Wolfgang's former apartment in the kitchen building [1,2]. Stylistically, they can be attributed almost entirely to Balthasar Katzenberger and were probably created immediately after the ceiling paintings in the hall, that is, around 1603-1604 [3].
+The twelve large-format siege scenes originally belonged to the ceiling of the former dining room of Weikersheim Palace. They were removed when the room was subdivided in 1837 and reappeared in the palace in 1946. Today, some of them are displayed in the hallway in front of Count Wolfgang's former apartment in the kitchen building [22,23]. Stylistically, they can be attributed almost entirely to Balthasar Katzenberger and were probably created immediately after the ceiling paintings in the hall, that is, around 1603-1604 [24].
 
-The paintings depict sieges of Hungarian fortresses during the Long Turkish War (1593-1606) between the Ottoman Empire and the Habsburgs [4]. This was a war of fortresses, marked by repeated sieges of fortified complexes, and it ended with the Peace of Zsitvatorok [4]. The events shown range from 1594 to 1604 at the latest.
+The paintings depict sieges of Hungarian fortresses during the Long Turkish War (1593-1606) between the Ottoman Empire and the Habsburgs [25]. This was a war of fortresses, marked by repeated sieges of fortified complexes, and it ended with the Peace of Zsitvatorok [25]. The events shown range from 1594 to 1604 at the latest.
 
-Copper engravings from Hieronymus Oertl's chronicle, published in Nuremberg in 1602, served as the basis for the images [5,6]. The scenes were adopted from these engravings together with their captions naming places and dates [7]. The selection included actions on both the imperial and the Ottoman side and was presumably shaped by the participation of members of the House of Hohenlohe [8]. The latest scene commemorates the death of Ludwig Kasimir during the siege of Gran in 1604 and functions as a memorial image [9].
+Copper engravings from Hieronymus Oertl's chronicle, published in Nuremberg in 1602, served as the basis for the images [26,27]. The scenes were adopted from these engravings together with their captions naming places and dates [28]. The selection included actions on both the imperial and the Ottoman side and was presumably shaped by the participation of members of the House of Hohenlohe [29]. The latest scene commemorates the death of Ludwig Kasimir during the siege of Gran in 1604 and functions as a memorial image [30].
 
-The scenes follow a uniform structure: a battle scene in the foreground, and in the middle and background the siege of a fortress set within a broad landscape of tents, skirmishes, and smaller battles [3]. Their order follows the chronology of events [10].
+The scenes follow a uniform structure: a battle scene in the foreground, and in the middle and background the siege of a fortress set within a broad landscape of tents, skirmishes, and smaller battles [24]. Their order follows the chronology of events [31].
 
 Taken together, the paintings do not depict generic battle scenes, but a sequence of identifiable historical sieges derived from contemporary printed war chronicles and connected to the participation of the Hohenlohe family.
+
 
 
 
@@ -1252,23 +1226,6 @@ document.addEventListener('DOMContentLoaded', function() {
   ]);
 });
 </script>
-
-### Sources
-
-<div class="cbdd-references" markdown="0">
-<ol>
-<li>Merten, Weikersheim, o.&nbsp;J., S.&nbsp;40. Trentin-Meyer, Georg Friedrich von Hohenlohe, 2019, S.&nbsp;90 spricht versehentlich von 13 Gemälden.</li>
-<li>Freeden, Kamin, 1950, S.&nbsp;142.</li>
-<li>Die Maße bei Drös, Inschriften Mergentheim, 2002, S.&nbsp;248. Ebd., S.&nbsp;249 die bislang ausführlichste Auseinandersetzung mit den Gemälden.</li>
-<li>Zum Langen Türkenkrieg: Niederkorn, Langer Türkenkrieg, 1993.</li>
-<li>Diese wichtige Vorlage bereits bei Fandrey, Weikersheim, 2010, S.&nbsp;60.</li>
-<li>Ortelius, Chronologia, 1602.</li>
-<li>Ebd. Außerdem Ortelius, Chronologia, 1602, „Ad Lectorem".</li>
-<li>Drös, Inschriften Mergentheim, 2002, S.&nbsp;248–249.</li>
-<li>Drös, Inschriften Mergentheim, 2002, S.&nbsp;248–250.</li>
-<li>Drös, Inschriften Mergentheim, 2002, Nr.&nbsp;366.</li>
-</ol>
-</div>
 
 
 </div><!-- /topic-society -->
@@ -1600,6 +1557,47 @@ Try exploring these notable Baroque ceiling painters:
 
 
 ### Society and Culture
+
+The art-historical descriptions and contextual interpretations presented in the Society and Culture section are primarily based on the research interpretations documented in the [CbDD](https://www.deckenmalerei.eu/42d06165-58e7-4653-bfe4-3d5f7091fc33#6e73f774-4b7f-4e37-937b-e11cc35c5bc8) and the primary sources referenced therein. The specific sources used are listed in the references below.
+
+<div class="cbdd-references" markdown="0">
+<ol>
+<li> Freeden, Georg Robin, 1943/44. Speziell zu Weikersheim im Jahr 1586: ebd., S.&nbsp;38. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Freeden, Georg Robin, 1943/44, S.&nbsp;38. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/ </li>
+<li> Ziegler, Idealplan, 2019, S.&nbsp;140–142. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/ </li>
+<li> Freeden, Georg Robin, 1943/44, S.&nbsp;39. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/ </li>
+<li> Ziegler, Idealplan, 2019, S.&nbsp;140. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> University of Konstanz: symbolic means for representing concepts of order. Abgerufen 7. Februar 2026, von https://kops.uni-konstanz.de/server/api/core/bitstreams/a191c70e-e145-45e2-83eb-ddb302cee269/content </li>
+<li> Joachim Hamberger: Eine kurzer Abriss der Jagdgeschichte. Von Hirschen und Menschen. In: <em>LWF aktuell</em>, Nr.&nbsp;44, 2004, S.&nbsp;28. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Peter Blickle: <em>Die Revolution von 1525</em>. 2.&nbsp;Auflage. Oldenbourg Verlag, München 1983, ISBN&nbsp;3-486-44652-5, S.&nbsp;58. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Bernd Ergert: <em>Die Jagd in Bayern – von der Vorzeit bis zur Gegenwart</em>. Rosenheimer Verlagshaus, Rosenheim 1984, S.&nbsp;123–127. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Barockjagd.de: Jagen vor 250 Jahren, Abgerufen 7. Februar 2026, von http://barockjagd.de </li>
+<li> Poser, Deckenbilder, 1980, S.&nbsp;160. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Poser, Deckenbilder, 1980, S.&nbsp;160. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Poser, Deckenbilder, 1980, S.&nbsp;161. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Poser, Deckenbilder, 1980, S.&nbsp;160, dort ohne das Wort „alleins". Die genaue Transkription: Drös, Inschriften Mergentheim, 2002, Nr.&nbsp;353. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Abschlussbericht der Restaurierung vom 05.03.1998. Dipl.&nbsp;Ing. Erik Reinhold. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Poser, Deckenbilder, 1980; Kniep, Glück, 2005; Käpplinger, Jagd, 2011; Käpplinger, Auf's Schönste, 2019, S.&nbsp;197. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Käpplinger, Jagd, 2011, S.&nbsp;76. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Käpplinger, Jagd, 2011. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Käpplinger, Jagd, 2011. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Poser, Deckenbilder, 1980, S.&nbsp;161. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Käpplinger, Jagd, 2011, S.&nbsp;81–85. Abgerufen am 7. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Merten, Weikersheim, o.&nbsp;J., S.&nbsp;40. Abgerufen am 9. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Freeden, Kamin, 1950, S.&nbsp;142. Abgerufen am 9. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Inschriften Mergentheim, 2002, S.&nbsp;248. Ebd., S.&nbsp;249. Abgerufen am 9. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Zum Langen Türkenkrieg: Niederkorn, Langer Türkenkrieg, 1993. Abgerufen am 9. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Fandrey, Weikersheim, 2010, S.&nbsp;60. Abgerufen am 9. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Ortelius, Chronologia, 1602. Abgerufen am 9. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Ortelius, Chronologia, 1602, „Ad Lectorem". Abgerufen am 9. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Drös, Inschriften Mergentheim, 2002, S.&nbsp;248–249. Abgerufen am 9. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Drös, Inschriften Mergentheim, 2002, S.&nbsp;248–250. Abgerufen am 9. Februar 2026, von https://www.deckenmalerei.eu/</li>
+<li> Drös, Inschriften Mergentheim, 2002, Nr.&nbsp;366. Abgerufen am 9. Februar 2026, von https://www.deckenmalerei.eu/</li>
+</ol>
+</div>
+
+
+
 
 
 ### Mythology
