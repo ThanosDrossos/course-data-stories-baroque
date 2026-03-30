@@ -47,6 +47,7 @@ How to add a new data story
 5. Optionally add an accordion entry to `src/docs/story/index.md`.
 
 Where to look for code
+- Issues of NFDI KG we found: `src/docs/story/CbDD/nfdi4culture-kg-issues.md`
 - Visualization and query helpers: `src/docs/overrides/assets/javascripts/baroque-viz.js`
 - DuckDB WASM initialization and loader: `src/docs/overrides/assets/javascripts/duckdb-wasm-loader.js`
 - Site-specific JS and DataTables helpers: `src/docs/overrides/assets/javascripts/extra.js`
