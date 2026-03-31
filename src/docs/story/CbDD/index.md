@@ -636,6 +636,28 @@ Baroque religious imagery was:
 
 Taken together, these works formed a coordinated visual language through which early modern society articulated its understanding of religion, the universe, and the relationship between the earthly and the divine.
 
+### Sources
+
+Bayerische staatsgemäldesammlungen. Baroque ceiling painting and religious iconography. Abgerufen 5. Februar 2026, von https://www.pinakothek.de/
+
+Deutsche digitale bibliothek. Baroque church art and ceiling paintings. Abgerufen 5. Februar 2026, von https://www.deutsche-digitale-bibliothek.de/
+
+Getty research institute. Iconography and religious symbolism in baroque art. Abgerufen 5. Februar 2026, von https://www.getty.edu/research/
+
+The met museum. Baroque art and religious themes. Abgerufen 5. Februar 2026, von https://www.metmuseum.org/
+
+Smarthistory. Baroque art and the catholic church. Abgerufen 5. Februar 2026, von https://smarthistory.org/
+
+Web gallery of art. Baroque painting and religious narratives. Abgerufen 5. Februar 2026, von https://www.wga.hu/
+
+Zentralinstitut für kunstgeschichte. Baroque art and church decoration. Abgerufen 5. Februar 2026, von https://www.zikg.eu/
+
+Corpus der barocken Deckenmalerei in Deutschland (Cbdd). Abgerufen 5. Februar 2026, von https://www.deckenmalerei.eu/
+
+Culture knowledge graph. NFDI4Culture. Abgerufen 5. Februar 2026, von https://nfdi4culture.de/services/details/culture-knowledge-graph.html
+
+Religion and magic. ICONCLASS. Abgerufen 5. Februar 2026, von https://iconclass.org/1
+
 </div><!-- /topic-church -->
 
 <!-- ═══════════════════════════════════════════════════════════════════════
