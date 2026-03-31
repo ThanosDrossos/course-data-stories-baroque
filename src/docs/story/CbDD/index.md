@@ -48,9 +48,6 @@ While this data story provides a broad overview of Baroque ceiling paintings in 
 
 4. **Interpretation of Results**: The patterns and trends identified here are shaped not only by the historical record, but also by the biases and limitations of the dataset and by our own analytical choices. The prominence of certain artists or regions, for example, may reflect documentation practices rather than actual production patterns. The results should therefore be interpreted with caution and in dialogue with existing art-historical research.
 
-5. **dfg**:
-
-
 
 
 
